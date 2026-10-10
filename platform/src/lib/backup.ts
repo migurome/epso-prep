@@ -1,6 +1,8 @@
 import { COMPETITIONS } from '../data/competition'
 import type { EssayAttempt, TestAttempt } from '../types/content'
 import { useApplicationStore, normaliseTexts, type ApplicationTexts } from './applicationStore'
+import { mergeMarks, normaliseMarks, type BoardMarks } from './boardMarks'
+import { useBoardStore } from './boardStore'
 import { useLocaleStore, type Locale } from './localeStore'
 import { usePracticeStore, type PracticeAnswer } from './practiceStore'
 import { useProgressStore } from './progressStore'
@@ -36,7 +38,10 @@ import { useTestLocaleStore } from './testLocaleStore'
  * dio por repasada. Una versión anterior lee ese campo esperando cadenas, y no
  * fallaría: descartaría en silencio todas las respuestas de práctica. Por eso
  * este número existe — para que se niegue a abrirlo en vez de vaciarlo. */
-export const SNAPSHOT_FORMAT = 4
+/* Subió a 5 al guardar las marcas del tablón. Una versión anterior lee ese
+ * campo y lo ignora: no se rompe, pero se perderían al ir y venir, y el
+ * candidato no tendría manera de saberlo. */
+export const SNAPSHOT_FORMAT = 5
 
 /** Marca del fichero, para no tragarse un JSON cualquiera. */
 const SNAPSHOT_APP = 'epso-prep'
@@ -57,6 +62,11 @@ export interface Snapshot {
    * de la plataforma que no se puede volver a generar: el progreso se vuelve
    * a hacer estudiando, un texto escrito a mano no. */
   application: ApplicationTexts
+  /** Lo visto y lo presentado del tablón. Va en la copia porque es trabajo de
+   * lectura: repasar treinta convocatorias en el móvil y encontrárselas sin
+   * marcar en el PC es hacerlo dos veces. El interruptor de esconderlas no
+   * viaja — eso es de cada pantalla. */
+  board: BoardMarks
   uiLocale: Locale
   testLocale: Locale
 }
@@ -96,6 +106,7 @@ export function createSnapshot(): Snapshot {
     practiceAnswers: practice.answers,
     practiceOrder: practice.orderSeed,
     application: useApplicationStore.getState().texts,
+    board: useBoardStore.getState().marks,
     uiLocale: useLocaleStore.getState().locale,
     testLocale: useTestLocaleStore.getState().locale,
   }
@@ -154,6 +165,7 @@ function normalise(raw: Record<string, unknown>): Snapshot {
     practiceAnswers: answerMap(raw.practiceAnswers),
     practiceOrder: numberMap(raw.practiceOrder),
     application: normaliseTexts(raw.application),
+    board: normaliseMarks(raw.board),
     uiLocale: asLocale(raw.uiLocale),
     testLocale: asLocale(raw.testLocale),
   }
@@ -231,6 +243,7 @@ export function applySnapshot(snapshot: Snapshot, mode: ImportMode): SnapshotSum
       orderSeed: snapshot.practiceOrder,
     })
     useApplicationStore.setState({ texts: snapshot.application })
+    useBoardStore.setState({ marks: snapshot.board })
     useLocaleStore.setState({ locale: snapshot.uiLocale })
     useTestLocaleStore.setState({ locale: snapshot.testLocale })
     return describeSnapshot(snapshot)
@@ -253,11 +266,13 @@ export function applySnapshot(snapshot: Snapshot, mode: ImportMode): SnapshotSum
   // con el de otro dispositivo sería la única pérdida de esta plataforma que
   // no se puede deshacer estudiando.
   const application = mergeTexts(useApplicationStore.getState().texts, snapshot.application)
+  const board = mergeMarks(useBoardStore.getState().marks, snapshot.board)
 
   useStudyStore.setState({ dayLog })
   useProgressStore.setState({ testAttempts, essayAttempts })
   usePracticeStore.setState({ answers, orderSeed })
   useApplicationStore.setState({ texts: application })
+  useBoardStore.setState({ marks: board })
 
   return {
     tests: testAttempts.length - progress.testAttempts.length,

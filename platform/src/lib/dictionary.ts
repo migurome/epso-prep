@@ -561,6 +561,35 @@ export const DICT = {
     es: 'Los títulos, los números de convocatoria, las sedes y los plazos se copian tal cual de los listados de EPSO, con su horario de Bruselas.',
     en: 'Titles, reference numbers, locations and deadlines are copied verbatim from the EPSO listings, in its Brussels time.',
   },
+  // Lo que el candidato ha hecho con cada convocatoria
+  board_mark_seen: { es: 'Visto', en: 'Seen' },
+  board_mark_applied: { es: 'Presentada', en: 'Applied' },
+  board_mark_seen_a11y: { es: 'Marcar {title} como vista', en: 'Mark {title} as seen' },
+  board_mark_applied_a11y: {
+    es: 'Marcar {title} como presentada',
+    en: 'Mark {title} as applied',
+  },
+  board_hide_seen: {
+    es: 'Ocultar {count} convocatorias vistas',
+    en: 'Hide {count} competitions marked seen',
+  },
+  board_hide_seen_one: {
+    es: 'Ocultar 1 convocatoria vista',
+    en: 'Hide 1 competition marked seen',
+  },
+  board_show_seen: {
+    es: 'Ver {count} convocatorias vistas',
+    en: 'Show {count} competitions marked seen',
+  },
+  board_show_seen_one: { es: 'Ver 1 convocatoria vista', en: 'Show 1 competition marked seen' },
+  board_all_hidden: {
+    es: 'Todas las convocatorias están marcadas como vistas. Enséñalas otra vez con el interruptor de arriba.',
+    en: 'Every competition is marked as seen. Bring them back with the switch above.',
+  },
+  board_applied_legend: {
+    es: 'Las presentadas no se esconden nunca: sus fechas de prueba son tus fechas.',
+    en: 'Competitions you applied to are never hidden: their test dates are your dates.',
+  },
   // Sincronización automática del progreso
   settings_autosync: { es: 'Sincronizar entre dispositivos', en: 'Sync across devices' },
   settings_autosync_description: {

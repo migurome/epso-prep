@@ -4,10 +4,11 @@
 // alguien podría llegar tarde por nuestra culpa—, y las convocatorias que ya
 // no están abiertas siguen en el tablón, porque el año entero es el archivo.
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { BoardView } from './BoardView'
 import { DICT } from '../lib/dictionary'
 import { useLocaleStore } from '../lib/localeStore'
+import { useBoardStore } from '../lib/boardStore'
 import type { BoardFile, BoardNotice } from '../types/board'
 
 const es = (key: keyof typeof DICT) => DICT[key].es
@@ -52,6 +53,9 @@ const cardOf = (title: string) => screen.getByRole('heading', { name: title }).c
 
 beforeEach(() => {
   useLocaleStore.setState({ locale: 'es' })
+  // El almacén está persistido y es el mismo para todo el fichero: sin
+  // vaciarlo, una marca puesta en un test se cuela en el siguiente.
+  useBoardStore.setState({ marks: {}, hideSeen: false })
   // El verde y los días que faltan se cuentan contra el reloj: sin fijarlo,
   // estos tests empezarían a fallar solos al pasar el mes.
   vi.useFakeTimers()
@@ -210,5 +214,126 @@ describe('en inglés', () => {
     expect(screen.queryByText(es('board_title'))).toBeNull()
     // El título de la convocatoria es lo que publica EPSO: ése no se traduce.
     expect(screen.getByRole('heading', { name: 'Cybersecurity' })).toBeTruthy()
+  })
+})
+
+describe('marcar una convocatoria', () => {
+  const seenOf = (title: string) =>
+    screen.getByRole('button', { name: es('board_mark_seen_a11y').replace('{title}', title) })
+  const appliedOf = (title: string) =>
+    screen.getByRole('button', { name: es('board_mark_applied_a11y').replace('{title}', title) })
+
+  it('el nombre del botón dice de qué convocatoria es', () => {
+    // «Visto» a secas, en una lista de treinta, no dice de cuál: quien navega
+    // con lector de pantalla oiría treinta botones idénticos.
+    render(<BoardView board={board([notice(), notice({ id: 'otra', title: 'Audit' })])} />)
+    expect(seenOf('Cybersecurity')).toBeTruthy()
+    expect(seenOf('Audit')).toBeTruthy()
+  })
+
+  it('marca, y el estado llega por aria-pressed y no sólo por el color', () => {
+    render(<BoardView board={board([notice()])} />)
+    expect(seenOf('Cybersecurity').getAttribute('aria-pressed')).toBe('false')
+    fireEvent.click(seenOf('Cybersecurity'))
+    expect(seenOf('Cybersecurity').getAttribute('aria-pressed')).toBe('true')
+  })
+
+  it('pulsar la marca puesta la quita', () => {
+    render(<BoardView board={board([notice()])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(seenOf('Cybersecurity'))
+    expect(seenOf('Cybersecurity').getAttribute('aria-pressed')).toBe('false')
+    expect(useBoardStore.getState().marks).toEqual({})
+  })
+
+  it('una marca sustituye a la otra: no son dos casillas independientes', () => {
+    render(<BoardView board={board([notice()])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(appliedOf('Cybersecurity'))
+    expect(seenOf('Cybersecurity').getAttribute('aria-pressed')).toBe('false')
+    expect(appliedOf('Cybersecurity').getAttribute('aria-pressed')).toBe('true')
+  })
+
+  it('marcarla como vista le quita el verde de recién publicada', () => {
+    // Lo verde quiere decir «mira esto». Si ya lo has mirado, deja de ser
+    // verdad, y el verde pasa a ser ruido que tapa lo que todavía no has visto.
+    render(<BoardView board={board([notice()])} />)
+    expect(cardOf('Cybersecurity').className).toContain('emerald')
+    expect(screen.getByText(es('board_new'))).toBeTruthy()
+    fireEvent.click(seenOf('Cybersecurity'))
+    expect(cardOf('Cybersecurity').className).not.toContain('emerald')
+    expect(screen.queryByText(es('board_new'))).toBeNull()
+  })
+
+  it('una presentada lleva su distintivo', () => {
+    render(<BoardView board={board([notice()])} />)
+    fireEvent.click(appliedOf('Cybersecurity'))
+    // Dos veces el mismo texto: el botón y el distintivo de la tarjeta.
+    expect(screen.getAllByText(es('board_mark_applied'))).toHaveLength(2)
+  })
+})
+
+describe('esconder lo repasado', () => {
+  const hideButton = () => screen.getByRole('button', { name: es('board_hide_seen_one') })
+  const seenOf = (title: string) =>
+    screen.getByRole('button', { name: es('board_mark_seen_a11y').replace('{title}', title) })
+
+  it('sin nada marcado no hay interruptor que estorbe', () => {
+    render(<BoardView board={board([notice()])} />)
+    expect(screen.queryByRole('button', { name: es('board_hide_seen_one') })).toBeNull()
+  })
+
+  it('esconde la vista y deja la otra', () => {
+    render(<BoardView board={board([notice(), notice({ id: 'otra', title: 'Audit' })])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(hideButton())
+    expect(screen.queryByRole('heading', { name: 'Cybersecurity' })).toBeNull()
+    expect(screen.getByRole('heading', { name: 'Audit' })).toBeTruthy()
+  })
+
+  it('una presentada se queda aunque el interruptor esté puesto', () => {
+    render(<BoardView board={board([notice(), notice({ id: 'otra', title: 'Audit' })])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(
+      screen.getByRole('button', { name: es('board_mark_applied_a11y').replace('{title}', 'Audit') }),
+    )
+    fireEvent.click(hideButton())
+    expect(screen.queryByRole('heading', { name: 'Cybersecurity' })).toBeNull()
+    expect(screen.getByRole('heading', { name: 'Audit' })).toBeTruthy()
+  })
+
+  it('el contador dice cuántas esconde, para que no desaparezcan en silencio', () => {
+    render(<BoardView board={board([notice(), notice({ id: 'otra', title: 'Audit' })])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(seenOf('Audit'))
+    const dos = es('board_hide_seen').replace('{count}', '2')
+    expect(screen.getByRole('button', { name: dos })).toBeTruthy()
+  })
+
+  it('escondiéndolas todas lo dice, en vez de quedarse en blanco', () => {
+    // Un tablón vacío sin explicación es la manera más fácil de que un filtro
+    // parezca una avería.
+    render(<BoardView board={board([notice()])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(hideButton())
+    expect(screen.getByText(es('board_all_hidden'))).toBeTruthy()
+    expect(screen.queryByText(es('board_empty_title'))).toBeNull()
+  })
+
+  it('el interruptor se deja volver atrás', () => {
+    render(<BoardView board={board([notice()])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(hideButton())
+    fireEvent.click(screen.getByRole('button', { name: es('board_show_seen_one') }))
+    expect(screen.getByRole('heading', { name: 'Cybersecurity' })).toBeTruthy()
+  })
+
+  it('esconder no cambia la fecha de la última novedad', () => {
+    // Es un dato del tablón, no de quien lo mira: si cambiara al filtrar,
+    // diría que el bot no ha visto nada nuevo cuando sí lo ha visto.
+    render(<BoardView board={board([notice({ firstSeen: '2026-09-20' })])} />)
+    fireEvent.click(seenOf('Cybersecurity'))
+    fireEvent.click(hideButton())
+    expect(screen.getByText('20/09/2026')).toBeTruthy()
   })
 })

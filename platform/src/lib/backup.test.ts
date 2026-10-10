@@ -19,6 +19,7 @@ import {
   type Snapshot,
 } from './backup'
 import { EMPTY_TEXTS, useApplicationStore } from './applicationStore'
+import { useBoardStore } from './boardStore'
 import { useLocaleStore } from './localeStore'
 import { usePracticeStore } from './practiceStore'
 import { useProgressStore } from './progressStore'
@@ -47,6 +48,7 @@ function blank() {
   useProgressStore.setState({ testAttempts: [], essayAttempts: [] })
   usePracticeStore.setState({ answers: {}, orderSeed: {} })
   useApplicationStore.setState({ texts: { ...EMPTY_TEXTS } })
+  useBoardStore.setState({ marks: {}, hideSeen: false })
   useLocaleStore.setState({ locale: 'es' })
   useTestLocaleStore.setState({ locale: 'es' })
 }
@@ -67,6 +69,7 @@ const EMPTY_FILE: Snapshot = {
   practiceAnswers: {},
   practiceOrder: {},
   application: EMPTY_TEXTS,
+  board: {},
   uiLocale: 'es',
   testLocale: 'es',
 }
@@ -511,5 +514,44 @@ describe('la redacción libre de la inscripción', () => {
     )
     expect(result.ok).toBe(true)
     if (result.ok) expect(result.snapshot.application).toEqual(EMPTY_TEXTS)
+  })
+})
+
+describe('las marcas del tablón', () => {
+  it('salen en la copia', () => {
+    useBoardStore.setState({ marks: { a: 'seen', b: 'applied' } })
+    expect(createSnapshot().board).toEqual({ a: 'seen', b: 'applied' })
+  })
+
+  it('el interruptor de esconderlas NO sale: es de esta pantalla', () => {
+    // Viajar con él haría que esconder las vistas en el móvil las escondiera
+    // en el escritorio, donde caben todas y no hace falta.
+    useBoardStore.setState({ marks: { a: 'seen' }, hideSeen: true })
+    expect('hideSeen' in createSnapshot()).toBe(false)
+  })
+
+  it('restaurar del todo las trae enteras', () => {
+    applySnapshot(fileFrom({ board: { a: 'applied' } }), 'replace')
+    expect(useBoardStore.getState().marks).toEqual({ a: 'applied' })
+  })
+
+  it('fusionar gana la marca local y se trae las que aquí no hay', () => {
+    useBoardStore.setState({ marks: { a: 'seen' } })
+    applySnapshot(fileFrom({ board: { a: 'applied', b: 'applied' } }), 'merge')
+    expect(useBoardStore.getState().marks).toEqual({ a: 'seen', b: 'applied' })
+  })
+
+  it('una copia antigua, sin tablón, no deja las marcas en undefined', () => {
+    const result = readSnapshot(JSON.stringify({ app: 'epso-prep', format: 4 }))
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.snapshot.board).toEqual({})
+  })
+
+  it('una marca que no sabemos pintar no entra', () => {
+    const result = readSnapshot(
+      JSON.stringify({ app: 'epso-prep', format: SNAPSHOT_FORMAT, board: { a: 'shortlisted' } }),
+    )
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.snapshot.board).toEqual({})
   })
 })

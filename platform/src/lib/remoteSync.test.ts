@@ -12,6 +12,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { SNAPSHOT_FORMAT, createSnapshot, snapshotText, type Snapshot } from './backup'
 import { fingerprint, syncOnce, type RemoteBackend, type SyncState } from './remoteSync'
 import { EMPTY_TEXTS, useApplicationStore } from './applicationStore'
+import { useBoardStore } from './boardStore'
 import { useLocaleStore } from './localeStore'
 import { usePracticeStore } from './practiceStore'
 import { useProgressStore } from './progressStore'
@@ -33,6 +34,7 @@ function blank() {
   useProgressStore.setState({ testAttempts: [], essayAttempts: [] })
   usePracticeStore.setState({ answers: {}, orderSeed: {} })
   useApplicationStore.setState({ texts: { ...EMPTY_TEXTS } })
+  useBoardStore.setState({ marks: {}, hideSeen: false })
   useLocaleStore.setState({ locale: 'es' })
   useTestLocaleStore.setState({ locale: 'es' })
 }
@@ -53,6 +55,7 @@ function fileFrom(extra: Partial<Snapshot> = {}): Snapshot {
     practiceAnswers: {},
     practiceOrder: {},
     application: EMPTY_TEXTS,
+    board: {},
     uiLocale: 'es',
     testLocale: 'es',
     ...extra,

@@ -1,4 +1,4 @@
-import { CalendarClock, ExternalLink, MapPin } from 'lucide-react'
+import { CalendarClock, Check, Eye, EyeOff, ExternalLink, MapPin, Send } from 'lucide-react'
 import clsx from 'clsx'
 import { PageHeader } from './PageHeader'
 import {
@@ -10,6 +10,8 @@ import {
   lastNewsOn,
   publishedOn,
 } from '../lib/board'
+import { seenCount, visibleNotices, type NoticeMark } from '../lib/boardMarks'
+import { useBoardStore } from '../lib/boardStore'
 import { useT } from '../lib/useT'
 import type { BoardFile, BoardNotice, BoardStage } from '../types/board'
 import type { DictKey } from '../lib/dictionary'
@@ -46,18 +48,69 @@ function DeadlineLine({ notice }: { notice: BoardNotice }) {
   )
 }
 
+/**
+ * Los dos botones de marcar, que son conmutadores y no casillas.
+ *
+ * `aria-pressed` y no una clase de color: el estado de un conmutador tiene que
+ * llegar también a quien no ve el azul. El nombre accesible lleva el título de
+ * la convocatoria porque «Visto» a secas, en una lista de treinta, no dice de
+ * cuál.
+ */
+function MarkButtons({ notice }: { notice: BoardNotice }) {
+  const t = useT()
+  const mark = useBoardStore((s) => s.marks[notice.id])
+  const set = useBoardStore((s) => s.mark)
+
+  const buttons: Array<{ value: NoticeMark; label: DictKey; a11y: DictKey; icon: typeof Eye }> = [
+    { value: 'seen', label: 'board_mark_seen', a11y: 'board_mark_seen_a11y', icon: Eye },
+    { value: 'applied', label: 'board_mark_applied', a11y: 'board_mark_applied_a11y', icon: Send },
+  ]
+
+  return (
+    <div className="flex gap-2">
+      {buttons.map(({ value, label, a11y, icon: Icon }) => {
+        const on = mark === value
+        return (
+          <button
+            key={value}
+            type="button"
+            aria-pressed={on}
+            aria-label={t(a11y, { title: notice.title })}
+            onClick={() => set(notice.id, value)}
+            className={clsx(
+              'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors',
+              on
+                ? 'border-accent bg-accent/5 text-accent'
+                : 'border-slate-200 text-slate-500 hover:border-accent hover:text-accent',
+            )}
+          >
+            {on ? <Check size={14} /> : <Icon size={14} />}
+            {t(label)}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 function NoticeCard({ notice, since }: { notice: BoardNotice; since: string | null }) {
   const t = useT()
+  const mark = useBoardStore((s) => s.marks[notice.id])
   // Verde: publicada hace menos de un mes. Es lo que el candidato busca al
-  // entrar aquí, y así lo encuentra sin leerse la lista entera.
-  const fresh = isFresh(notice, since, new Date())
+  // entrar aquí, y así lo encuentra sin leerse la lista entera. Marcarla como
+  // vista le quita el verde: lo verde es «mira esto», y eso ya está hecho.
+  const fresh = isFresh(notice, since, new Date()) && mark !== 'seen'
   const published = publishedOn(notice, since)
 
   return (
     <li
       className={clsx(
         'rounded-xl border p-5',
-        fresh ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 bg-white',
+        fresh
+          ? 'border-emerald-300 bg-emerald-50/50'
+          : mark === 'seen'
+            ? 'border-slate-200 bg-slate-50'
+            : 'border-slate-200 bg-white',
       )}
     >
       <div className="flex flex-wrap items-start gap-2">
@@ -65,11 +118,23 @@ function NoticeCard({ notice, since }: { notice: BoardNotice; since: string | nu
           {notice.reference && (
             <p className="font-mono text-xs tabular-nums text-slate-500">{notice.reference}</p>
           )}
-          <h3 className="mt-0.5 text-base font-semibold text-slate-900">{notice.title}</h3>
+          <h3
+            className={clsx(
+              'mt-0.5 text-base font-semibold',
+              mark === 'seen' ? 'text-slate-500' : 'text-slate-900',
+            )}
+          >
+            {notice.title}
+          </h3>
         </div>
         {fresh && (
           <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
             {t('board_new')}
+          </span>
+        )}
+        {mark === 'applied' && (
+          <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-white">
+            {t('board_mark_applied')}
           </span>
         )}
         {notice.grade && (
@@ -104,20 +169,23 @@ function NoticeCard({ notice, since }: { notice: BoardNotice; since: string | nu
         )}
       </div>
 
-      <a
-        href={notice.url}
-        target="_blank"
-        rel="noreferrer"
-        className={clsx(
-          'mt-4 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors',
-          fresh
-            ? 'border-emerald-300 bg-white text-emerald-800 hover:border-emerald-500'
-            : 'border-slate-200 text-slate-700 hover:border-accent hover:text-accent',
-        )}
-      >
-        <ExternalLink size={14} />
-        {t('board_apply')}
-      </a>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <a
+          href={notice.url}
+          target="_blank"
+          rel="noreferrer"
+          className={clsx(
+            'mr-auto inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors',
+            fresh
+              ? 'border-emerald-300 bg-white text-emerald-800 hover:border-emerald-500'
+              : 'border-slate-200 text-slate-700 hover:border-accent hover:text-accent',
+          )}
+        >
+          <ExternalLink size={14} />
+          {t('board_apply')}
+        </a>
+        <MarkButtons notice={notice} />
+      </div>
     </li>
   )
 }
@@ -127,7 +195,15 @@ function NoticeCard({ notice, since }: { notice: BoardNotice; since: string | nu
  * fichero generado. */
 export function BoardView({ board }: { board: BoardFile }) {
   const t = useT()
-  const groups = byStage(board.notices)
+  const marks = useBoardStore((s) => s.marks)
+  const hideSeen = useBoardStore((s) => s.hideSeen)
+  const toggleHideSeen = useBoardStore((s) => s.toggleHideSeen)
+  // Las novedades se cuentan sobre el tablón entero y no sobre lo que queda a
+  // la vista: esconder lo repasado no puede cambiar la fecha de la última
+  // novedad, que es un dato del tablón y no de quien lo mira.
+  const shown = visibleNotices(board.notices, marks, hideSeen)
+  const seen = seenCount(board.notices, marks)
+  const groups = byStage(shown)
   const news = lastNewsOn(board.notices)
 
   return (
@@ -189,10 +265,43 @@ export function BoardView({ board }: { board: BoardFile }) {
         </p>
       </div>
 
+      {seen > 0 && (
+        <div className="mb-4">
+          <button
+            type="button"
+            aria-pressed={hideSeen}
+            onClick={toggleHideSeen}
+            className={clsx(
+              'inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors',
+              hideSeen
+                ? 'border-accent bg-accent/5 text-accent'
+                : 'border-slate-200 bg-white text-slate-600 hover:border-accent hover:text-accent',
+            )}
+          >
+            {hideSeen ? <Eye size={14} /> : <EyeOff size={14} />}
+            {hideSeen
+              ? seen === 1
+                ? t('board_show_seen_one')
+                : t('board_show_seen', { count: seen })
+              : seen === 1
+                ? t('board_hide_seen_one')
+                : t('board_hide_seen', { count: seen })}
+          </button>
+          {hideSeen && <p className="mt-2 text-xs text-slate-500">{t('board_applied_legend')}</p>}
+        </div>
+      )}
+
       {board.notices.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center">
           <h2 className="text-sm font-semibold text-slate-800">{t('board_empty_title')}</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">{t('board_empty_body')}</p>
+        </div>
+      ) : shown.length === 0 ? (
+        /* Todo marcado y todo escondido. Sin esto el tablón se queda en blanco
+           sin decir por qué, que es la manera más fácil de que un filtro
+           parezca una avería. */
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center">
+          <p className="mx-auto max-w-md text-sm text-slate-500">{t('board_all_hidden')}</p>
         </div>
       ) : (
         <div className="space-y-8">

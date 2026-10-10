@@ -729,8 +729,8 @@ MUTATIONS = [
     (
         "las recién publicadas dejan de destacarse en verde",
         "src/components/BoardView.tsx",
-        "        fresh ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 bg-white',",
-        "        'border-slate-200 bg-white',",
+        "        fresh\n          ? 'border-emerald-300 bg-emerald-50/50'",
+        "        false\n          ? 'border-emerald-300 bg-emerald-50/50'",
         "src/components/BoardView.test.tsx",
     ),
     # ── Sincronización entre dispositivos ──────────────────────────────────────────
@@ -1390,6 +1390,70 @@ MUTATIONS = [
         "        const active = lastActiveCompetition()",
         "        const active = 'ad8' as CompetitionId",
         "src/lib/stores.test.ts",
+    ),
+    (
+        "el filtro esconde tambien las convocatorias presentadas",
+        "src/lib/boardMarks.ts",
+        "  return notices.filter((notice) => marks[notice.id] !== 'seen')",
+        "  return notices.filter((notice) => marks[notice.id] === undefined)",
+        "src/lib/boardMarks.test.ts",
+    ),
+    (
+        "al fusionar gana la marca del fichero y pisa la de esta pantalla",
+        "src/lib/boardMarks.ts",
+        "  return { ...incoming, ...local }",
+        "  return { ...local, ...incoming }",
+        "src/lib/boardMarks.test.ts",
+    ),
+    (
+        "una marca que no sabemos pintar entra igual",
+        "src/lib/boardMarks.ts",
+        "    if (typeof mark === 'string' && (MARKS as string[]).includes(mark)) {",
+        "    if (typeof mark === 'string') {",
+        "src/lib/boardMarks.test.ts",
+    ),
+    (
+        "el contador del boton cuenta tambien las presentadas, que no esconde",
+        "src/lib/boardMarks.ts",
+        "  return notices.filter((notice) => marks[notice.id] === 'seen').length",
+        "  return notices.filter((notice) => marks[notice.id] !== undefined).length",
+        "src/lib/boardMarks.test.ts",
+    ),
+    (
+        "pulsar la marca puesta deja de quitarla",
+        "src/lib/boardStore.ts",
+        """          if (marks[id] === mark) delete marks[id]
+          else marks[id] = mark""",
+        "          marks[id] = mark",
+        "src/components/BoardView.test.tsx",
+    ),
+    (
+        "una convocatoria repasada sigue en verde y tapa lo que no se ha visto",
+        "src/components/BoardView.tsx",
+        "  const fresh = isFresh(notice, since, new Date()) && mark !== 'seen'",
+        "  const fresh = isFresh(notice, since, new Date())",
+        "src/components/BoardView.test.tsx",
+    ),
+    (
+        "escondiendolas todas el tablon se queda en blanco sin decir por que",
+        "src/components/BoardView.tsx",
+        "      ) : shown.length === 0 ? (",
+        "      ) : shown.length < 0 ? (",
+        "src/components/BoardView.test.tsx",
+    ),
+    (
+        "las marcas del tablon se quedan fuera de la copia",
+        "src/lib/backup.ts",
+        "    board: useBoardStore.getState().marks,",
+        "    board: {},",
+        "src/lib/backup.test.ts",
+    ),
+    (
+        "fusionar el tablon con los argumentos al reves",
+        "src/lib/backup.ts",
+        "  const board = mergeMarks(useBoardStore.getState().marks, snapshot.board)",
+        "  const board = mergeMarks(snapshot.board, useBoardStore.getState().marks)",
+        "src/lib/backup.test.ts",
     ),
 ]
 

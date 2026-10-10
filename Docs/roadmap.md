@@ -10,6 +10,7 @@ Acordado el 18/09/2026.
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.3` | El tablón se puede marcar: «Visto» aparta lo repasado y «Presentada» deja constancia de dónde te has inscrito. Las vistas se esconden con un interruptor; las presentadas no se esconden nunca. Las marcas viajan en la copia. |
 | `2.2` | Las 24 preguntas del banco numérico que enseñan un gráfico ya lo enseñan: líneas, sectores y apiladas, con los datos leídos del libro original. El reloj de práctica lo arranca y lo para el candidato, y su ritmo sale del formato de cada prueba. |
 | `2.1` | Candidaturas: los cuatro textos de la redacción libre de la inscripción, con la cuenta de caracteres contra el límite de 2 000 de EPSO y un botón para copiar cada uno al formulario. |
 | `2.0.1` | La interfaz es azul UE siempre: fuera el acento granate de la AD8. La convocatoria ya no se elige, así que no hacía falta gritarla con el color. |
@@ -210,6 +211,43 @@ Tres cosas que el trabajo pidió y el plan no:
   —que es lo correcto: no pudo comprobarlas—. Se reapuntaron una a una al código
   equivalente en vez de borrarlas, que habría sido perder la cobertura sin que
   nada se quejara.
+
+### Marcar el tablón — **hecho** (`2.3`)
+
+El tablón lo escribe el bot y crece solo. Con cuatro convocatorias se lee de
+arriba abajo; con un año entero publicado son treinta, y releerlas cada semana
+para ver si hay algo nuevo deja de funcionar. Dos marcas lo arreglan:
+
+- **Visto** es orden en la mesa: la he leído y no tengo nada que hacer con ella.
+  Le quita el verde de recién publicada, porque el verde quiere decir «mira
+  esto» y eso ya está hecho; dejarlo puesto taparía lo que de verdad no se ha
+  mirado. Un interruptor las esconde, diciendo cuántas, y se deja volver atrás.
+- **Presentada** es un hecho del mundo: me he inscrito. **No se esconde nunca,
+  ni con el interruptor puesto.** Es la que más importa —sus fechas de prueba
+  son las fechas del candidato— y esconderla convertiría el filtro en una
+  manera de perder de vista la propia candidatura. Quien quiera quitársela de
+  delante la marca como vista, que para eso está.
+
+Las dos no se encadenan, y por eso cada convocatoria tiene UNA marca y no dos
+casillas: marcar «vista» una a la que te has presentado no significa nada.
+Pulsar la marca puesta la quita, sin un tercer botón para desmarcar.
+
+Tres decisiones que parecen detalles y no lo son:
+
+- **El estado va en `aria-pressed`, no sólo en el color**, y el nombre accesible
+  del botón lleva el título de la convocatoria: «Visto» a secas, en una lista de
+  treinta, no dice de cuál.
+- **Esconderlas todas lo dice.** Un tablón en blanco sin explicación es la
+  manera más fácil de que un filtro parezca una avería.
+- **Esconder no toca la fecha de la última novedad.** Es un dato del tablón, no
+  de quien lo mira; si cambiara al filtrar, diría que el bot no ha visto nada
+  nuevo cuando sí lo ha visto.
+
+Las marcas viajan en la copia (formato `5`) porque son trabajo de lectura:
+repasar treinta convocatorias en el móvil y encontrárselas sin marcar en el PC
+es hacerlo dos veces. Al fusionar gana la marca local, como las respuestas de
+práctica. El interruptor de esconderlas **no** viaja: eso es de cada pantalla,
+y el escritorio, donde caben todas, no se mira como el móvil.
 
 ### Los 24 gráficos, con los datos del libro — **hecho** (`2.2`)
 
