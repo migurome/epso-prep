@@ -1392,6 +1392,39 @@ MUTATIONS = [
         "src/lib/stores.test.ts",
     ),
     (
+        "una ficha retirada por EPSO vuelve a tumbar la ejecucion entera",
+        "scripts/lib/epsoBoard.mjs",
+        r"""    } catch (error) {
+      log(`  ficha ilegible, se anota sin fecha: ${url}\n    ${error.message}`)
+      notice.openedOn = null
+    }""",
+        """    } catch (error) {
+      throw error
+    }""",
+        "scripts/epsoBoard.test.mjs",
+    ),
+    (
+        "una ficha sin fecha se vuelve a pedir todos los dias",
+        "scripts/lib/epsoBoard.mjs",
+        "      notice.openedOn = null",
+        "      notice.openedOn = undefined",
+        "scripts/epsoBoard.test.mjs",
+    ),
+    (
+        "el bot pide la pagina de inscripcion en vez de la ficha con el calendario",
+        "scripts/lib/epsoBoard.mjs",
+        "    const url = notice.infoUrl ?? notice.url",
+        "    const url = notice.url",
+        "scripts/epsoBoard.test.mjs",
+    ),
+    (
+        "se le sueltan a EPSO todas las fichas de golpe, sin tope",
+        "scripts/lib/epsoBoard.mjs",
+        "    if (asked >= MAX_DETAILS) break",
+        "    if (asked >= MAX_DETAILS * 100) break",
+        "scripts/epsoBoard.test.mjs",
+    ),
+    (
         "el filtro esconde tambien las convocatorias presentadas",
         "src/lib/boardMarks.ts",
         "  return notices.filter((notice) => marks[notice.id] !== 'seen')",

@@ -409,3 +409,45 @@ export function buildFile(previous, notices, today, { year }) {
     notices,
   }
 }
+
+/**
+ * Tope de fichas por ejecución.
+ *
+ * Si algún día hubiera cien convocatorias nuevas de golpe, se piden hoy las
+ * primeras y mañana el resto, en vez de soltarle cien peticiones seguidas a
+ * EPSO.
+ */
+export const MAX_DETAILS = 12
+
+/**
+ * Completa la fecha de apertura leyendo la ficha de cada convocatoria.
+ *
+ * Se guarda incluso cuando la ficha no la trae (queda en `null`), para no
+ * volver a pedir todos los días una página que ya sabemos que no la publica.
+ *
+ * **Una ficha que ya no existe no es una avería.** EPSO retira la página de
+ * inscripción cuando la convocatoria se cierra, y eso tumbaba la ejecución
+ * entera con un mensaje que además mentía: decía que no se habían podido leer
+ * los listados cuando los listados se habían leído perfectamente. El tablón se
+ * quedaba sin actualizar por una página de una convocatoria terminada. Ahora
+ * esa ficha se anota como «sin fecha», igual que una que no la publica, y el
+ * bot sigue. Lo que sí sigue siendo una avería —y sigue gritando— es que falle
+ * un LISTADO: ahí es donde un cambio de plantilla de EPSO vaciaría el tablón.
+ */
+export async function fillOpenedOn(notices, read, counter, log = console.warn) {
+  let asked = 0
+  for (const notice of notices) {
+    if (notice.openedOn !== undefined) continue
+    if (asked >= MAX_DETAILS) break
+    // La ficha, no la página de inscripción: el calendario está en aquélla.
+    const url = notice.infoUrl ?? notice.url
+    try {
+      notice.openedOn = parseOpenedOn(await read(url, counter))
+    } catch (error) {
+      log(`  ficha ilegible, se anota sin fecha: ${url}\n    ${error.message}`)
+      notice.openedOn = null
+    }
+    asked++
+  }
+  return asked
+}

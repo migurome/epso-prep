@@ -21,7 +21,9 @@ import {
   LISTINGS,
   buildFile,
   combineListings,
+  fillOpenedOn,
   keyOf,
+  MAX_DETAILS,
   mergeNotices,
   pagerLinks,
   parseListing,
@@ -364,5 +366,94 @@ describe('las piezas pequeñas', () => {
 
   it('el identificador aguanta acentos y símbolos', () => {
     expect(slug('Auditoría & Análisis (AD 7)')).toBe('auditoria-analisis-ad-7')
+  })
+})
+
+describe('pedir la ficha de cada convocatoria', () => {
+  const counter = () => ({ requests: 0 })
+  const sinRuido = () => {}
+
+  it('una ficha que ya no existe NO tumba la ejecución', async () => {
+    // Esto es lo que pasó el 9 de octubre de 2026: EPSO retiró la página de
+    // inscripción de una convocatoria terminada (ast3 de gestión de datos),
+    // el 404 subió sin recoger y el bot murió diciendo que no había podido
+    // leer los listados —que los había leído perfectamente—. El tablón se
+    // quedó un día sin actualizar por una página de una oposición cerrada.
+    const notices = [
+      { id: 'viva', url: 'https://epso.example/viva' },
+      { id: 'retirada', url: 'https://epso.example/retirada' },
+    ]
+    const read = async (url) => {
+      if (url.endsWith('/retirada')) throw new Error('404 Not Found')
+      // La ficha real que sirve EPSO, no un HTML a mano: el calendario va en
+      // una tabla con celdas por clase, y un párrafo inventado habría pasado
+      // el test sin probar que la fecha se lee de verdad.
+      return DETAIL
+    }
+
+    const asked = await fillOpenedOn(notices, read, counter(), sinRuido)
+
+    expect(asked).toBe(2)
+    expect(notices[0].openedOn).toBe('2026-09-08')
+    // `null` y no `undefined`: es la diferencia entre «ya preguntamos y no hay
+    // fecha» y «falta preguntar», y con undefined volvería a pedirla cada día.
+    expect(notices[1].openedOn).toBeNull()
+  })
+
+  it('deja dicho por qué se quedó sin fecha, en vez de callárselo', async () => {
+    const avisos = []
+    const read = async () => {
+      throw new Error('403 Forbidden')
+    }
+    await fillOpenedOn([{ id: 'x', url: 'https://epso.example/x' }], read, counter(), (m) =>
+      avisos.push(m),
+    )
+    expect(avisos).toHaveLength(1)
+    expect(avisos[0]).toContain('https://epso.example/x')
+    expect(avisos[0]).toContain('403')
+  })
+
+  it('prefiere la ficha a la página de inscripción: el calendario está en aquélla', async () => {
+    const pedidas = []
+    const read = async (url) => {
+      pedidas.push(url)
+      return ''
+    }
+    await fillOpenedOn(
+      [{ id: 'x', url: 'https://epso.example/apply', infoUrl: 'https://epso.example/ficha' }],
+      read,
+      counter(),
+      sinRuido,
+    )
+    expect(pedidas).toEqual(['https://epso.example/ficha'])
+  })
+
+  it('no vuelve a pedir una ficha que ya se preguntó', async () => {
+    // Incluida la que no tenía fecha: por eso se guarda null y no undefined.
+    let veces = 0
+    const read = async () => {
+      veces++
+      return ''
+    }
+    await fillOpenedOn(
+      [
+        { id: 'a', url: 'https://epso.example/a', openedOn: '2026-01-01' },
+        { id: 'b', url: 'https://epso.example/b', openedOn: null },
+      ],
+      read,
+      counter(),
+      sinRuido,
+    )
+    expect(veces).toBe(0)
+  })
+
+  it('para al llegar al tope, para no soltarle cien peticiones seguidas a EPSO', async () => {
+    const muchas = Array.from({ length: MAX_DETAILS + 5 }, (_, i) => ({
+      id: `n${i}`,
+      url: `https://epso.example/${i}`,
+    }))
+    const read = async () => ''
+    expect(await fillOpenedOn(muchas, read, counter(), sinRuido)).toBe(MAX_DETAILS)
+    expect(muchas[MAX_DETAILS].openedOn).toBeUndefined()
   })
 })

@@ -29,10 +29,10 @@ import {
   LISTINGS,
   buildFile,
   combineListings,
+  fillOpenedOn,
   mergeNotices,
   pagerLinks,
   parseListing,
-  parseOpenedOn,
   yearOf,
 } from './lib/epsoBoard.mjs'
 
@@ -41,10 +41,6 @@ const REPO = resolve(HERE, '../..')
 const OUT = resolve(REPO, 'Docs/board/notices.json')
 const UA = 'epso-prep-board/1.0 (+https://github.com/migurome/epso-prep)'
 const MAX_PAGES = 8
-// Tope de fichas por ejecución: si algún día hubiera cien convocatorias nuevas
-// de golpe, se piden hoy las primeras y mañana el resto, en vez de soltarle
-// cien peticiones seguidas a EPSO.
-const MAX_DETAILS = 12
 const PAUSE = 1500
 
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms))
@@ -108,24 +104,6 @@ async function readListings(read, year, counter) {
     byStage[listing.stage] = rows
   }
   return byStage
-}
-
-/**
- * Completa la fecha de apertura de las convocatorias que aún no la tienen.
- *
- * Se guarda incluso cuando la ficha no la trae (queda en null), para no volver
- * a pedir todos los días una página que ya sabemos que no la publica.
- */
-async function fillOpenedOn(notices, read, counter) {
-  let asked = 0
-  for (const notice of notices) {
-    if (notice.openedOn !== undefined) continue
-    if (asked >= MAX_DETAILS) break
-    // La ficha, no la página de inscripción: el calendario está en aquélla.
-    notice.openedOn = parseOpenedOn(await read(notice.infoUrl ?? notice.url, counter))
-    asked++
-  }
-  return asked
 }
 
 function loadPrevious(file) {
