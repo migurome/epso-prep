@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight, Flame, ListChecks, PenLine, Target, Timer } from 'lucide-react'
 import clsx from 'clsx'
 import { PageHeader } from '../components/PageHeader'
+import { heatClass } from '../lib/calendarHeat'
 import { useProgressStore } from '../lib/progressStore'
 import { usePracticeStore } from '../lib/practiceStore'
 import { useStudyStore } from '../lib/studyStore'
@@ -261,11 +262,10 @@ function DayCell({
           : day.isToday
             ? 'ring-1 ring-accent/50'
             : 'ring-1 ring-transparent',
-        level === 0 && 'bg-sunken text-ink-muted hover:bg-sunken',
-        level === 1 && 'bg-accent/15 text-ink-soft hover:bg-accent/25',
-        level === 2 && 'bg-accent/35 text-ink hover:bg-accent/45',
-        level === 3 && 'bg-accent/60 text-on-accent hover:bg-accent/70',
-        level === 4 && 'bg-accent text-on-accent hover:brightness-110',
+        // Los cinco pasos viven en lib/calendarHeat.ts: cada uno es el acento a
+        // una opacidad, y el contraste de su número hay que comprobarlo contra
+        // la MEZCLA, no contra el acento. Ver el comentario de ese fichero.
+        heatClass(level),
         day.isFuture && 'bg-transparent text-ink-muted hover:bg-sunken',
       )}
     >

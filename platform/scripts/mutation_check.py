@@ -1392,6 +1392,27 @@ MUTATIONS = [
         "src/lib/stores.test.ts",
     ),
     (
+        "el nivel 3 del calendario vuelve al 60 % y su numero deja de leerse",
+        "src/lib/calendarHeat.ts",
+        "    alpha: 0.8,\n    ink: 'on-accent',\n    className: 'bg-accent/80 text-on-accent hover:bg-accent/90',",
+        "    alpha: 0.6,\n    ink: 'on-accent',\n    className: 'bg-accent/60 text-on-accent hover:bg-accent/70',",
+        "scripts/contrast.test.mjs",
+    ),
+    (
+        "la clase del calendario y la opacidad que declara se desincronizan",
+        "src/lib/calendarHeat.ts",
+        "    className: 'bg-accent/80 text-on-accent hover:bg-accent/90',",
+        "    className: 'bg-accent/60 text-on-accent hover:bg-accent/70',",
+        "scripts/contrast.test.mjs",
+    ),
+    (
+        "el calendario deja de pintar el paso que le toca a cada dia",
+        "src/lib/calendarHeat.ts",
+        "  return (HEAT_LEVELS.find((l) => l.level === level) ?? HEAT_LEVELS[0]).className",
+        "  return HEAT_LEVELS[0].className",
+        "src/lib/calendarHeat.test.ts",
+    ),
+    (
         "un token se queda sin valor en el tema oscuro y su texto se vuelve invisible",
         "src/index.css",
         "  --ink-muted: #8b939d;\n  --ink-faint: #4a5058;",
