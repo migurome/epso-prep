@@ -11,7 +11,7 @@ const { version } = JSON.parse(readFileSync(new URL('./package.json', import.met
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/epso-ad429-26-prep/',
+  base: '/epso-prep/',
   define: { __APP_VERSION__: JSON.stringify(version) },
   plugins: [react(), tailwindcss()],
   build: {

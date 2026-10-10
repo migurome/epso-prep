@@ -39,7 +39,7 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = resolve(HERE, '../..')
 const OUT = resolve(REPO, 'Docs/board/notices.json')
-const UA = 'epso-ad429-26-prep-board/1.0 (+https://github.com/migurome/epso-ad429-26-prep)'
+const UA = 'epso-prep-board/1.0 (+https://github.com/migurome/epso-prep)'
 const MAX_PAGES = 8
 // Tope de fichas por ejecución: si algún día hubiera cien convocatorias nuevas
 // de golpe, se piden hoy las primeras y mañana el resto, en vez de soltarle

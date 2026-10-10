@@ -203,7 +203,7 @@ jsdom no puede hacer: en un DOM simulado nada se descarga, así que los tests de
 rutas pasarían igual con la carpeta de figuras vacía.
 
 - `dist/index.html` existe, referencia la ruta base de GitHub Pages
-  (`/epso-ad429-26-prep/`) y carga un módulo JavaScript.
+  (`/epso-prep/`) y carga un módulo JavaScript.
 - Todo lo que `index.html` enlaza existe en disco.
 - Hay un chunk de contenido por bloque generado (12), es decir que Rollup los
   sigue separando y la carga inicial no arrastra las 1334 preguntas de golpe.
