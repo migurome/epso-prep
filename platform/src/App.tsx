@@ -92,8 +92,8 @@ function App() {
  */
 function StartingScreen() {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-slate-50">
-      <LoaderCircle size={22} className="animate-spin text-slate-300" aria-hidden="true" />
+    <div className="flex min-h-dvh items-center justify-center bg-sunken">
+      <LoaderCircle size={22} className="animate-spin text-ink-muted" aria-hidden="true" />
     </div>
   )
 }

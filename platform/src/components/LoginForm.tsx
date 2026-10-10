@@ -113,29 +113,29 @@ export function LoginForm({ onSignIn, onSignUp, onRequest }: Props) {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-slate-50 px-4 py-10">
+    <div className="flex min-h-dvh items-center justify-center bg-sunken px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex justify-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-white">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-on-accent">
             {panel ? <MailCheck size={22} aria-hidden="true" /> : <Lock size={22} aria-hidden="true" />}
           </span>
         </div>
 
-        <h1 className="text-center text-lg font-semibold text-slate-800">{t('app_name')}</h1>
-        <p className="mt-1 text-center text-sm text-slate-500">{t('login_subtitle')}</p>
+        <h1 className="text-center text-lg font-semibold text-ink">{t('app_name')}</h1>
+        <p className="mt-1 text-center text-sm text-ink-muted">{t('login_subtitle')}</p>
 
         {panel ? (
-          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 text-center">
-            <h2 className="text-sm font-semibold text-slate-800">
+          <div className="mt-6 rounded-xl border border-line bg-raised p-6 text-center">
+            <h2 className="text-sm font-semibold text-ink">
               {t(panel === 'asked' ? 'login_ask_sent_title' : 'login_created_title')}
             </h2>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-ink-soft">
               {t(panel === 'asked' ? 'login_ask_sent_body' : 'login_created_body')}
             </p>
             <button
               type="button"
               onClick={() => go('in')}
-              className="mt-5 w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-accent hover:text-accent"
+              className="mt-5 w-full rounded-lg border border-line px-4 py-2.5 text-sm font-medium text-ink-soft hover:border-accent hover:text-accent"
             >
               {t('login_ask_back')}
             </button>
@@ -163,7 +163,7 @@ export function LoginForm({ onSignIn, onSignUp, onRequest }: Props) {
               onClick={() => setLocale(code)}
               className={clsx(
                 'rounded-md px-2 py-1 text-xs font-medium uppercase transition-colors',
-                locale === code ? 'bg-slate-200 text-slate-700' : 'text-slate-400 hover:text-slate-600',
+                locale === code ? 'bg-line text-ink-soft' : 'text-ink-muted hover:text-ink-soft',
               )}
             >
               {code}
@@ -216,10 +216,10 @@ function Form({
       <form
         onSubmit={onSubmit}
         noValidate
-        className="mt-6 rounded-xl border border-slate-200 bg-white p-6"
+        className="mt-6 rounded-xl border border-line bg-raised p-6"
       >
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">{t('login_email')}</span>
+          <span className="mb-1 block text-xs font-medium text-ink-muted">{t('login_email')}</span>
           <input
             type="email"
             value={email}
@@ -233,7 +233,7 @@ function Form({
 
         {!asking && (
           <label className="mt-4 block">
-            <span className="mb-1 block text-xs font-medium text-slate-500">
+            <span className="mb-1 block text-xs font-medium text-ink-muted">
               {t('login_password')}
             </span>
             <input
@@ -247,14 +247,14 @@ function Form({
           </label>
         )}
 
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-3 text-sm text-bad">{error}</p>}
 
         <button
           type="submit"
           disabled={!canSubmit}
           className={clsx(
             'mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5',
-            'text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60',
+            'text-sm font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-60',
           )}
         >
           {checking && <LoaderCircle size={15} className="animate-spin" aria-hidden="true" />}
@@ -281,12 +281,12 @@ function Form({
         </div>
       </form>
 
-      <p className="mt-4 text-center text-xs text-slate-400">{t(noteText)}</p>
+      <p className="mt-4 text-center text-xs text-ink-muted">{t(noteText)}</p>
     </>
   )
 }
 
 const inputClass =
-  'w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-accent focus:outline-none disabled:bg-slate-50'
+  'w-full rounded-lg border border-line px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none disabled:bg-sunken'
 const linkClass =
-  'w-full text-center text-xs text-slate-500 underline-offset-2 hover:underline disabled:opacity-60'
+  'w-full text-center text-xs text-ink-muted underline-offset-2 hover:underline disabled:opacity-60'

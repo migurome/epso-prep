@@ -20,11 +20,11 @@ import type { DictKey } from '../../lib/dictionary'
 // una hora después seguiría mintiendo con la misma cara.
 
 const TONE: Record<SyncStatus, string> = {
-  off: 'text-slate-300',
-  idle: 'text-slate-500',
-  syncing: 'text-emerald-600',
-  ready: 'text-emerald-600',
-  error: 'text-red-600',
+  off: 'text-ink-muted',
+  idle: 'text-ink-muted',
+  syncing: 'text-good',
+  ready: 'text-good',
+  error: 'text-bad',
 }
 
 const UNIT_KEY = {
@@ -83,7 +83,7 @@ export function SyncButton() {
       }
       className={clsx(
         'inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium',
-        'transition-colors hover:bg-slate-100 disabled:opacity-60',
+        'transition-colors hover:bg-sunken disabled:opacity-60',
         TONE[status],
       )}
     >

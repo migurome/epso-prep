@@ -27,8 +27,47 @@ import {
 // Sólo claro: la web entera lo es, a propósito, y un gráfico oscuro aquí sería
 // una isla.
 
-/** La paleta categórica validada, en orden fijo. Nunca se cicla. */
-const SERIES_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300']
+/**
+ * La paleta categórica validada, en orden fijo. Nunca se cicla.
+ *
+ * Los valores no están aquí: están en `index.css`, un juego por tema. Los seis
+ * pasos del tema oscuro son las MISMAS seis tonalidades estepadas para el
+ * fondo oscuro, no los claros invertidos, y están validados como conjunto
+ * contra esa superficie: banda de luminosidad, suelo de croma, separación para
+ * daltonismo y 3:1 de contraste. En claro, aqua, amarillo y magenta se quedan
+ * por debajo de 3:1 y la tabla de debajo es su alivio documentado; en oscuro
+ * los seis llegan.
+ */
+const SERIES_COLORS = [
+  'var(--color-series-1)',
+  'var(--color-series-2)',
+  'var(--color-series-3)',
+  'var(--color-series-4)',
+  'var(--color-series-5)',
+  'var(--color-series-6)',
+]
+
+/**
+ * El anillo que separa marcas que se solapan: un sector de la tarta del
+ * siguiente, un marcador de línea de la línea que pasa por debajo.
+ *
+ * Sigue a la superficie y no es blanco fijo. Blanco sobre una tarjeta oscura
+ * no separa: dibuja un contorno luminoso alrededor de cada marca, que es un
+ * adorno que nadie pidió y además sugiere un dato donde no hay ninguno.
+ */
+const RING = 'var(--color-raised)'
+
+/**
+ * La cifra que va ENCIMA del sector, que no es lo mismo que el anillo aunque
+ * los dos fueran blancos hasta ahora.
+ *
+ * El anillo se apoya en la superficie y tiene que seguirla. Esta cifra se
+ * apoya en el COLOR DE LA SERIE, que es de luminosidad media en los dos temas
+ * —es un requisito de la paleta—, así que es blanca en los dos y no cambia.
+ * Atarla a la superficie la habría puesto oscura sobre un relleno medio en el
+ * tema oscuro, que es peor que dejarla quieta.
+ */
+const ON_SLICE = '#ffffff'
 
 const W = 680
 const H = 300
@@ -76,7 +115,7 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
       {spec.series.length >= 2 && (
         <figcaption className="mb-2 flex flex-wrap gap-x-4 gap-y-1">
           {spec.series.map((s, i) => (
-            <span key={s.label} className="flex items-center gap-1.5 text-xs text-slate-600">
+            <span key={s.label} className="flex items-center gap-1.5 text-xs text-ink-soft">
               <span
                 aria-hidden="true"
                 className="h-2.5 w-2.5 rounded-sm"
@@ -90,7 +129,7 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
 
       <svg
         viewBox={`0 0 ${W} ${H}`}
-        className="w-full rounded-lg border border-slate-200 bg-white"
+        className="w-full rounded-lg border border-line bg-raised"
         role="img"
         aria-label={axisLabel}
       >
@@ -98,7 +137,7 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
           <text
             x={PAD.left - 48}
             y={14}
-            className="fill-slate-500"
+            className="fill-ink-muted"
             style={{ fontSize: 11 }}
           >
             {spec.unit}
@@ -113,14 +152,14 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
               x2={W - PAD.right}
               y1={y(tick)}
               y2={y(tick)}
-              stroke={tick === 0 ? '#94a3b8' : '#e2e8f0'}
+              stroke={tick === 0 ? 'var(--color-line-strong)' : 'var(--color-line)'}
               strokeWidth={1}
             />
             <text
               x={PAD.left - 8}
               y={y(tick) + 4}
               textAnchor="end"
-              className="fill-slate-500"
+              className="fill-ink-muted"
               style={{ fontSize: 12, fontVariantNumeric: 'tabular-nums' }}
             >
               {tick.toLocaleString(intl)}
@@ -194,7 +233,7 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
                     cy={y(value)}
                     r={4}
                     fill={SERIES_COLORS[i % SERIES_COLORS.length]}
-                    stroke="#ffffff"
+                    stroke={RING}
                     strokeWidth={2}
                   />
                 ),
@@ -208,7 +247,7 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
             x={centreX(g)}
             y={H - PAD.bottom + 18}
             textAnchor="middle"
-            className="fill-slate-600"
+            className="fill-ink-soft"
             style={{ fontSize: 12 }}
           >
             {point}
@@ -219,7 +258,7 @@ export function QuestionChart({ spec }: { spec: ChartSpec }) {
           x={PAD.left + PLOT.w / 2}
           y={H - 6}
           textAnchor="middle"
-          className="fill-slate-500"
+          className="fill-ink-muted"
           style={{ fontSize: 11 }}
         >
           {spec.category}
@@ -365,7 +404,7 @@ function PieChart({ spec }: { spec: ChartSpec }) {
     <figure className="my-4">
       <figcaption className="mb-2 flex flex-wrap gap-x-4 gap-y-1">
         {spec.points.map((point, i) => (
-          <span key={point} className="flex items-center gap-1.5 text-xs text-slate-600">
+          <span key={point} className="flex items-center gap-1.5 text-xs text-ink-soft">
             <span
               aria-hidden="true"
               className="h-2.5 w-2.5 rounded-sm"
@@ -376,7 +415,7 @@ function PieChart({ spec }: { spec: ChartSpec }) {
         ))}
       </figcaption>
 
-      <div className="flex flex-wrap justify-center gap-4 rounded-lg border border-slate-200 bg-white p-3">
+      <div className="flex flex-wrap justify-center gap-4 rounded-lg border border-line bg-raised p-3">
         {spec.series.map((serie) => (
           <div key={serie.label} className="text-center">
             <svg
@@ -393,14 +432,14 @@ function PieChart({ spec }: { spec: ChartSpec }) {
                     <path
                       d={slicePath(slice, BOX / 2, BOX / 2, R)}
                       fill={SERIES_COLORS[i % SERIES_COLORS.length]}
-                      stroke="#ffffff"
+                      stroke={RING}
                       strokeWidth={2}
                     />
                     <text
                       x={BOX / 2 + R * 0.62 * Math.cos(mid)}
                       y={BOX / 2 + R * 0.62 * Math.sin(mid) + 4}
                       textAnchor="middle"
-                      fill="#ffffff"
+                      fill={ON_SLICE}
                       style={{ fontSize: 12, fontWeight: 600 }}
                     >
                       {spec.unit === '%' ? `${slice.value}%` : slice.value}
@@ -410,13 +449,13 @@ function PieChart({ spec }: { spec: ChartSpec }) {
               })}
             </svg>
             {spec.series.length > 1 && (
-              <p className="mt-1 text-xs font-medium text-slate-600">{serie.label}</p>
+              <p className="mt-1 text-xs font-medium text-ink-soft">{serie.label}</p>
             )}
           </div>
         ))}
       </div>
 
-      <p className="mt-1 text-center text-xs text-slate-500">{spec.category}</p>
+      <p className="mt-1 text-center text-xs text-ink-muted">{spec.category}</p>
     </figure>
   )
 }

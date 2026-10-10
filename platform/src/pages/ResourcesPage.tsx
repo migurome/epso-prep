@@ -31,35 +31,35 @@ export function ResourcesPage() {
     <div>
       <PageHeader eyebrow={t('resources_eyebrow')} title={t('resources_title')} description={t('resources_description')} />
 
-      <div className="mb-8 rounded-xl border border-slate-200 bg-white p-5">
-        <h3 className="text-sm font-semibold text-slate-800">
+      <div className="mb-8 rounded-xl border border-line bg-raised p-5">
+        <h3 className="text-sm font-semibold text-ink">
           {competition.id} — {pick(locale, competition.title)}
         </h3>
         <dl className="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-slate-400">{t('total_posts')}</dt>
-            <dd className="font-medium text-slate-700">{competition.postsTotal}</dd>
+            <dt className="text-ink-muted">{t('total_posts')}</dt>
+            <dd className="font-medium text-ink-soft">{competition.postsTotal}</dd>
           </div>
           <div>
-            <dt className="text-slate-400">{t('fields_label')}</dt>
-            <dd className="font-medium text-slate-700">
+            <dt className="text-ink-muted">{t('fields_label')}</dt>
+            <dd className="font-medium text-ink-soft">
               {competition.fields.map((f) => `${pick(locale, f.label)} (${f.posts})`).join(' · ')}
             </dd>
           </div>
           <div>
-            <dt className="text-slate-400">{t('application_window')}</dt>
-            <dd className="font-medium text-slate-700">
+            <dt className="text-ink-muted">{t('application_window')}</dt>
+            <dd className="font-medium text-ink-soft">
               {competition.applicationWindow.open} → {competition.applicationWindow.close}
             </dd>
           </div>
           <div>
-            <dt className="text-slate-400">{t('language_regime')}</dt>
-            <dd className="font-medium text-slate-700">{pick(locale, competition.languageRule)}</dd>
+            <dt className="text-ink-muted">{t('language_regime')}</dt>
+            <dd className="font-medium text-ink-soft">{pick(locale, competition.languageRule)}</dd>
           </div>
         </dl>
-        <p className="mt-4 text-xs text-slate-400">
+        <p className="mt-4 text-xs text-ink-muted">
           {t('resources_verified_note', { notice: competition.id })}{' '}
-          <code className="rounded bg-slate-100 px-1 py-0.5">
+          <code className="rounded bg-sunken px-1 py-0.5">
             Docs/0.- Selection procedure overview.md
           </code>
           .
@@ -69,7 +69,7 @@ export function ResourcesPage() {
       <div className="space-y-8">
         {[...grouped.entries()].map(([category, links]) => (
           <div key={category}>
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {category}
             </h3>
             <ul className="space-y-2">
@@ -79,21 +79,21 @@ export function ResourcesPage() {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex items-start gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm transition-colors hover:border-accent"
+                    className="group flex items-start gap-2 rounded-lg border border-line bg-raised px-4 py-3 text-sm transition-colors hover:border-accent"
                   >
                     <ExternalLink
                       size={15}
-                      className="mt-0.5 shrink-0 text-slate-300 group-hover:text-accent"
+                      className="mt-0.5 shrink-0 text-ink-muted group-hover:text-accent"
                     />
                     <span>
-                      <span className="font-medium text-slate-800">{link.title}</span>
+                      <span className="font-medium text-ink">{link.title}</span>
                       {link.competition && (
-                        <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 align-middle text-[11px] font-semibold tabular-nums text-slate-500">
+                        <span className="ml-2 rounded bg-sunken px-1.5 py-0.5 align-middle text-[11px] font-semibold tabular-nums text-ink-muted">
                           {COMPETITIONS[link.competition].grade}
                         </span>
                       )}
                       {link.notes && (
-                        <span className="mt-0.5 block text-xs text-slate-500">
+                        <span className="mt-0.5 block text-xs text-ink-muted">
                           {link.notes}
                         </span>
                       )}

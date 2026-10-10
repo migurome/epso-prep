@@ -21,9 +21,9 @@ export function ApplicationPage() {
         description={t('application_description')}
       />
 
-      <div className="mb-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <p className="text-xs text-slate-600">{t('application_board_note')}</p>
-        <p className="mt-2 text-xs tabular-nums text-slate-500">
+      <div className="mb-6 rounded-xl border border-line bg-sunken p-4">
+        <p className="text-xs text-ink-soft">{t('application_board_note')}</p>
+        <p className="mt-2 text-xs tabular-nums text-ink-muted">
           {t('application_ready', {
             ready: String(readyCount(texts)),
             total: String(SECTIONS.length),
@@ -33,7 +33,7 @@ export function ApplicationPage() {
 
       <ApplicationEditor texts={texts} onChange={setText} />
 
-      <p className="mt-6 text-xs text-slate-400">{t('application_local_note')}</p>
+      <p className="mt-6 text-xs text-ink-muted">{t('application_local_note')}</p>
     </div>
   )
 }

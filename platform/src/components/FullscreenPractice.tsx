@@ -42,7 +42,7 @@ export function FullscreenPractice({ questions }: FullscreenPracticeProps) {
     <div>
       <TestLocaleSelector />
       {sources.length >= 2 && (
-        <div className="mx-auto mb-4 flex max-w-md gap-1 rounded-lg bg-slate-100 p-1 text-xs sm:text-sm">
+        <div className="mx-auto mb-4 flex max-w-md gap-1 rounded-lg bg-sunken p-1 text-xs sm:text-sm">
           {[
             ...sources.map((source) => [source, t(SOURCE_LABEL_KEY[source])] as const),
             ['all', t('filter_all')] as const,
@@ -53,7 +53,7 @@ export function FullscreenPractice({ questions }: FullscreenPracticeProps) {
               onClick={() => changeFilter(value)}
               className={clsx(
                 'flex-1 rounded-md px-2 py-1.5 font-medium transition-colors sm:px-3',
-                sourceFilter === value ? 'bg-white text-accent shadow-sm' : 'text-slate-500 hover:text-slate-700',
+                sourceFilter === value ? 'bg-raised text-accent shadow-sm' : 'text-ink-muted hover:text-ink-soft',
               )}
             >
               {label}
@@ -62,11 +62,11 @@ export function FullscreenPractice({ questions }: FullscreenPracticeProps) {
         </div>
       )}
 
-      <p className="mb-3 text-center text-sm font-medium text-slate-500">
+      <p className="mb-3 text-center text-sm font-medium text-ink-muted">
         {t('question_x_of_y', { x: safeIndex + 1, y: filtered.length })}
       </p>
 
-      <div className="mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8 md:p-10">
+      <div className="mx-auto max-w-2xl rounded-2xl border border-line bg-raised p-4 shadow-sm sm:p-8 md:p-10">
         <QuestionCard
           question={current}
           selectedOptionId={answers[current.id] ?? null}
@@ -81,7 +81,7 @@ export function FullscreenPractice({ questions }: FullscreenPracticeProps) {
           type="button"
           disabled={safeIndex === 0}
           onClick={() => setIndex((i) => Math.max(0, i - 1))}
-          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink-soft disabled:opacity-40"
         >
           <ChevronLeft size={16} />
           {t('previous')}
@@ -90,7 +90,7 @@ export function FullscreenPractice({ questions }: FullscreenPracticeProps) {
           type="button"
           disabled={safeIndex === filtered.length - 1}
           onClick={() => setIndex((i) => Math.min(filtered.length - 1, i + 1))}
-          className="inline-flex items-center gap-1 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-on-accent disabled:opacity-40"
         >
           {t('next')}
           <ChevronRight size={16} />

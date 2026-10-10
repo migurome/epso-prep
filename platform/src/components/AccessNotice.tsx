@@ -38,9 +38,9 @@ const ICON: Record<AccessNoticeKind, typeof Clock> = {
 }
 
 const TONE: Record<AccessNoticeKind, string> = {
-  pending: 'bg-amber-100 text-amber-700',
-  revoked: 'bg-red-100 text-red-700',
-  unavailable: 'bg-slate-200 text-slate-600',
+  pending: 'bg-warn-soft text-warn-ink',
+  revoked: 'bg-bad-soft text-bad-ink',
+  unavailable: 'bg-line text-ink-soft',
 }
 
 interface Props {
@@ -57,7 +57,7 @@ export function AccessNotice({ kind, email, failure, onRetry, onSignOut }: Props
   const Icon = ICON[kind]
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-slate-50 px-4 py-10">
+    <div className="flex min-h-dvh items-center justify-center bg-sunken px-4 py-10">
       <div className="w-full max-w-md text-center">
         <div className="mb-6 flex justify-center">
           <span
@@ -67,18 +67,18 @@ export function AccessNotice({ kind, email, failure, onRetry, onSignOut }: Props
           </span>
         </div>
 
-        <h1 className="text-lg font-semibold text-slate-800">{t(TITLE[kind])}</h1>
-        <p className="mt-3 text-sm text-slate-600">{t(BODY[kind])}</p>
+        <h1 className="text-lg font-semibold text-ink">{t(TITLE[kind])}</h1>
+        <p className="mt-3 text-sm text-ink-soft">{t(BODY[kind])}</p>
 
         {/* El motivo técnico sólo cuando lo hay: en una espera normal sería
             ruido, y en un fallo es lo único que permite arreglarlo. */}
         {kind === 'unavailable' && failure && (
-          <p className="mt-3 break-words rounded-lg bg-white px-3 py-2 font-mono text-xs text-red-600">
+          <p className="mt-3 break-words rounded-lg bg-raised px-3 py-2 font-mono text-xs text-bad">
             {failure}
           </p>
         )}
 
-        {email && <p className="mt-4 text-xs text-slate-400">{t('access_signed_in_as', { email })}</p>}
+        {email && <p className="mt-4 text-xs text-ink-muted">{t('access_signed_in_as', { email })}</p>}
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button type="button" onClick={onRetry} className={buttonClass}>
@@ -96,4 +96,4 @@ export function AccessNotice({ kind, email, failure, onRetry, onSignOut }: Props
 }
 
 const buttonClass =
-  'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-accent hover:text-accent'
+  'inline-flex items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-accent hover:text-accent'

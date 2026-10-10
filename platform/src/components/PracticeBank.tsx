@@ -106,7 +106,7 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
     <div>
       <TestLocaleSelector />
       {sources.length >= 2 && (
-        <div className="mb-3 flex gap-1 rounded-lg bg-slate-100 p-1 text-xs sm:text-sm">
+        <div className="mb-3 flex gap-1 rounded-lg bg-sunken p-1 text-xs sm:text-sm">
           {[
             ...sources.map((source) => [source, t(SOURCE_LABEL_KEY[source])] as const),
             ['all', t('filter_all')] as const,
@@ -117,7 +117,7 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
               onClick={() => setSourceFilter(value)}
               className={clsx(
                 'flex-1 rounded-md px-2 py-1.5 font-medium transition-colors sm:px-3',
-                sourceFilter === value ? 'bg-white text-accent shadow-sm' : 'text-slate-500 hover:text-slate-700',
+                sourceFilter === value ? 'bg-raised text-accent shadow-sm' : 'text-ink-muted hover:text-ink-soft',
               )}
             >
               {label}
@@ -129,7 +129,7 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
       {/* El filtro por estado va aparte del de procedencia y no fundido con él:
           son dos preguntas distintas —de dónde sale y si ya la he trabajado— y
           un solo grupo de pestañas obligaría a elegir una de las dos. */}
-      <div className="mb-4 flex gap-1 rounded-lg bg-slate-100 p-1 text-xs sm:text-sm">
+      <div className="mb-4 flex gap-1 rounded-lg bg-sunken p-1 text-xs sm:text-sm">
         {FILTERS.map(({ value, key }) => (
           <button
             key={value}
@@ -137,11 +137,11 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
             onClick={() => setStateFilter(value)}
             className={clsx(
               'flex-1 rounded-md px-2 py-1.5 font-medium tabular-nums transition-colors sm:px-3',
-              stateFilter === value ? 'bg-white text-accent shadow-sm' : 'text-slate-500 hover:text-slate-700',
+              stateFilter === value ? 'bg-raised text-accent shadow-sm' : 'text-ink-muted hover:text-ink-soft',
             )}
           >
             {t(key)}{' '}
-            <span className="text-slate-400">
+            <span className="text-ink-muted">
               {value === 'all' ? counts.total : value === 'answered' ? counts.answered : counts.pending}
             </span>
           </button>
@@ -149,16 +149,16 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
       </div>
 
       <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-        <p className="text-xs text-slate-400">{t('n_questions', { n: filtered.length })}</p>
+        <p className="text-xs text-ink-muted">{t('n_questions', { n: filtered.length })}</p>
         {counts.answered > 0 && (
           <>
-            <p className="text-xs text-slate-500 tabular-nums">
+            <p className="text-xs text-ink-muted tabular-nums">
               {t('practice_answered', { done: counts.answered, total: counts.total })}
             </p>
             <button
               type="button"
               onClick={() => reactivateAll(bank)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-raised px-2.5 py-1 text-xs font-medium text-ink-soft transition-colors hover:bg-sunken"
             >
               <RotateCcw size={13} />
               {t('practice_reactivate_all')}
@@ -166,12 +166,12 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
           </>
         )}
         {counts.answered === 0 && seed !== 0 && (
-          <p className="text-xs text-slate-400">{t('practice_reshuffled')}</p>
+          <p className="text-xs text-ink-muted">{t('practice_reshuffled')}</p>
         )}
       </div>
 
       {filtered.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-500">
+        <p className="rounded-xl border border-dashed border-line px-4 py-6 text-center text-sm text-ink-muted">
           {t('practice_none_under_filter')}
         </p>
       ) : (
@@ -255,19 +255,19 @@ function PracticeRow({
   return (
     <li
       className={clsx(
-        'overflow-hidden rounded-xl border bg-white',
-        verdict === true && 'border-emerald-300',
-        verdict === false && 'border-red-300',
-        verdict === null && 'border-slate-200',
+        'overflow-hidden rounded-xl border bg-raised',
+        verdict === true && 'border-good',
+        verdict === false && 'border-bad',
+        verdict === null && 'border-line',
       )}
     >
       <div className="flex w-full items-start gap-3 px-4 py-3 text-left">
         <span
           className={clsx(
             'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold',
-            verdict === true && 'bg-emerald-100 text-emerald-700',
-            verdict === false && 'bg-red-100 text-red-700',
-            verdict === null && 'bg-slate-100 text-slate-500',
+            verdict === true && 'bg-good-soft text-good-ink',
+            verdict === false && 'bg-bad-soft text-bad-ink',
+            verdict === null && 'bg-sunken text-ink-muted',
           )}
         >
           {index + 1}
@@ -281,7 +281,7 @@ function PracticeRow({
               aquí se recortara, al reabrirla el texto no estaría en ninguna
               parte. */}
           {compact ? (
-            <p className="truncate text-sm text-slate-500">
+            <p className="truncate text-sm text-ink-muted">
               {firstLine(pick(testLocale, question.prompt))}
             </p>
           ) : (
@@ -290,7 +290,7 @@ function PracticeRow({
             </PromptWithChart>
           )}
           {when && (
-            <p className="mt-1 text-[11px] text-slate-400" title={when.toLocaleString(intl)}>
+            <p className="mt-1 text-[11px] text-ink-muted" title={when.toLocaleString(intl)}>
               {t('practice_answered_on', {
                 date: when.toLocaleDateString(intl, { day: 'numeric', month: 'short' }),
               })}
@@ -310,8 +310,8 @@ function PracticeRow({
               title={t(clock.running ? 'practice_clock_stop' : 'practice_clock_start')}
               className={clsx(
                 'flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium tabular-nums transition-colors',
-                clock.running ? 'hover:bg-slate-100' : 'hover:bg-slate-100',
-                pace.over ? 'text-red-600' : clock.running ? 'text-slate-600' : 'text-slate-400',
+                clock.running ? 'hover:bg-sunken' : 'hover:bg-sunken',
+                pace.over ? 'text-bad' : clock.running ? 'text-ink-soft' : 'text-ink-muted',
               )}
             >
               {clock.running ? (
@@ -336,8 +336,8 @@ function PracticeRow({
               className={clsx(
                 'rounded-md p-1 transition-colors',
                 clock.seconds === 0 && !clock.running
-                  ? 'cursor-not-allowed text-slate-200'
-                  : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600',
+                  ? 'cursor-not-allowed text-ink-faint'
+                  : 'text-ink-muted hover:bg-sunken hover:text-ink-soft',
               )}
             >
               <TimerReset size={13} aria-hidden="true" />
@@ -347,13 +347,13 @@ function PracticeRow({
         )}
 
         {verdict === true && (
-          <span className="mt-0.5 flex shrink-0 items-center text-emerald-600">
+          <span className="mt-0.5 flex shrink-0 items-center text-good">
             <Check size={16} aria-hidden="true" />
             <span className="sr-only">{t('answered_correct')}</span>
           </span>
         )}
         {verdict === false && (
-          <span className="mt-0.5 flex shrink-0 items-center text-red-600">
+          <span className="mt-0.5 flex shrink-0 items-center text-bad">
             <X size={16} aria-hidden="true" />
             <span className="sr-only">{t('answered_wrong')}</span>
           </span>
@@ -365,7 +365,7 @@ function PracticeRow({
             aria-label={t('practice_reactivate_one')}
             title={t('practice_reactivate_one')}
             onClick={onReactivate}
-            className="mt-0.5 shrink-0 rounded p-0.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="mt-0.5 shrink-0 rounded p-0.5 text-ink-muted transition-colors hover:bg-sunken hover:text-ink-soft"
           >
             <RotateCcw size={14} />
           </button>
@@ -377,7 +377,7 @@ function PracticeRow({
           aria-label={isOpen ? t('practice_collapse') : t('practice_expand')}
           title={isOpen ? t('practice_collapse') : t('practice_expand')}
           onClick={onToggle}
-          className="-mt-0.5 shrink-0 rounded p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+          className="-mt-0.5 shrink-0 rounded p-1.5 text-ink-muted transition-colors hover:bg-sunken hover:text-ink-soft"
         >
           <ChevronDown
             size={16}
@@ -388,7 +388,7 @@ function PracticeRow({
       </div>
 
       {isOpen && (
-        <div className="border-t border-slate-100 px-4 py-4">
+        <div className="border-t border-line-soft px-4 py-4">
           <QuestionCard
             question={question}
             selectedOptionId={answer?.optionId ?? null}

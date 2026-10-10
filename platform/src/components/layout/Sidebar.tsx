@@ -88,7 +88,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-slate-900/40 md:hidden"
+          className="fixed inset-0 z-30 bg-scrim md:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -96,23 +96,23 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-40 flex h-full w-64 shrink-0 transform flex-col border-r border-slate-200 bg-white transition-transform duration-200 ease-in-out',
+          'fixed inset-y-0 left-0 z-40 flex h-full w-64 shrink-0 transform flex-col border-r border-line bg-raised transition-transform duration-200 ease-in-out',
           'md:static md:z-auto md:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <div className="flex items-start justify-between gap-2 border-b border-slate-200 px-5 py-5">
+        <div className="flex items-start justify-between gap-2 border-b border-line px-5 py-5">
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs font-semibold uppercase tracking-wide text-accent">
               {competition.id}
             </p>
-            <h1 className="mt-1 text-sm font-semibold text-slate-800">{t('app_name')}</h1>
+            <h1 className="mt-1 text-sm font-semibold text-ink">{t('app_name')}</h1>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label={t('close_menu')}
-            className="-mr-1.5 -mt-1 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 md:hidden"
+            className="-mr-1.5 -mt-1 rounded-lg p-1.5 text-ink-muted hover:bg-sunken hover:text-ink-soft md:hidden"
           >
             <X size={18} />
           </button>
@@ -130,8 +130,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     clsx(
                       'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-accent text-white'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+                        ? 'bg-accent text-on-accent'
+                        : 'text-ink-soft hover:bg-sunken hover:text-ink',
                     )
                   }
                 >
@@ -144,7 +144,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     onClick={() => setFieldOpen((v) => !v)}
                     aria-expanded={fieldOpen}
                     aria-label={t('toggle_subsection', { section: label })}
-                    className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+                    className="rounded-lg p-1.5 text-ink-muted transition-colors hover:bg-sunken hover:text-ink-soft"
                   >
                     <ChevronRight
                       size={15}
@@ -157,7 +157,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               {children && children.length > 0 && fieldOpen && (
                 // La sangría y la guía vertical dicen a qué cuelga esto, sin
                 // necesidad de repetir el nombre del padre en cada hijo.
-                <div className="mt-1 ml-5 space-y-1 border-l border-slate-200 pl-3">
+                <div className="mt-1 ml-5 space-y-1 border-l border-line pl-3">
                   {children.map((child) => (
                     <NavLink
                       key={child.to}
@@ -171,7 +171,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                           'flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm transition-colors',
                           isActive
                             ? 'bg-accent/10 font-semibold text-accent'
-                            : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900',
+                            : 'text-ink-muted hover:bg-sunken hover:text-ink',
                         )
                       }
                     >
@@ -185,8 +185,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="border-t border-slate-200 px-5 py-4">
-          <div className="mb-3 flex gap-1 rounded-lg bg-slate-100 p-1 text-xs" aria-label={t('language_selector_label')}>
+        <div className="border-t border-line px-5 py-4">
+          <div className="mb-3 flex gap-1 rounded-lg bg-sunken p-1 text-xs" aria-label={t('language_selector_label')}>
             {(['es', 'en'] as const).map((l) => (
               <button
                 key={l}
@@ -194,7 +194,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 onClick={() => setLocale(l)}
                 className={clsx(
                   'flex-1 rounded-md py-1 font-semibold uppercase transition-colors',
-                  locale === l ? 'bg-white text-accent shadow-sm' : 'text-slate-500 hover:text-slate-700',
+                  locale === l ? 'bg-raised text-accent shadow-sm' : 'text-ink-muted hover:text-ink-soft',
                 )}
               >
                 {l}
@@ -204,7 +204,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* La versión, no el recuento de plazas: las plazas ya están en la
               cabecera de cada ámbito, y lo que aquí hace falta saber es qué
               versión de la plataforma se está usando. */}
-          <p className="text-xs tabular-nums text-slate-400">
+          <p className="text-xs tabular-nums text-ink-muted">
             {t('app_version', { version: __APP_VERSION__ })}
           </p>
         </div>

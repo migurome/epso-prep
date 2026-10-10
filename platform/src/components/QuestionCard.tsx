@@ -108,7 +108,7 @@ export function QuestionCard({
   return (
     <div>
       {index != null && (
-        <p className={clsx('mb-3 font-semibold text-slate-400', large ? 'text-sm' : 'text-xs')}>
+        <p className={clsx('mb-3 font-semibold text-ink-muted', large ? 'text-sm' : 'text-xs')}>
           {t('question_n', { n: index + 1 })}
         </p>
       )}
@@ -177,10 +177,10 @@ export function QuestionCard({
 
           const stateClasses = clsx(
             !revealed && isSelected && 'border-accent bg-accent/5',
-            !revealed && !isSelected && 'border-slate-200 hover:border-slate-300 cursor-pointer',
-            showCorrect && 'border-emerald-500 bg-emerald-50',
-            showWrong && 'border-red-500 bg-red-50',
-            revealed && !isSelected && !opt.isCorrect && 'border-slate-200 opacity-60',
+            !revealed && !isSelected && 'border-line hover:border-line cursor-pointer',
+            showCorrect && 'border-good bg-good-soft',
+            showWrong && 'border-bad bg-bad-soft',
+            revealed && !isSelected && !opt.isCorrect && 'border-line opacity-60',
           )
 
           const badge = (
@@ -189,11 +189,11 @@ export function QuestionCard({
                 'flex shrink-0 items-center justify-center rounded-full border font-semibold',
                 large ? 'h-7 w-7 text-sm' : 'h-5 w-5 text-[11px]',
                 asCard ? 'mb-1.5' : 'mt-0.5',
-                showCorrect && 'border-emerald-500 text-emerald-700',
-                showWrong && 'border-red-500 text-red-700',
+                showCorrect && 'border-good text-good-ink',
+                showWrong && 'border-bad text-bad-ink',
                 !revealed && isSelected && 'border-accent text-accent',
                 (!revealed && !isSelected) || (revealed && !isSelected && !opt.isCorrect)
-                  ? 'border-slate-300 text-slate-500'
+                  ? 'border-line text-ink-muted'
                   : '',
               )}
             >
@@ -223,10 +223,10 @@ export function QuestionCard({
                   alt={t('figure_option_alt', { id: opt.id })}
                   className={clsx('mt-1', large ? 'w-16 sm:w-20' : 'w-14 sm:w-16')}
                 />
-                {showCorrect && <Check size={large ? 20 : 16} className="mt-1 shrink-0 text-emerald-600" />}
-                {showWrong && <X size={large ? 20 : 16} className="mt-1 shrink-0 text-red-600" />}
+                {showCorrect && <Check size={large ? 20 : 16} className="mt-1 shrink-0 text-good" />}
+                {showWrong && <X size={large ? 20 : 16} className="mt-1 shrink-0 text-bad" />}
                 {showExplanation && (
-                  <span className="mt-2 max-w-[10rem] text-center text-xs leading-relaxed text-slate-600">
+                  <span className="mt-2 max-w-[10rem] text-center text-xs leading-relaxed text-ink-soft">
                     {optExplanation}
                   </span>
                 )}
@@ -250,11 +250,11 @@ export function QuestionCard({
               >
                 <span className="flex items-center gap-1.5">
                   <span className={clsx('font-semibold', large ? 'text-lg' : 'text-base')}>{opt.id}</span>
-                  {showCorrect && <Check size={large ? 18 : 15} className="shrink-0 text-emerald-600" />}
-                  {showWrong && <X size={large ? 18 : 15} className="shrink-0 text-red-600" />}
+                  {showCorrect && <Check size={large ? 18 : 15} className="shrink-0 text-good" />}
+                  {showWrong && <X size={large ? 18 : 15} className="shrink-0 text-bad" />}
                 </span>
                 {showExplanation && (
-                  <span className="max-w-[11rem] text-center text-xs leading-relaxed text-slate-600">
+                  <span className="max-w-[11rem] text-center text-xs leading-relaxed text-ink-soft">
                     {optExplanation}
                   </span>
                 )}
@@ -277,10 +277,10 @@ export function QuestionCard({
               >
                 {badge}
                 <FigurePanelView panel={optionPanel!} large={large} framed={optionsFramed} />
-                {showCorrect && <Check size={large ? 20 : 16} className="mt-1 shrink-0 text-emerald-600" />}
-                {showWrong && <X size={large ? 20 : 16} className="mt-1 shrink-0 text-red-600" />}
+                {showCorrect && <Check size={large ? 20 : 16} className="mt-1 shrink-0 text-good" />}
+                {showWrong && <X size={large ? 20 : 16} className="mt-1 shrink-0 text-bad" />}
                 {showExplanation && (
-                  <span className="mt-2 max-w-[9rem] text-center text-xs leading-relaxed text-slate-600">
+                  <span className="mt-2 max-w-[9rem] text-center text-xs leading-relaxed text-ink-soft">
                     {optExplanation}
                   </span>
                 )}
@@ -306,17 +306,17 @@ export function QuestionCard({
                   {isAbstract ? asPlainNotation(optText) : optText}
                 </span>
                 {showExplanation && (
-                  <span className="mt-2 block text-xs leading-relaxed text-slate-600">{optExplanation}</span>
+                  <span className="mt-2 block text-xs leading-relaxed text-ink-soft">{optExplanation}</span>
                 )}
               </span>
-              {showCorrect && <Check size={large ? 20 : 16} className="mt-0.5 shrink-0 text-emerald-600" />}
-              {showWrong && <X size={large ? 20 : 16} className="mt-0.5 shrink-0 text-red-600" />}
+              {showCorrect && <Check size={large ? 20 : 16} className="mt-0.5 shrink-0 text-good" />}
+              {showWrong && <X size={large ? 20 : 16} className="mt-0.5 shrink-0 text-bad" />}
             </button>
           )
         })}
       </div>
       {revealed && lacksOfficialExplanation && (
-        <p className={clsx('mt-3 text-slate-500', large ? 'text-sm' : 'text-xs')}>
+        <p className={clsx('mt-3 text-ink-muted', large ? 'text-sm' : 'text-xs')}>
           {t('no_official_explanation')}
         </p>
       )}

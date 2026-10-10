@@ -6,7 +6,7 @@ import { useT } from '../lib/useT'
 export function LoadingFallback() {
   const t = useT()
   return (
-    <div className="flex items-center justify-center gap-2 py-24 text-sm text-slate-400">
+    <div className="flex items-center justify-center gap-2 py-24 text-sm text-ink-muted">
       <Loader2 size={18} className="animate-spin" />
       {t('loading')}
     </div>

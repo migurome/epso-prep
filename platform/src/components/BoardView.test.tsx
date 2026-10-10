@@ -120,13 +120,13 @@ describe('una convocatoria', () => {
 describe('el verde de lo recién publicado', () => {
   it('lo publicado hace diez días va en verde y marcado', () => {
     render(<BoardView board={board([notice({ openedOn: '2026-09-08' })])} />)
-    expect(cardOf('Cybersecurity').className).toContain('emerald')
+    expect(cardOf('Cybersecurity').className).toContain('good')
     expect(screen.getByText(es('board_new'))).toBeTruthy()
   })
 
   it('lo publicado hace cuatro meses NO', () => {
     render(<BoardView board={board([notice({ title: 'Data science', openedOn: '2026-05-06' })])} />)
-    expect(cardOf('Data science').className).not.toContain('emerald')
+    expect(cardOf('Data science').className).not.toContain('good')
     expect(screen.queryByText(es('board_new'))).toBeNull()
   })
 
@@ -139,8 +139,8 @@ describe('el verde de lo recién publicado', () => {
         ])}
       />,
     )
-    expect(cardOf('Cybersecurity').className).toContain('emerald')
-    expect(cardOf('Data science').className).not.toContain('emerald')
+    expect(cardOf('Cybersecurity').className).toContain('good')
+    expect(cardOf('Data science').className).not.toContain('good')
   })
 
   it('la leyenda explica qué significa el verde', () => {
@@ -258,10 +258,10 @@ describe('marcar una convocatoria', () => {
     // Lo verde quiere decir «mira esto». Si ya lo has mirado, deja de ser
     // verdad, y el verde pasa a ser ruido que tapa lo que todavía no has visto.
     render(<BoardView board={board([notice()])} />)
-    expect(cardOf('Cybersecurity').className).toContain('emerald')
+    expect(cardOf('Cybersecurity').className).toContain('good')
     expect(screen.getByText(es('board_new'))).toBeTruthy()
     fireEvent.click(seenOf('Cybersecurity'))
-    expect(cardOf('Cybersecurity').className).not.toContain('emerald')
+    expect(cardOf('Cybersecurity').className).not.toContain('good')
     expect(screen.queryByText(es('board_new'))).toBeNull()
   })
 

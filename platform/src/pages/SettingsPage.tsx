@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
-import { Check, RotateCcw, Trash2, Undo2 } from 'lucide-react'
+import { Check, Monitor, Moon, RotateCcw, Sun, Trash2, Undo2 } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
 import { SyncCard } from '../components/SyncCard'
 import { useProgressStore } from '../lib/progressStore'
 import { usePracticeStore } from '../lib/practiceStore'
 import { activeFieldsOf, useStudyStore } from '../lib/studyStore'
 import { useLocaleStore, pick } from '../lib/localeStore'
+import { useThemeStore } from '../lib/themeStore'
+import type { Theme } from '../lib/theme'
 import { useT } from '../lib/useT'
+import type { DictKey } from '../lib/dictionary'
 import { ALL_FIELDS, COMPETITIONS, competitionOf } from '../data/competition'
 import { currentWeek, formatDuration, type CalendarInput } from '../lib/studyCalendar'
 import type { Field } from '../types/content'
@@ -125,7 +128,7 @@ export function SettingsPage() {
             </FormField>
           </div>
 
-          <p className="mt-4 text-xs text-slate-400">{t('settings_local_note')}</p>
+          <p className="mt-4 text-xs text-ink-muted">{t('settings_local_note')}</p>
         </Card>
 
         {/* ── Ámbito ────────────────────────────────────────────────────── */}
@@ -157,10 +160,10 @@ export function SettingsPage() {
               nadie se prepara seis: aquí se decide cuáles salen en el menú,
               bajo Field-Related MCQ. El que se esté usando no se puede dar de
               baja — sería quitar del menú la página abierta. */}
-          <fieldset className="mt-6 border-t border-slate-200 pt-5">
+          <fieldset className="mt-6 border-t border-line pt-5">
             <legend className="sr-only">{t('settings_active_fields')}</legend>
-            <p className="text-sm font-medium text-slate-700">{t('settings_active_fields')}</p>
-            <p className="mt-1 text-xs text-slate-500">{t('settings_active_fields_hint')}</p>
+            <p className="text-sm font-medium text-ink-soft">{t('settings_active_fields')}</p>
+            <p className="mt-1 text-xs text-ink-muted">{t('settings_active_fields_hint')}</p>
             <ul className="mt-3 space-y-2">
               {ALL_FIELDS.map((f) => {
                 const on = activeFields.includes(f.id)
@@ -170,8 +173,8 @@ export function SettingsPage() {
                     <label
                       className={clsx(
                         'flex items-start gap-3 rounded-lg border px-3 py-2 text-sm',
-                        on ? 'border-accent/40 bg-accent/5' : 'border-slate-200',
-                        locked ? 'cursor-not-allowed' : 'cursor-pointer hover:border-slate-300',
+                        on ? 'border-accent/40 bg-accent/5' : 'border-line',
+                        locked ? 'cursor-not-allowed' : 'cursor-pointer hover:border-line',
                       )}
                     >
                       <input
@@ -188,12 +191,12 @@ export function SettingsPage() {
                         className="mt-0.5 h-4 w-4 accent-[var(--color-accent)]"
                       />
                       <span className="min-w-0">
-                        <span className="font-medium text-slate-800">{pick(locale, f.label)}</span>
-                        <span className="ml-2 text-xs tabular-nums text-slate-400">
+                        <span className="font-medium text-ink">{pick(locale, f.label)}</span>
+                        <span className="ml-2 text-xs tabular-nums text-ink-muted">
                           {COMPETITIONS[f.competition].grade} · {f.posts}
                         </span>
                         {locked && (
-                          <span className="mt-0.5 block text-xs text-slate-500">
+                          <span className="mt-0.5 block text-xs text-ink-muted">
                             {t('settings_active_fields_current')}
                           </span>
                         )}
@@ -232,17 +235,17 @@ export function SettingsPage() {
                   }
                   className={`${inputClass} w-20 tabular-nums`}
                 />
-                <span className="text-sm text-slate-500">{t('settings_hours_per_week')}</span>
+                <span className="text-sm text-ink-muted">{t('settings_hours_per_week')}</span>
               </div>
             </FormField>
           </div>
 
-          <p className="mt-4 text-sm text-slate-600">
+          <p className="mt-4 text-sm text-ink-soft">
             {t('settings_goal_daily', {
               daily: formatDuration((draftSettings.weeklyGoalHours * 3600) / 7, locale),
             })}
           </p>
-          <p className="mt-1 text-xs text-slate-400 tabular-nums">
+          <p className="mt-1 text-xs text-ink-muted tabular-nums">
             {t('calendar_week_progress', {
               done: formatDuration(week.seconds, locale),
               goal: formatDuration(week.goalSeconds, locale),
@@ -260,7 +263,7 @@ export function SettingsPage() {
               onChange={(e) => editSettings({ trackUsage: e.target.checked })}
               className="mt-0.5 h-4 w-4 accent-[var(--color-accent)]"
             />
-            <span className="text-sm text-slate-700">{t('settings_track_usage')}</span>
+            <span className="text-sm text-ink-soft">{t('settings_track_usage')}</span>
           </label>
 
           <div className="mt-4 max-w-xs">
@@ -278,6 +281,11 @@ export function SettingsPage() {
               />
             </FormField>
           </div>
+        </Card>
+
+        {/* ── Aspecto ───────────────────────────────────────────────────── */}
+        <Card title={t('settings_theme')} description={t('settings_theme_description')}>
+          <ThemePicker />
         </Card>
 
         {/* ── Sincronización automática entre dispositivos ──────────────── */}
@@ -303,13 +311,13 @@ export function SettingsPage() {
               onClick={() => {
                 if (window.confirm(t('settings_clear_log_confirm'))) clearDayLog()
               }}
-              className={`${buttonClass} border-red-200 text-red-700 hover:bg-red-50`}
+              className={`${buttonClass} border-bad text-bad-ink hover:bg-bad-soft`}
             >
               <Trash2 size={15} />
               {t('settings_clear_log')}
             </button>
           </div>
-          <p className="mt-3 text-xs text-slate-400">
+          <p className="mt-3 text-xs text-ink-muted">
             {t('settings_log_size', { days: Object.keys(dayLog).length })}
           </p>
         </Card>
@@ -317,12 +325,12 @@ export function SettingsPage() {
         {/* ── Confirmar ─────────────────────────────────────────────────────
             Pegada abajo: la página es larga y el candidato no debería tener
             que buscar dónde se confirma lo que acaba de escribir. */}
-        <div className="sticky bottom-0 flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white/95 px-5 py-3 backdrop-blur">
+        <div className="sticky bottom-0 flex flex-wrap items-center gap-3 rounded-xl border border-line bg-raised/95 px-5 py-3 backdrop-blur">
           <button
             type="button"
             onClick={save}
             disabled={!dirty}
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-40"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-dark disabled:opacity-40"
           >
             <Check size={15} />
             {t('settings_save')}
@@ -335,7 +343,7 @@ export function SettingsPage() {
           )}
           <span
             className={
-              dirty ? 'text-xs font-medium text-amber-700' : 'text-xs text-slate-400'
+              dirty ? 'text-xs font-medium text-warn-ink' : 'text-xs text-ink-muted'
             }
           >
             {dirty ? t('settings_unsaved') : justSaved ? t('settings_saved') : t('settings_no_changes')}
@@ -347,11 +355,58 @@ export function SettingsPage() {
 }
 
 const inputClass =
-  'rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-800 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent'
+  'rounded-lg border border-line bg-raised px-3 py-1.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent'
 
 
 const buttonClass =
-  'flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50'
+  'flex items-center gap-2 rounded-lg border border-line bg-raised px-3 py-1.5 text-sm font-medium text-ink-soft transition-colors hover:bg-sunken'
+
+/**
+ * Claro, oscuro o el del sistema.
+ *
+ * Tres botones y no un interruptor de dos, porque «el del sistema» es una
+ * respuesta distinta de «claro»: quien tiene el portátil en automático quiere
+ * que la plataforma cambie sola al atardecer, y un interruptor de dos
+ * posiciones le obliga a elegir un bando para siempre.
+ */
+function ThemePicker() {
+  const t = useT()
+  const theme = useThemeStore((s) => s.theme)
+  const setTheme = useThemeStore((s) => s.setTheme)
+  const options: Array<{ value: Theme; label: DictKey; icon: typeof Monitor }> = [
+    { value: 'system', label: 'theme_system', icon: Monitor },
+    { value: 'light', label: 'theme_light', icon: Sun },
+    { value: 'dark', label: 'theme_dark', icon: Moon },
+  ]
+
+  return (
+    <div>
+      <div className="flex flex-wrap gap-2">
+        {options.map(({ value, label, icon: Icon }) => {
+          const on = theme === value
+          return (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={on}
+              onClick={() => setTheme(value)}
+              className={clsx(
+                'inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors',
+                on
+                  ? 'border-accent bg-accent-soft text-accent-ink'
+                  : 'border-line text-ink-soft hover:border-accent hover:text-accent',
+              )}
+            >
+              <Icon size={14} />
+              {t(label)}
+            </button>
+          )
+        })}
+      </div>
+      <p className="mt-3 text-xs text-ink-muted">{t('settings_theme_figures')}</p>
+    </div>
+  )
+}
 
 function clamp(value: number, min: number, max: number): number {
   if (Number.isNaN(value)) return min
@@ -368,9 +423,9 @@ function Card({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5">
-      <h2 className="text-sm font-semibold text-slate-800">{title}</h2>
-      {description && <p className="mt-1 mb-4 text-xs text-slate-500">{description}</p>}
+    <section className="rounded-xl border border-line bg-raised p-5">
+      <h2 className="text-sm font-semibold text-ink">{title}</h2>
+      {description && <p className="mt-1 mb-4 text-xs text-ink-muted">{description}</p>}
       <div className={description ? '' : 'mt-4'}>{children}</div>
     </section>
   )
@@ -387,9 +442,9 @@ function FormField({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-slate-500">{label}</span>
+      <span className="mb-1 block text-xs font-medium text-ink-muted">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-xs text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1 block text-xs text-ink-muted">{hint}</span>}
     </label>
   )
 }

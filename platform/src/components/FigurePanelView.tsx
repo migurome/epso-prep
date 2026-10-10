@@ -33,7 +33,7 @@ function cellIconPx(count: number): number {
  * amontonadas en una sola. */
 function PositionFrame({ cells, size }: { cells: Map<number, React.ReactNode>; size: SizeKind }) {
   return (
-    <div className={clsx('grid grid-cols-3 grid-rows-3 rounded-lg border border-dashed border-slate-300 p-1', FRAME_PX[size])}>
+    <div className={clsx('grid grid-cols-3 grid-rows-3 rounded-lg border border-dashed border-line p-1', FRAME_PX[size])}>
       {Array.from({ length: 9 }).map((_, i) => (
         <div key={i} className="flex items-center justify-center">
           {cells.get(i) ?? null}
@@ -51,7 +51,7 @@ function Caption({ panel }: { panel: FigurePanel }) {
     <span
       className={clsx(
         'max-w-[7rem] text-center leading-tight',
-        panel.partial ? 'text-xs text-slate-600' : 'text-[10px] text-slate-400',
+        panel.partial ? 'text-xs text-ink-soft' : 'text-[10px] text-ink-muted',
       )}
     >
       {asPlainNotation(panel.caption ?? '')}
@@ -89,7 +89,7 @@ export function FigurePanelView({ panel, large, sizeOverride, framed }: FigurePa
     return (
       <div
         className={clsx(
-          'flex items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-300',
+          'flex items-center justify-center rounded-lg border-2 border-dashed border-line text-ink-muted',
           sizeOverride ? FRAME_PX[sizeOverride] : large ? 'h-24 w-24 text-3xl' : 'h-14 w-14 text-xl',
         )}
       >
@@ -100,7 +100,7 @@ export function FigurePanelView({ panel, large, sizeOverride, framed }: FigurePa
 
   if (panel.shapes.length === 0) {
     return (
-      <div className={clsx('flex max-w-[7rem] items-center justify-center text-center text-slate-500', large ? 'text-sm' : 'text-xs')}>
+      <div className={clsx('flex max-w-[7rem] items-center justify-center text-center text-ink-muted', large ? 'text-sm' : 'text-xs')}>
         {panel.caption ?? panel.raw}
       </div>
     )
@@ -139,7 +139,7 @@ export function FigurePanelView({ panel, large, sizeOverride, framed }: FigurePa
     const rowBase: SizeKind = sizeOverride ?? (large ? 'medium' : 'small')
     return (
       <div className="flex flex-col items-center gap-1.5">
-        <div className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-slate-300 px-2 py-1.5">
+        <div className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-line px-2 py-1.5">
           {rowKeys.map((key) => (
             <div key={key} className="flex items-center justify-center gap-0.5">
               {byRow.get(key)!.map((s, i) => (
@@ -163,7 +163,7 @@ export function FigurePanelView({ panel, large, sizeOverride, framed }: FigurePa
       <div className="flex flex-col items-center gap-1.5">
         <div
           className={clsx(
-            'flex items-center justify-center gap-1 rounded-lg border border-dashed border-slate-300 p-1',
+            'flex items-center justify-center gap-1 rounded-lg border border-dashed border-line p-1',
             FRAME_PX[sizeOverride ?? (large ? 'large' : 'medium')],
           )}
         >

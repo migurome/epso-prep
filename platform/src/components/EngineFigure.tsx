@@ -54,7 +54,7 @@ export function EngineBoardView({
                 role="img"
                 aria-label={unknownAlt}
                 className={clsx(
-                  'flex aspect-square items-center justify-center rounded border-2 border-dashed border-slate-300 bg-slate-50 font-semibold text-slate-400',
+                  'flex aspect-square items-center justify-center rounded border-2 border-dashed border-line bg-sunken font-semibold text-ink-muted',
                   width,
                   large ? 'text-3xl' : 'text-2xl',
                 )}

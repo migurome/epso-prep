@@ -590,6 +590,19 @@ export const DICT = {
     es: 'Las presentadas no se esconden nunca: sus fechas de prueba son tus fechas.',
     en: 'Competitions you applied to are never hidden: their test dates are your dates.',
   },
+  // Tema claro u oscuro
+  settings_theme: { es: 'Aspecto', en: 'Appearance' },
+  settings_theme_description: {
+    es: 'El tema vale para este navegador y no viaja con el progreso: elegir oscuro en el móvil no es motivo para oscurecer el portátil.',
+    en: 'The theme applies to this browser and does not travel with your progress: choosing dark on the phone is no reason to darken the laptop.',
+  },
+  theme_system: { es: 'El del sistema', en: 'Match the system' },
+  theme_light: { es: 'Claro', en: 'Light' },
+  theme_dark: { es: 'Oscuro', en: 'Dark' },
+  settings_theme_figures: {
+    es: 'Las figuras de razonamiento abstracto siguen sobre fondo blanco en el tema oscuro: sus rellenos son el dato de la pregunta, y el examen real también es sobre papel claro.',
+    en: 'Abstract reasoning figures stay on white in the dark theme: their fills are the question’s data, and the real exam is on light paper too.',
+  },
   // Sincronización automática del progreso
   settings_autosync: { es: 'Sincronizar entre dispositivos', en: 'Sync across devices' },
   settings_autosync_description: {

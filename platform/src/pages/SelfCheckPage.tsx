@@ -352,7 +352,7 @@ export function SelfCheckPage() {
         ))}
       </div>
 
-      <p className="mt-8 text-xs leading-relaxed text-slate-400">{t('selfcheck_footnote')}</p>
+      <p className="mt-8 text-xs leading-relaxed text-ink-muted">{t('selfcheck_footnote')}</p>
     </div>
   )
 }
@@ -384,31 +384,31 @@ function Summary({
   const percent = progress.total ? Math.round((progress.done / progress.total) * 100) : 0
 
   const tone = running
-    ? 'border-slate-200 bg-white'
+    ? 'border-line bg-raised'
     : ok
-      ? 'border-emerald-200 bg-emerald-50'
-      : 'border-red-200 bg-red-50'
+      ? 'border-good bg-good-soft'
+      : 'border-bad bg-bad-soft'
 
   return (
     <div className={`rounded-xl border p-5 ${tone}`}>
       <div className="flex flex-wrap items-center gap-3">
         {running ? (
-          <Loader2 size={22} className="animate-spin text-slate-400" />
+          <Loader2 size={22} className="animate-spin text-ink-muted" />
         ) : ok ? (
-          <CheckCircle2 size={22} className="text-emerald-600" />
+          <CheckCircle2 size={22} className="text-good" />
         ) : (
-          <XCircle size={22} className="text-red-600" />
+          <XCircle size={22} className="text-bad" />
         )}
 
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-slate-800">
+          <p className="text-sm font-semibold text-ink">
             {running
               ? t('selfcheck_running')
               : ok
                 ? t('selfcheck_all_good', { checks })
                 : t('selfcheck_failed', { issues, checks: failing })}
           </p>
-          <p className="mt-0.5 text-xs text-slate-500 tabular-nums">
+          <p className="mt-0.5 text-xs text-ink-muted tabular-nums">
             {running
               ? `${progress.done} / ${progress.total} (${percent} %) · ${formatBytes(bytes)}`
               : t('selfcheck_elapsed', {
@@ -422,7 +422,7 @@ function Summary({
           type="button"
           onClick={onRerun}
           disabled={running}
-          className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-lg border border-line bg-raised px-3 py-1.5 text-xs font-semibold text-ink-soft transition-colors hover:bg-sunken disabled:opacity-50"
         >
           <RotateCw size={14} />
           {t('selfcheck_rerun')}
@@ -430,7 +430,7 @@ function Summary({
       </div>
 
       {running && (
-        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-200">
+        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-line">
           <div
             className="h-full rounded-full bg-accent transition-[width] duration-200"
             style={{ width: `${percent}%` }}
@@ -439,7 +439,7 @@ function Summary({
       )}
 
       {!running && !ok && (
-        <p className="mt-3 text-xs text-red-700">
+        <p className="mt-3 text-xs text-bad-ink">
           {locale === 'es'
             ? 'Cada incidencia dice el sitio exacto donde está. Corrige, vuelve a generar el contenido y recarga.'
             : 'Each issue names exactly where it is. Fix it, rebuild the content and reload.'}
@@ -451,11 +451,11 @@ function Summary({
 
 function StatusIcon({ status }: { status: GroupStatus }) {
   if (status === 'running') return <Loader2 size={16} className="shrink-0 animate-spin text-accent" />
-  if (status === 'ok') return <CheckCircle2 size={16} className="shrink-0 text-emerald-500" />
-  if (status === 'failed') return <AlertTriangle size={16} className="shrink-0 text-red-500" />
+  if (status === 'ok') return <CheckCircle2 size={16} className="shrink-0 text-good" />
+  if (status === 'failed') return <AlertTriangle size={16} className="shrink-0 text-bad" />
   // Pendiente: un círculo vacío. Que se distinga de un tick a simple vista es
   // lo que permite ver, de un vistazo, hasta dónde ha llegado la pasada.
-  return <Circle size={16} className="shrink-0 text-slate-300" />
+  return <Circle size={16} className="shrink-0 text-ink-muted" />
 }
 
 function GroupCard({
@@ -476,11 +476,11 @@ function GroupCard({
   return (
     <section
       className={clsx(
-        'overflow-hidden rounded-xl border bg-white transition-colors',
-        group.status === 'failed' && 'border-red-200',
+        'overflow-hidden rounded-xl border bg-raised transition-colors',
+        group.status === 'failed' && 'border-bad',
         group.status === 'running' && 'border-accent/40',
-        group.status === 'ok' && 'border-slate-200',
-        pending && 'border-slate-200 bg-slate-50/60',
+        group.status === 'ok' && 'border-line',
+        pending && 'border-line bg-sunken/60',
       )}
     >
       <button
@@ -490,10 +490,10 @@ function GroupCard({
         className="flex w-full items-center gap-2 px-5 py-3 text-left"
       >
         <StatusIcon status={group.status} />
-        <h3 className={clsx('text-sm font-semibold', pending ? 'text-slate-400' : 'text-slate-800')}>
+        <h3 className={clsx('text-sm font-semibold', pending ? 'text-ink-muted' : 'text-ink')}>
           {group.title}
         </h3>
-        <span className="ml-auto text-xs tabular-nums text-slate-400">
+        <span className="ml-auto text-xs tabular-nums text-ink-muted">
           {group.note ??
             (pending
               ? t('selfcheck_pending')
@@ -502,35 +502,35 @@ function GroupCard({
         <ChevronRight
           size={15}
           aria-hidden="true"
-          className={clsx('shrink-0 text-slate-300 transition-transform', open && 'rotate-90')}
+          className={clsx('shrink-0 text-ink-muted transition-transform', open && 'rotate-90')}
         />
       </button>
 
       {open && group.checks.length > 0 && (
-        <ul className="divide-y divide-slate-100 border-t border-slate-100">
+        <ul className="divide-y divide-line-soft border-t border-line-soft">
           {group.checks.map((check) => (
             <li key={check.id} className="px-5 py-3">
               <div className="flex items-start gap-2">
                 {check.issues.length ? (
-                  <XCircle size={15} className="mt-0.5 shrink-0 text-red-500" />
+                  <XCircle size={15} className="mt-0.5 shrink-0 text-bad" />
                 ) : (
-                  <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-500" />
+                  <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-good" />
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-slate-700">{pick(locale, check.label)}</p>
+                  <p className="text-sm text-ink-soft">{pick(locale, check.label)}</p>
                   {check.detail && !check.issues.length && (
-                    <p className="mt-0.5 text-xs text-slate-400">{pick(locale, check.detail)}</p>
+                    <p className="mt-0.5 text-xs text-ink-muted">{pick(locale, check.detail)}</p>
                   )}
                   {check.issues.length > 0 && (
                     <ul className="mt-2 space-y-1">
                       {check.issues.slice(0, 25).map((issue, i) => (
-                        <li key={`${issue.where}-${i}`} className="text-xs text-red-700">
-                          <code className="rounded bg-red-50 px-1 py-0.5 font-mono">{issue.where}</code>{' '}
+                        <li key={`${issue.where}-${i}`} className="text-xs text-bad-ink">
+                          <code className="rounded bg-bad-soft px-1 py-0.5 font-mono">{issue.where}</code>{' '}
                           {pick(locale, issue.problem)}
                         </li>
                       ))}
                       {check.issues.length > 25 && (
-                        <li className="text-xs text-slate-400">+ {check.issues.length - 25}…</li>
+                        <li className="text-xs text-ink-muted">+ {check.issues.length - 25}…</li>
                       )}
                     </ul>
                   )}

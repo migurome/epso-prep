@@ -10,6 +10,7 @@ Acordado el 18/09/2026.
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.4` | Tema oscuro, con interruptor en Ajustes (claro, oscuro o el del sistema). Los 612 colores escritos a mano pasan a diez tokens con nombre de papel, los gráficos estrenan paleta validada contra fondo oscuro y las figuras de abstracto se quedan sobre blanco, porque sus rellenos son el dato de la pregunta. |
 | `2.3` | El tablón se puede marcar: «Visto» aparta lo repasado y «Presentada» deja constancia de dónde te has inscrito. Las vistas se esconden con un interruptor; las presentadas no se esconden nunca. Las marcas viajan en la copia. |
 | `2.2` | Las 24 preguntas del banco numérico que enseñan un gráfico ya lo enseñan: líneas, sectores y apiladas, con los datos leídos del libro original. El reloj de práctica lo arranca y lo para el candidato, y su ritmo sale del formato de cada prueba. |
 | `2.1` | Candidaturas: los cuatro textos de la redacción libre de la inscripción, con la cuenta de caracteres contra el límite de 2 000 de EPSO y un botón para copiar cada uno al formulario. |
@@ -211,6 +212,84 @@ Tres cosas que el trabajo pidió y el plan no:
   —que es lo correcto: no pudo comprobarlas—. Se reapuntaron una a una al código
   equivalente en vez de borrarlas, que habría sido perder la cobertura sin que
   nada se quejara.
+
+### Tema oscuro — **hecho** (`2.4`)
+
+La plataforma era clara a propósito y lo dejaba escrito en sus comentarios. El
+problema de aquella decisión no era el gusto: eran **612 clases de color
+escritas a mano en 44 ficheros** (`bg-white`, `text-slate-600`,
+`border-slate-200`), y con eso un tema oscuro significa 612 variantes `dark:`
+que nadie puede revisar ni mantener.
+
+Así que primero el refactor y después el tema. Ahora son **diez tokens con
+nombre de papel** —`surface`, `raised`, `sunken`, `line`, `ink`, `ink-soft`,
+`ink-muted`, y los semánticos `good`, `bad`, `warn`— registrados en `@theme`
+apuntando a variables, de modo que Tailwind genera la utilidad una vez y el
+valor lo decide el tema en tiempo de ejecución. La sustitución la hizo un
+script que al terminar **lista lo que no ha sabido traducir**, que es la parte
+que importa: un `text-slate-200` sin equivalente que se quede escrito es texto
+invisible en uno de los dos temas, y eso no lo ve ningún test. Quedaron 43
+casos, se miraron uno a uno y de ahí salieron cuatro tokens más.
+
+**El token que evita el fallo clásico es `on-accent`.** En claro el acento es
+azul oscuro y lleva texto blanco; en oscuro el acento tiene que aclararse para
+verse sobre el fondo, y entonces el blanco encima se queda en 2,6:1 y el botón
+deja de leerse. El texto que va *sobre* un relleno es su propio token y cambia
+con el tema, igual que `on-good`, `on-bad` y `on-warn`.
+
+Tres cosas que no se decidieron a ojo:
+
+- **La paleta de los gráficos.** Las mismas seis tonalidades estepadas para el
+  fondo oscuro, no las claras invertidas, y validadas como conjunto con el
+  guion del skill de visualización: banda de luminosidad, suelo de croma,
+  separación para daltonismo (peor par ΔE 8,4 protan) y 3:1 de contraste. El
+  conjunto oscuro sale **mejor** que el claro: en claro, aqua, amarillo y
+  magenta se quedan por debajo de 3:1 y su alivio documentado es la tabla de
+  debajo; en oscuro los seis llegan.
+- **Los 26 pares de color de los dos temas, medidos.** El tema oscuro los pasó
+  todos a la primera. El claro traía **dos defectos heredados** que este
+  refactor hizo medibles por primera vez: el blanco sobre el verde del
+  distintivo «Nueva» estaba en 3,77:1 y sobre el ámbar en 3,19:1, con 4,5 de
+  mínimo para texto normal. Venían del `bg-emerald-600 text-white` original.
+  Los dos tonos se oscurecieron hasta 5,48:1 y 5,02:1.
+- **El anillo de los gráficos y la cifra del sector no son lo mismo**, aunque
+  los dos fueran blancos. El anillo separa marcas que se solapan y se apoya en
+  la superficie, así que la sigue. La cifra se apoya en el color de la serie,
+  que es de luminosidad media en los dos temas por requisito de la paleta, así
+  que es blanca en los dos y no se mueve. Atarlas juntas habría puesto la cifra
+  oscura sobre un relleno medio.
+
+**Lo que no se oscurece: las figuras.** Las 240 imágenes de razonamiento
+abstracto y las 2.666 del motor están renderizadas sobre blanco, y sus rellenos
+son el dato de la pregunta —cuál figura es la clara y cuál la oscura—. Un
+`filter: invert` es la solución que parece obvia y es la que rompe el
+ejercicio. Van sobre un token `paper` que es blanco en los dos temas y lo dice
+en el nombre para que nadie lo «arregle», con su test y su mutación. Las del
+motor no necesitaron nada: se comprobó que las 2.666 pintan su propio
+rectángulo blanco de fondo, así que el contrato congelado del motor sigue
+valiendo sin tocarlo.
+
+**El interruptor tiene tres estados** —claro, oscuro, el del sistema— porque
+«el del sistema» es una respuesta distinta de «claro»: quien tiene el portátil
+en automático quiere que la plataforma cambie sola al atardecer. Y «sistema»
+**quita** el atributo `data-theme` en vez de escribir `light`: dejarlo escrito
+ganaría a `prefers-color-scheme` y clavaría el tema claro. Es el fallo más
+fácil de cometer aquí y el más difícil de ver, porque en una pantalla clara
+todo parece correcto; tiene test y mutación propios.
+
+El tema se aplica en un script en línea del `index.html`, antes del primer
+pintado: esperar a que arranque React le daría a quien use el tema oscuro un
+fogonazo blanco en cada recarga. Ese script lee una clave plana y no
+`zustand/persist`, que guarda `{"state":{…},"version":n}`: acoplar el arranque
+al formato interno de zustand es pedir que se rompa en silencio el día que
+zustand cambie el envoltorio. Y el tema **no viaja en la copia**, como el
+interruptor de esconder las vistas del tablón: elegir oscuro en el móvil no es
+motivo para oscurecer el portátil.
+
+Un test lee `index.css` y comprueba que los tres bloques —claro, el del sistema
+y el elegido a mano— definen exactamente los mismos tokens, y que cada variable
+registrada en `@theme` tiene valor en los tres. Un token que exista en claro y
+falte en oscuro es texto invisible, y ningún test de componente lo vería.
 
 ### Marcar el tablón — **hecho** (`2.3`)
 

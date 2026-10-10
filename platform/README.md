@@ -229,6 +229,7 @@ subir el número en `package.json` es parte del cambio, no un trámite posterior
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.4` | Tema oscuro, con interruptor en Ajustes (claro, oscuro o el del sistema). Los 612 colores escritos a mano pasan a diez tokens con nombre de papel, los gráficos estrenan paleta validada contra fondo oscuro y las figuras de abstracto se quedan sobre blanco, porque sus rellenos son el dato de la pregunta. |
 | `2.3` | El tablón se puede marcar: «Visto» aparta lo repasado y «Presentada» deja constancia de dónde te has inscrito. Las vistas se esconden con un interruptor; las presentadas no se esconden nunca. Las marcas viajan en la copia. |
 | `2.2` | Las 24 preguntas del banco numérico que enseñan un gráfico ya lo enseñan: líneas, sectores y apiladas, con los datos leídos del libro original. El reloj de práctica lo arranca y lo para el candidato, y su ritmo sale del formato de cada prueba. |
 | `2.1` | Candidaturas: los cuatro textos de la redacción libre de la inscripción, con la cuenta de caracteres contra el límite de 2 000 de EPSO y un botón para copiar cada uno al formulario. |

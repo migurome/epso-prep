@@ -42,9 +42,9 @@ const STATUS_TEXT: Record<AccountStatus, DictKey> = {
 }
 
 const STATUS_TONE: Record<AccountStatus, string> = {
-  pending: 'bg-amber-100 text-amber-800',
-  approved: 'bg-emerald-100 text-emerald-800',
-  revoked: 'bg-slate-200 text-slate-600',
+  pending: 'bg-warn-soft text-warn-ink',
+  approved: 'bg-good-soft text-good-ink',
+  revoked: 'bg-line text-ink-soft',
 }
 
 interface Props {
@@ -90,18 +90,18 @@ export function AdminPanel({
 
   return (
     <div>
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-ink-soft">
         {waiting > 0 ? t('admin_waiting', { n: waiting }) : t('admin_none_waiting')}
       </p>
 
-      {error && <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
+      {error && <p className="mt-3 rounded-lg bg-bad-soft px-3 py-2 text-xs text-bad-ink">{error}</p>}
       {notice && (
-        <p className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-800">{notice}</p>
+        <p className="mt-3 rounded-lg bg-good-soft px-3 py-2 text-xs text-good-ink">{notice}</p>
       )}
 
       <h2 className={headingClass}>{t('admin_requests_title')}</h2>
       {requests.length === 0 ? (
-        <p className="mt-2 text-sm text-slate-500">{t('admin_requests_empty')}</p>
+        <p className="mt-2 text-sm text-ink-muted">{t('admin_requests_empty')}</p>
       ) : (
         <ul className="mt-3 flex flex-col gap-3">
           {sortRequests(requests).map((request) => (
@@ -136,7 +136,7 @@ export function AdminPanel({
         ))}
       </ul>
 
-      {accounts.length === 0 && <p className="mt-5 text-sm text-slate-500">{t('admin_empty')}</p>}
+      {accounts.length === 0 && <p className="mt-5 text-sm text-ink-muted">{t('admin_empty')}</p>}
     </div>
   )
 }
@@ -167,9 +167,9 @@ function AccountRow({
   const anything = ACTIONS.some(allowed)
 
   return (
-    <li className="rounded-xl border border-slate-200 bg-white p-4">
+    <li className="rounded-xl border border-line bg-raised p-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="break-all text-sm font-medium text-slate-800">{account.email}</span>
+        <span className="break-all text-sm font-medium text-ink">{account.email}</span>
         <span
           className={clsx(
             'rounded-full px-2 py-0.5 text-xs font-medium',
@@ -179,17 +179,17 @@ function AccountRow({
           {t(STATUS_TEXT[account.status])}
         </span>
         {account.role === 'admin' && (
-          <span className="rounded-full bg-slate-800 px-2 py-0.5 text-xs font-medium text-white">
+          <span className="rounded-full bg-ink px-2 py-0.5 text-xs font-medium text-surface">
             {t('admin_role_admin')}
           </span>
         )}
-        {isMe && <span className="text-xs text-slate-400">{t('admin_this_is_you')}</span>}
+        {isMe && <span className="text-xs text-ink-muted">{t('admin_this_is_you')}</span>}
       </div>
 
       {!anything ? (
         // Sin botones y con el motivo escrito: un botón desactivado sin
         // explicación desconcierta más que su ausencia.
-        <p className="mt-3 text-xs text-slate-500">{t('admin_self_note')}</p>
+        <p className="mt-3 text-xs text-ink-muted">{t('admin_self_note')}</p>
       ) : (
         <>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -236,7 +236,7 @@ function AccountRow({
 
           {/* Borrar va aparte y en rojo: de revocar se vuelve aprobando otra
               vez, de esto no se vuelve. */}
-          <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3">
+          <div className="mt-3 flex flex-wrap gap-2 border-t border-line-soft pt-3">
             {allowed('wipe') && (
             <button
               type="button"
@@ -284,9 +284,9 @@ function AccountRow({
 
 const base =
   'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-50'
-const plainClass = `${base} border-slate-200 text-slate-700 hover:border-accent hover:text-accent`
-const okClass = `${base} border-emerald-300 bg-emerald-50 text-emerald-800 hover:border-emerald-500`
-const dangerClass = `${base} border-red-200 text-red-700 hover:border-red-500`
+const plainClass = `${base} border-line text-ink-soft hover:border-accent hover:text-accent`
+const okClass = `${base} border-good bg-good-soft text-good-ink hover:border-good`
+const dangerClass = `${base} border-bad text-bad-ink hover:border-bad`
 
 // La cola de solicitudes: correos que han llamado a la puerta antes de que
 // exista ninguna cuenta.
@@ -302,9 +302,9 @@ const REQ_STATUS_TEXT: Record<RequestStatus, DictKey> = {
 }
 
 const REQ_STATUS_TONE: Record<RequestStatus, string> = {
-  pending: 'bg-amber-100 text-amber-800',
-  approved: 'bg-sky-100 text-sky-800',
-  rejected: 'bg-slate-200 text-slate-600',
+  pending: 'bg-warn-soft text-warn-ink',
+  approved: 'bg-accent-soft text-accent-ink',
+  rejected: 'bg-line text-ink-soft',
 }
 
 function RequestCard({
@@ -328,9 +328,9 @@ function RequestCard({
   const allowed = (action: RequestAction) => canRequest(action, request, hasAccount).ok
 
   return (
-    <li className="rounded-xl border border-slate-200 bg-white p-4">
+    <li className="rounded-xl border border-line bg-raised p-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="break-all text-sm font-medium text-slate-800">{request.email}</span>
+        <span className="break-all text-sm font-medium text-ink">{request.email}</span>
         <span
           className={clsx(
             'rounded-full px-2 py-0.5 text-xs font-medium',
@@ -344,12 +344,12 @@ function RequestCard({
       {/* Un sí dado no es un sí usado, y saber en cuál de las dos está esa
           persona es lo que distingue «se le olvidó volver» de «ya está dentro». */}
       {request.status === 'approved' && (
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-xs text-ink-muted">
           {request.claimedAt ? t('admin_req_claimed') : t('admin_req_unclaimed')}
         </p>
       )}
 
-      {hasAccount && <p className="mt-2 text-xs text-slate-500">{t('admin_req_account_note')}</p>}
+      {hasAccount && <p className="mt-2 text-xs text-ink-muted">{t('admin_req_account_note')}</p>}
 
       <div className="mt-3 flex flex-wrap gap-2">
         {allowed('approve') && (
@@ -383,4 +383,4 @@ function RequestCard({
   )
 }
 
-const headingClass = 'mt-6 text-xs font-semibold uppercase tracking-wide text-slate-500'
+const headingClass = 'mt-6 text-xs font-semibold uppercase tracking-wide text-ink-muted'

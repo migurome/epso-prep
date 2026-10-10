@@ -20,10 +20,10 @@ interface ApplicationEditorProps {
 }
 
 const COUNTER_TONE: Record<string, string> = {
-  empty: 'text-slate-400',
-  ok: 'text-slate-500',
-  near: 'text-amber-600',
-  over: 'text-red-600',
+  empty: 'text-ink-muted',
+  ok: 'text-ink-muted',
+  near: 'text-warn',
+  over: 'text-bad',
 }
 
 export function ApplicationEditor({ texts, onChange }: ApplicationEditorProps) {
@@ -62,9 +62,9 @@ function SectionCard({
   const intl = locale === 'es' ? 'es-ES' : 'en-GB'
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5">
-      <h2 className="text-sm font-semibold text-slate-800">{title}</h2>
-      <p className="mt-1 text-xs text-slate-500">{prompt}</p>
+    <section className="rounded-xl border border-line bg-raised p-5">
+      <h2 className="text-sm font-semibold text-ink">{title}</h2>
+      <p className="mt-1 text-xs text-ink-muted">{prompt}</p>
 
       <textarea
         value={text}
@@ -72,9 +72,9 @@ function SectionCard({
         rows={12}
         aria-label={title}
         className={clsx(
-          'mt-3 w-full resize-y rounded-lg border px-3 py-2 text-sm leading-relaxed text-slate-800',
+          'mt-3 w-full resize-y rounded-lg border px-3 py-2 text-sm leading-relaxed text-ink',
           'focus:border-accent focus:outline-none',
-          state === 'over' ? 'border-red-300 bg-red-50/40' : 'border-slate-200',
+          state === 'over' ? 'border-bad bg-bad-soft' : 'border-line',
         )}
       />
 
@@ -128,8 +128,8 @@ function CopyButton({ text }: { text: string }) {
       className={clsx(
         'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors',
         text === ''
-          ? 'cursor-not-allowed border-slate-200 text-slate-300'
-          : 'border-slate-200 text-slate-600 hover:border-accent hover:text-accent',
+          ? 'cursor-not-allowed border-line text-ink-muted'
+          : 'border-line text-ink-soft hover:border-accent hover:text-accent',
       )}
     >
       {copied ? <Check size={14} /> : <Copy size={14} />}

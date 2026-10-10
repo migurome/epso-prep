@@ -15,7 +15,7 @@ export function TestDayPage() {
     <div>
       <PageHeader eyebrow={t('test_day_eyebrow')} title={t('test_day_title')} description={t('test_day_description')} />
       {doc && (
-        <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <div className="rounded-xl border border-line bg-raised p-6">
           <Markdown>{pick(locale, doc.summaryMd)}</Markdown>
         </div>
       )}

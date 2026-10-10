@@ -34,20 +34,20 @@ export function EssayHistory({ attempts, prompts }: EssayHistoryProps) {
       {sorted.map((a) => {
         const prompt = prompts.find((p) => p.id === a.promptId)
         return (
-          <div key={a.id} className="rounded-xl border border-slate-200 bg-white p-4">
+          <div key={a.id} className="rounded-xl border border-line bg-raised p-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-slate-800">{prompt ? pick(testLocale, prompt.title) : a.promptId}</p>
-              <span className="text-xs text-slate-400">
+              <p className="text-sm font-semibold text-ink">{prompt ? pick(testLocale, prompt.title) : a.promptId}</p>
+              <span className="text-xs text-ink-muted">
                 {new Date(a.startedAt).toLocaleString(locale === 'es' ? 'es-ES' : 'en-GB', {
                   dateStyle: 'medium',
                   timeStyle: 'short',
                 })}
               </span>
             </div>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-ink-muted">
               {t('essay_history_meta', { n: wordCount(a.text), t: formatClock(a.timeSpentSeconds) })}
             </p>
-            {a.selfReviewNotes && <p className="mt-2 text-sm italic text-slate-600">"{a.selfReviewNotes}"</p>}
+            {a.selfReviewNotes && <p className="mt-2 text-sm italic text-ink-soft">"{a.selfReviewNotes}"</p>}
           </div>
         )
       })}

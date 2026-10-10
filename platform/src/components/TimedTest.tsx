@@ -95,17 +95,17 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
   }
 
   if (preferredPool.length === 0) {
-    return <p className="text-sm text-slate-500">{t('no_questions_available')}</p>
+    return <p className="text-sm text-ink-muted">{t('no_questions_available')}</p>
   }
 
   if (stage === 'setup') {
     return (
       <div>
         <TestLocaleSelector />
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+        <div className="rounded-xl border border-line bg-raised p-8 text-center">
           <TimerIcon size={28} className="mx-auto mb-3 text-accent" />
-          <h3 className="text-base font-semibold text-slate-800">{t('timed_test_title')}</h3>
-          <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+          <h3 className="text-base font-semibold text-ink">{t('timed_test_title')}</h3>
+          <p className="mx-auto mt-2 max-w-md text-sm text-ink-muted">
             {t('timed_test_setup_description', {
               n: Math.min(format.questions, preferredPool.length),
               m: format.minutes,
@@ -114,7 +114,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
           <button
             type="button"
             onClick={start}
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark"
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-dark"
           >
             <Play size={16} />
             {t('start_test')}
@@ -130,13 +130,13 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
     return (
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-ink-muted">
             {t('question_x_of_y', { x: current + 1, y: testQuestions.length })}
           </p>
           <span
             className={clsx(
               'rounded-full px-3 py-1 text-sm font-semibold tabular-nums',
-              remaining <= 60 ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600',
+              remaining <= 60 ? 'bg-bad-soft text-bad-ink' : 'bg-sunken text-ink-soft',
             )}
           >
             {formatClock(remaining)}
@@ -151,13 +151,13 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
               onClick={() => setCurrent(i)}
               className={clsx(
                 'h-1.5 flex-1 rounded-full transition-colors',
-                i === current ? 'bg-accent' : answers[tq.id] ? 'bg-accent/40' : 'bg-slate-200',
+                i === current ? 'bg-accent' : answers[tq.id] ? 'bg-accent/40' : 'bg-line',
               )}
             />
           ))}
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="rounded-xl border border-line bg-raised p-5">
           <QuestionCard
             question={q}
             selectedOptionId={answers[q.id] ?? null}
@@ -171,7 +171,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
             type="button"
             disabled={current === 0}
             onClick={() => setCurrent((c) => Math.max(0, c - 1))}
-            className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 disabled:opacity-40"
+            className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink-soft disabled:opacity-40"
           >
             {t('previous')}
           </button>
@@ -179,7 +179,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
             <button
               type="button"
               onClick={finish}
-              className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark"
+              className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-on-accent hover:bg-accent-dark"
             >
               {t('finish_test')}
             </button>
@@ -187,7 +187,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
             <button
               type="button"
               onClick={() => setCurrent((c) => Math.min(testQuestions.length - 1, c + 1))}
-              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600"
+              className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink-soft"
             >
               {t('next')}
             </button>
@@ -207,12 +207,12 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
 
   return (
     <div>
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-6 text-center">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{t('result')}</p>
-        <p className="mt-1 text-3xl font-bold text-slate-900">
+      <div className="mb-6 rounded-xl border border-line bg-raised p-6 text-center">
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">{t('result')}</p>
+        <p className="mt-1 text-3xl font-bold text-ink">
           {score} / {testQuestions.length}
         </p>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-ink-muted">
           {t('points_and_time', {
             scaled: scaledScore.toFixed(1),
             max: format.maxScore,
@@ -220,7 +220,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
           })}
         </p>
         {passed != null && (
-          <p className={clsx('mt-2 text-sm font-semibold', passed ? 'text-emerald-600' : 'text-red-600')}>
+          <p className={clsx('mt-2 text-sm font-semibold', passed ? 'text-good' : 'text-bad')}>
             {passed ? t('passed') : t('not_passed')}{' '}
             {t('pass_mark_paren', { min: format.passMark ?? 0, max: format.maxScore })}
           </p>
@@ -228,7 +228,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
         <button
           type="button"
           onClick={reset}
-          className="mx-auto mt-4 inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:border-slate-300"
+          className="mx-auto mt-4 inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink-soft hover:border-line"
         >
           <RotateCcw size={14} />
           {t('retry_new_questions')}
@@ -237,7 +237,7 @@ export function TimedTest({ questions, format, phase, skill, field }: TimedTestP
 
       <div className="space-y-4">
         {testQuestions.map((q, i) => (
-          <div key={q.id} className="rounded-xl border border-slate-200 bg-white p-5">
+          <div key={q.id} className="rounded-xl border border-line bg-raised p-5">
             <QuestionCard question={q} index={i} selectedOptionId={answers[q.id] ?? null} revealed onSelect={() => {}} />
           </div>
         ))}

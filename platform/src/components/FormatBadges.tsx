@@ -26,7 +26,7 @@ export function FormatBadges({ format }: FormatBadgesProps) {
       {items.map((item) => (
         <span
           key={item}
-          className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600"
+          className="rounded-full bg-sunken px-3 py-1 text-xs font-medium text-ink-soft"
         >
           {item}
         </span>

@@ -27,10 +27,14 @@ export function ScannedFigure({
     <img
       src={`${import.meta.env.BASE_URL}figures/abstract/${questionId}-${kind}.webp`}
       alt={alt}
-      // El escaneo es una foto de papel: sobre el fondo claro de la tarjeta se
-      // confundiría con ella, así que lleva su propio marco blanco.
+      // El escaneo es una foto de papel, y por eso va sobre `paper` y no sobre
+      // la superficie del tema: es la única cosa de la plataforma que NO se
+      // oscurece. La imagen está renderizada sobre blanco y sus rellenos son el
+      // dato de la pregunta —cuál de las figuras es la clara y cuál la oscura—,
+      // así que invertirla cambiaría la figura y no el fondo. Queda como una
+      // hoja apoyada en la mesa, que además es como se ve el examen de verdad.
       className={clsx(
-        'mx-auto block h-auto w-full max-w-3xl rounded-lg border border-slate-200 bg-white',
+        'mx-auto block h-auto w-full max-w-3xl rounded-lg border border-line bg-paper',
         className,
       )}
       loading="lazy"

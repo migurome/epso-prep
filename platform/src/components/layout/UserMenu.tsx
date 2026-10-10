@@ -101,8 +101,8 @@ export function UserMenu() {
         className={clsx(
           'flex h-9 w-9 items-center justify-center rounded-full border text-xs font-semibold transition-colors',
           open
-            ? 'border-accent bg-accent text-white'
-            : 'border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-900',
+            ? 'border-accent bg-accent text-on-accent'
+            : 'border-line bg-raised text-ink-soft hover:border-line-strong hover:text-ink',
         )}
       >
         {initials || <User size={17} aria-hidden="true" />}
@@ -111,10 +111,10 @@ export function UserMenu() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+          className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-line bg-raised shadow-lg"
         >
-          <div className="border-b border-slate-100 px-4 py-3">
-            <p className="truncate text-sm font-semibold text-slate-800">
+          <div className="border-b border-line-soft px-4 py-3">
+            <p className="truncate text-sm font-semibold text-ink">
               {profile.displayName || t('user_menu_anonymous')}
             </p>
             {/* El correo de la cuenta, que es la identidad de verdad. El de
@@ -122,12 +122,12 @@ export function UserMenu() {
                 mismo— y enseñar aquí uno u otro según el día sería tener dos
                 identidades a la vista sin decir cuál manda. */}
             {accountEmail && (
-              <p className="truncate text-xs text-slate-400">{accountEmail}</p>
+              <p className="truncate text-xs text-ink-muted">{accountEmail}</p>
             )}
           </div>
 
           {SECTIONS.map((section, i) => (
-            <div key={i} className={clsx('p-1.5', i > 0 && 'border-t border-slate-100')}>
+            <div key={i} className={clsx('p-1.5', i > 0 && 'border-t border-line-soft')}>
               {section.map(({ to, label, icon: Icon }) => (
                 <NavLink
                   key={to}
@@ -138,7 +138,7 @@ export function UserMenu() {
                       'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
                       isActive
                         ? 'bg-accent/10 font-semibold text-accent'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+                        : 'text-ink-soft hover:bg-sunken hover:text-ink',
                     )
                   }
                 >
@@ -149,12 +149,12 @@ export function UserMenu() {
             </div>
           ))}
 
-          <div className="border-t border-slate-100 p-1.5">
+          <div className="border-t border-line-soft p-1.5">
             <button
               type="button"
               role="menuitem"
               onClick={() => void signOut()}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-ink-soft transition-colors hover:bg-sunken hover:text-ink"
             >
               <LogOut size={16} />
               {t('user_menu_sign_out')}

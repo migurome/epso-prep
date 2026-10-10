@@ -78,7 +78,7 @@ export function ProgressPage() {
                   clearAll()
                 }
               }}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:border-red-300 hover:text-red-600"
+              className="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-xs font-medium text-ink-muted hover:border-bad hover:text-bad"
             >
               <Trash2 size={14} />
               {t('clear_history')}
@@ -94,10 +94,10 @@ export function ProgressPage() {
       {hasActivity && (
         <div className="space-y-6">
           {rows.length > 0 && (
-          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="overflow-hidden rounded-xl border border-line bg-raised">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px] text-sm">
-                <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <thead className="bg-sunken text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
                   <tr>
                     <th className="px-4 py-2.5">{t('col_test')}</th>
                     <th className="px-4 py-2.5">{t('col_attempts')}</th>
@@ -106,20 +106,20 @@ export function ProgressPage() {
                     <th className="px-4 py-2.5">{t('col_total_time')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-line-soft">
                   {rows.map((r) => {
                     const { avg, best, totalTime, count } = summarize(r.attempts, r.maxScore)
                     return (
                       <tr key={r.key}>
-                        <td className="px-4 py-2.5 font-medium text-slate-800">{r.label}</td>
-                        <td className="px-4 py-2.5 text-slate-600">{count}</td>
-                        <td className="px-4 py-2.5 text-slate-600">
+                        <td className="px-4 py-2.5 font-medium text-ink">{r.label}</td>
+                        <td className="px-4 py-2.5 text-ink-soft">{count}</td>
+                        <td className="px-4 py-2.5 text-ink-soft">
                           {avg.toFixed(1)} / {r.maxScore}
                         </td>
-                        <td className="px-4 py-2.5 text-slate-600">
+                        <td className="px-4 py-2.5 text-ink-soft">
                           {best.toFixed(1)} / {r.maxScore}
                         </td>
-                        <td className="px-4 py-2.5 text-slate-600">{formatClock(totalTime)}</td>
+                        <td className="px-4 py-2.5 text-ink-soft">{formatClock(totalTime)}</td>
                       </tr>
                     )
                   })}
@@ -130,9 +130,9 @@ export function ProgressPage() {
           )}
 
           {essayAttempts.length > 0 && (
-            <div className="rounded-xl border border-slate-200 bg-white p-5">
-              <p className="text-sm font-semibold text-slate-800">{t('nav_eufte')}</p>
-              <p className="mt-1 text-sm text-slate-600">
+            <div className="rounded-xl border border-line bg-raised p-5">
+              <p className="text-sm font-semibold text-ink">{t('nav_eufte')}</p>
+              <p className="mt-1 text-sm text-ink-soft">
                 {t('eufte_progress_summary', {
                   n: essayAttempts.length,
                   plural: essayAttempts.length === 1 ? '' : locale === 'es' ? 'es' : 's',

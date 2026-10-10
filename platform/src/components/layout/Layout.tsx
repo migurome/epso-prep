@@ -37,16 +37,16 @@ export function Layout() {
         {/* La barra superior existe en todos los tamaños porque la sección de
             usuario vive en ella. En móvil lleva además el botón del menú y el
             nombre, que en escritorio ya los da la barra lateral. */}
-        <header className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-2.5">
+        <header className="flex shrink-0 items-center gap-3 border-b border-line bg-raised px-4 py-2.5">
           <button
             type="button"
             onClick={() => setMobileNavOpen(true)}
             aria-label={t('open_menu')}
-            className="-ml-1.5 rounded-lg p-1.5 text-slate-600 hover:bg-slate-100 md:hidden"
+            className="-ml-1.5 rounded-lg p-1.5 text-ink-soft hover:bg-sunken md:hidden"
           >
             <Menu size={22} />
           </button>
-          <span className="text-sm font-semibold text-slate-800 md:hidden">{t('app_name')}</span>
+          <span className="text-sm font-semibold text-ink md:hidden">{t('app_name')}</span>
           <div className="ml-auto flex items-center gap-1">
             <SyncButton />
             <UserMenu />

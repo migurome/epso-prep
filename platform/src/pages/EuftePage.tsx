@@ -55,7 +55,7 @@ export function EuftePage() {
               theory.length === 0 ? (
                 <EmptyState icon={<PenLine size={28} />} title={t('empty_theory_title')} description={t('empty_theory_description')} />
               ) : (
-                <div className="rounded-xl border border-slate-200 bg-white p-6">
+                <div className="rounded-xl border border-line bg-raised p-6">
                   {theory.map((doc) => (
                     <Markdown key={doc.id}>{pick(locale, doc.summaryMd)}</Markdown>
                   ))}
@@ -76,20 +76,20 @@ export function EuftePage() {
                       const isOpen = expandedId === prompt.id
                       const hasBeenOpened = openedIds.has(prompt.id)
                       return (
-                        <div key={prompt.id} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                        <div key={prompt.id} className="overflow-hidden rounded-xl border border-line bg-raised">
                           <button
                             type="button"
                             onClick={() => toggle(prompt.id)}
                             className="flex w-full items-center gap-3 px-4 py-3 text-left"
                           >
-                            <span className="flex-1 text-sm font-medium text-slate-700">{pick(testLocale, prompt.title)}</span>
+                            <span className="flex-1 text-sm font-medium text-ink-soft">{pick(testLocale, prompt.title)}</span>
                             <ChevronDown
                               size={16}
-                              className={clsx('shrink-0 text-slate-400 transition-transform', isOpen && 'rotate-180')}
+                              className={clsx('shrink-0 text-ink-muted transition-transform', isOpen && 'rotate-180')}
                             />
                           </button>
                           {hasBeenOpened && (
-                            <div className={clsx('border-t border-slate-100 px-4 py-4', !isOpen && 'hidden')}>
+                            <div className={clsx('border-t border-line-soft px-4 py-4', !isOpen && 'hidden')}>
                               <EssayRunner prompt={prompt} />
                             </div>
                           )}

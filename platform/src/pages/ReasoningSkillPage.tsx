@@ -45,7 +45,7 @@ export function ReasoningSkillPage() {
               theory.length === 0 ? (
                 <EmptyState icon={<BookOpen size={28} />} title={t('empty_theory_title')} description={t('empty_theory_description')} />
               ) : (
-                <div className="rounded-xl border border-slate-200 bg-white p-6">
+                <div className="rounded-xl border border-line bg-raised p-6">
                   {theory.map((doc) => (
                     <Markdown key={doc.id}>{pick(locale, doc.summaryMd)}</Markdown>
                   ))}

@@ -82,24 +82,24 @@ export function CalendarPage() {
       <WeekGoalCard week={week} streak={streak} locale={locale} />
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <section className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+        <section className="rounded-xl border border-line bg-raised p-4 sm:p-5">
           <header className="mb-4 flex items-center gap-2">
             <button
               type="button"
               onClick={() => shiftMonth(-1)}
               aria-label={t('calendar_previous_month')}
-              className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+              className="rounded-lg p-1.5 text-ink-muted transition-colors hover:bg-sunken hover:text-ink"
             >
               <ChevronLeft size={18} />
             </button>
-            <h2 className="flex-1 text-center text-sm font-semibold text-slate-800 first-letter:uppercase">
+            <h2 className="flex-1 text-center text-sm font-semibold text-ink first-letter:uppercase">
               {monthLabel}
             </h2>
             <button
               type="button"
               onClick={() => shiftMonth(1)}
               aria-label={t('calendar_next_month')}
-              className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+              className="rounded-lg p-1.5 text-ink-muted transition-colors hover:bg-sunken hover:text-ink"
             >
               <ChevronRight size={18} />
             </button>
@@ -110,7 +110,7 @@ export function CalendarPage() {
             {weekdayNames.map((name) => (
               <span
                 key={name}
-                className="pb-1 text-center text-[0.65rem] font-semibold uppercase tracking-wide text-slate-400"
+                className="pb-1 text-center text-[0.65rem] font-semibold uppercase tracking-wide text-ink-muted"
               >
                 {name}
               </span>
@@ -134,7 +134,7 @@ export function CalendarPage() {
             ))}
           </div>
 
-          <p className="mt-4 text-xs text-slate-400">{t('calendar_legend')}</p>
+          <p className="mt-4 text-xs text-ink-muted">{t('calendar_legend')}</p>
         </section>
 
         <DayDetail day={selected} locale={locale} />
@@ -160,18 +160,18 @@ function WeekGoalCard({
     <div
       className={clsx(
         'rounded-xl border p-5',
-        week.complete ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-white',
+        week.complete ? 'border-good bg-good-soft' : 'border-line bg-raised',
       )}
     >
       <div className="flex flex-wrap items-center gap-3">
-        <Target size={20} className={week.complete ? 'text-emerald-600' : 'text-accent'} />
+        <Target size={20} className={week.complete ? 'text-good' : 'text-accent'} />
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-slate-800">
+          <p className="text-sm font-semibold text-ink">
             {week.complete
               ? t('calendar_week_complete')
               : t('calendar_week_remaining', { time: formatDuration(remaining, locale) })}
           </p>
-          <p className="mt-0.5 text-xs text-slate-500 tabular-nums">
+          <p className="mt-0.5 text-xs text-ink-muted tabular-nums">
             {t('calendar_week_progress', {
               done: formatDuration(week.seconds, locale),
               goal: formatDuration(week.goalSeconds, locale),
@@ -180,18 +180,18 @@ function WeekGoalCard({
           </p>
         </div>
         {streak > 0 && (
-          <span className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+          <span className="flex items-center gap-1.5 rounded-full bg-raised px-3 py-1 text-xs font-semibold text-warn-ink ring-1 ring-warn">
             <Flame size={14} />
             {t('calendar_streak', { n: streak })}
           </span>
         )}
       </div>
 
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-line">
         <div
           className={clsx(
             'h-full rounded-full transition-[width] duration-300',
-            week.complete ? 'bg-emerald-500' : 'bg-accent',
+            week.complete ? 'bg-good' : 'bg-accent',
           )}
           style={{ width: `${percent}%` }}
         />
@@ -217,10 +217,10 @@ function WeekBadge({ week, locale }: { week: WeekSummary; locale: Locale }) {
         className={clsx(
           'flex h-6 w-6 items-center justify-center rounded-full text-[0.6rem] font-bold',
           week.complete
-            ? 'bg-emerald-500 text-white'
+            ? 'bg-good text-on-accent'
             : percent > 0
-              ? 'bg-slate-100 text-slate-500 ring-1 ring-slate-200'
-              : 'text-slate-300',
+              ? 'bg-sunken text-ink-muted ring-1 ring-line'
+              : 'text-ink-muted',
         )}
       >
         {week.isFuture ? '' : week.complete ? '✓' : `${percent}`}
@@ -261,12 +261,12 @@ function DayCell({
           : day.isToday
             ? 'ring-1 ring-accent/50'
             : 'ring-1 ring-transparent',
-        level === 0 && 'bg-slate-50 text-slate-400 hover:bg-slate-100',
-        level === 1 && 'bg-accent/15 text-slate-700 hover:bg-accent/25',
-        level === 2 && 'bg-accent/35 text-slate-800 hover:bg-accent/45',
-        level === 3 && 'bg-accent/60 text-white hover:bg-accent/70',
-        level === 4 && 'bg-accent text-white hover:brightness-110',
-        day.isFuture && 'bg-transparent text-slate-300 hover:bg-slate-50',
+        level === 0 && 'bg-sunken text-ink-muted hover:bg-sunken',
+        level === 1 && 'bg-accent/15 text-ink-soft hover:bg-accent/25',
+        level === 2 && 'bg-accent/35 text-ink hover:bg-accent/45',
+        level === 3 && 'bg-accent/60 text-on-accent hover:bg-accent/70',
+        level === 4 && 'bg-accent text-on-accent hover:brightness-110',
+        day.isFuture && 'bg-transparent text-ink-muted hover:bg-sunken',
       )}
     >
       <span className={clsx('font-semibold tabular-nums', day.isToday && 'underline')}>
@@ -277,7 +277,7 @@ function DayCell({
           aria-hidden="true"
           className={clsx(
             'absolute bottom-1 h-1 w-1 rounded-full',
-            level >= 3 ? 'bg-white' : 'bg-accent',
+            level >= 3 ? 'bg-raised' : 'bg-accent',
           )}
         />
       )}
@@ -290,8 +290,8 @@ function DayDetail({ day, locale }: { day: DaySummary | null; locale: Locale }) 
 
   if (!day) {
     return (
-      <aside className="rounded-xl border border-slate-200 bg-white p-5">
-        <p className="text-sm text-slate-500">{t('calendar_pick_a_day')}</p>
+      <aside className="rounded-xl border border-line bg-raised p-5">
+        <p className="text-sm text-ink-muted">{t('calendar_pick_a_day')}</p>
       </aside>
     )
   }
@@ -303,47 +303,47 @@ function DayDetail({ day, locale }: { day: DaySummary | null; locale: Locale }) 
   }).format(day.date)
 
   return (
-    <aside className="rounded-xl border border-slate-200 bg-white p-5">
-      <h3 className="text-sm font-semibold text-slate-800 first-letter:uppercase">{heading}</h3>
+    <aside className="rounded-xl border border-line bg-raised p-5">
+      <h3 className="text-sm font-semibold text-ink first-letter:uppercase">{heading}</h3>
 
       <dl className="mt-4 space-y-3 text-sm">
         <div className="flex items-baseline justify-between gap-3">
-          <dt className="text-slate-400">{t('calendar_time_total')}</dt>
-          <dd className="font-semibold tabular-nums text-slate-800">
+          <dt className="text-ink-muted">{t('calendar_time_total')}</dt>
+          <dd className="font-semibold tabular-nums text-ink">
             {formatDuration(day.seconds, locale)}
           </dd>
         </div>
         {day.activeSeconds > 0 && (
           <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-slate-400">{t('calendar_time_usage')}</dt>
-            <dd className="tabular-nums text-slate-600">
+            <dt className="text-ink-muted">{t('calendar_time_usage')}</dt>
+            <dd className="tabular-nums text-ink-soft">
               {formatDuration(day.activeSeconds, locale)}
             </dd>
           </div>
         )}
         {day.eventSeconds > 0 && (
           <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-slate-400">{t('calendar_time_tests')}</dt>
-            <dd className="tabular-nums text-slate-600">
+            <dt className="text-ink-muted">{t('calendar_time_tests')}</dt>
+            <dd className="tabular-nums text-ink-soft">
               {formatDuration(day.eventSeconds, locale)}
             </dd>
           </div>
         )}
       </dl>
 
-      <h4 className="mt-6 mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+      <h4 className="mt-6 mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
         {t('calendar_activity_heading')}
       </h4>
 
       {day.events.length === 0 ? (
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-ink-muted">
           {day.seconds > 0 ? t('calendar_only_usage') : t('calendar_nothing_that_day')}
         </p>
       ) : (
         <ul className="space-y-3">
           {day.events.map((event) => (
             <li key={event.id} className="flex gap-3">
-              <span className="mt-0.5 shrink-0 text-slate-400">
+              <span className="mt-0.5 shrink-0 text-ink-muted">
                 {event.kind === 'essay' ? (
                   <PenLine size={15} />
                 ) : event.kind === 'practice' ? (
@@ -353,8 +353,8 @@ function DayDetail({ day, locale }: { day: DaySummary | null; locale: Locale }) 
                 )}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-slate-800">{pick(locale, event.label)}</p>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm font-medium text-ink">{pick(locale, event.label)}</p>
+                <p className="text-xs text-ink-muted">
                   {pick(locale, event.detail)}
                   {event.score && ` · ${event.score.value}/${event.score.max}`}
                   {/* Las preguntas sueltas no aportan tiempo al día —ocurren

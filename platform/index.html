@@ -4,7 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Preparación EPSO/AD/429/26 (AD7)</title>
+    <!-- Sin número de convocatoria: el título de la pestaña decía
+         «EPSO/AD/429/26 (AD7)» cuando esto preparaba una sola oposición, y
+         ahora cubre seis ámbitos de dos convocatorias. Un título que miente es
+         peor que uno genérico, y éste es el que se ve en la pestaña y en el
+         marcador. -->
+    <title>Preparación EPSO</title>
+    <!-- El tema, antes del primer pintado y antes de cargar React.
+         Esperar a que arranque la aplicación le daría a quien tiene el tema
+         oscuro un fogonazo blanco en cada recarga. Son cuatro líneas en línea
+         a propósito: un fichero aparte sería una petición más por delante del
+         primer pintado, que es exactamente lo que se quiere evitar.
+         La clave la comparte con src/lib/theme.ts. -->
+    <script>
+      try {
+        var t = localStorage.getItem('epso-prep-theme')
+        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t
+      } catch (e) {
+        /* ventana privada o almacenamiento bloqueado: manda el sistema */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* Los colores de la plataforma, por el papel que hacen y no por su tono.
+ *
+ * Hasta la 2.3 cada componente escribía el tono a mano: `bg-white`,
+ * `text-slate-600`, `border-slate-200`. Eran 612 decisiones de color repartidas
+ * en 44 ficheros, y con eso un tema oscuro significaba 612 variantes `dark:`
+ * imposibles de revisar. Ahora son diez tokens con nombre de papel —superficie,
+ * tinta, línea— y el tema cambia su valor en un sitio.
+ *
+ * El registro apunta a una variable en vez de a un color: así Tailwind genera
+ * la utilidad una sola vez (`bg-raised` es `background-color:
+ * var(--color-raised)`) y quien decide el valor es el tema, en tiempo de
+ * ejecución. */
 @theme {
   /* Color de acento de la interfaz: el azul de la UE, y sólo ése. Hubo un
      tiempo en que la AD8 lo cambiaba por granate, para que no hubiera duda de
@@ -8,9 +20,230 @@
      en el antetítulo de la fase. Teñir la interfaz entera era gritar un dato
      que ya estaba dicho, y de paso obligaba a mantener dos acentos que
      contrastaran igual de bien sobre blanco. */
-  --color-accent: #003399;
-  --color-accent-dark: #002266;
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
   --color-eu-gold: #ffcc00;
+
+  /* El texto que va ENCIMA de un relleno de color.
+   *
+   * Es el token que impide el fallo más común de un tema oscuro: en claro el
+   * acento es azul oscuro y lleva texto blanco, pero en oscuro el acento se
+   * aclara —tiene que aclararse, o no se ve sobre el fondo— y entonces el
+   * blanco encima se queda en 2,6:1 y el botón deja de leerse. Así que el
+   * texto sobre relleno es su propio token y cambia con el tema. */
+  --color-on-accent: var(--on-accent);
+  --color-on-good: var(--on-good);
+  --color-on-bad: var(--on-bad);
+  --color-on-warn: var(--on-warn);
+
+  /* Superficies, de atrás adelante: el fondo de la página, la tarjeta que se
+     levanta sobre él y el hueco que se hunde (lo ya repasado, una celda de
+     cabecera). */
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-sunken: var(--sunken);
+
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-line-strong: var(--line-strong);
+
+  /* La cortina que tapa la página cuando se abre el menú en el móvil. Oscurece
+     en los dos temas: una cortina que aclara no es una cortina. */
+  --color-scrim: var(--scrim);
+
+  /* Tinta, de más a menos voz. `faint` es lo deshabilitado: tiene que
+     desaparecer sin llegar a ser invisible, y en oscuro eso es más oscuro que
+     el fondo, no más claro. */
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+
+  /* Semánticos. `good` es lo recién publicado del tablón y lo acertado; `bad`,
+     pasarse del límite de caracteres o fallar una pregunta. Nunca se usan como
+     «una serie más» de un gráfico. */
+  --color-good: var(--good);
+  --color-good-ink: var(--good-ink);
+  --color-good-soft: var(--good-soft);
+  --color-bad: var(--bad);
+  --color-bad-ink: var(--bad-ink);
+  --color-bad-soft: var(--bad-soft);
+  /* `warn` es lo que está a la espera: una solicitud de acceso sin decidir, un
+     apartado de la candidatura a cien caracteres del límite, un día del
+     calendario con el objetivo a medias. */
+  --color-warn: var(--warn);
+  --color-warn-ink: var(--warn-ink);
+  --color-warn-soft: var(--warn-soft);
+
+  /* **Blanco en los dos temas, a propósito.** Las 240 figuras de razonamiento
+     abstracto son imágenes renderizadas sobre blanco, y sus rellenos son el
+     dato de la pregunta: invertirlas cambiaría la figura, no el fondo. Van
+     sobre una hoja de papel apoyada en la mesa oscura, que además es como se
+     ve el examen de verdad. El nombre lo dice para que nadie lo «arregle». */
+  --color-paper: #ffffff;
+  --color-paper-ink: #0f172a;
+
+  /* Las seis series de un gráfico, en orden fijo. Nunca se ciclan. Los pasos
+     del tema oscuro son las MISMAS seis tonalidades estepadas para el fondo
+     oscuro, no los claros invertidos: están validados como conjunto contra esa
+     superficie (banda de luminosidad, suelo de croma, separación para daltonismo
+     y 3:1 de contraste). En claro, aqua, amarillo y magenta se quedan por
+     debajo de 3:1 y dependen de la tabla como alivio; en oscuro los seis
+     llegan. */
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+  --color-series-5: var(--series-5);
+  --color-series-6: var(--series-6);
+}
+
+/* Tema claro: el de siempre, con los tonos que ya tenía la plataforma. */
+:root {
+  --accent: #003399;
+  --accent-dark: #002266;
+  --accent-soft: #eaf0fb;
+  --accent-ink: #003399;
+  --on-accent: #ffffff;
+  --on-good: #ffffff;
+  --on-bad: #ffffff;
+  --on-warn: #ffffff;
+
+  --surface: #f8fafc;
+  --raised: #ffffff;
+  --sunken: #f1f5f9;
+
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+  --line-strong: #94a3b8;
+  --scrim: rgb(15 23 42 / 0.4);
+
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #64748b;
+  --ink-faint: #cbd5e1;
+
+  --good: #047857;
+  --good-ink: #065f46;
+  --good-soft: #ecfdf5;
+  --bad: #dc2626;
+  --bad-ink: #b91c1c;
+  --bad-soft: #fef2f2;
+  --warn: #b45309;
+  --warn-ink: #92400e;
+  --warn-soft: #fffbeb;
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+
+  color-scheme: light;
+}
+
+/* Lo que pide el sistema operativo, salvo que se haya elegido claro a mano.
+ * El `:not([data-theme="light"])` es lo que deja el interruptor por encima del
+ * sistema: sin él, elegir claro en un portátil en modo oscuro no haría nada. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent: #6f9eea;
+    --accent-dark: #a8c4f2;
+    --accent-soft: #16243d;
+    --accent-ink: #9dbdf2;
+    /* Sobre un acento claro el texto va oscuro: blanco encima se quedaria en
+       2,6:1 y el boton dejaria de leerse. */
+    --on-accent: #0b1220;
+    --on-good: #052e22;
+    --on-bad: #2d0a0a;
+    --on-warn: #2a1a00;
+
+    --surface: #0f1215;
+    --raised: #1a1d21;
+    --sunken: #23272c;
+
+    --line: #30353c;
+    --line-soft: #23272c;
+    --line-strong: #5d6672;
+    --scrim: rgb(0 0 0 / 0.6);
+
+    --ink: #e8eaed;
+    --ink-soft: #b4bac2;
+    --ink-muted: #8b939d;
+    --ink-faint: #4a5058;
+
+    --good: #34d399;
+    --good-ink: #6ee7b7;
+    --good-soft: #0d2a20;
+    --bad: #f87171;
+    --bad-ink: #fca5a5;
+    --bad-soft: #2d1414;
+    --warn: #fbbf24;
+    --warn-ink: #fcd34d;
+    --warn-soft: #2a2008;
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+
+    color-scheme: dark;
+  }
+}
+
+/* Y lo elegido a mano, que gana en los dos sentidos. Repetido y no compartido
+ * con el bloque de arriba a propósito: un selector de lista con `@media`
+ * dentro no existe en CSS, y una variable intermedia escondería qué valor
+ * gana. */
+:root[data-theme="dark"] {
+  --accent: #6f9eea;
+  --accent-dark: #a8c4f2;
+  --accent-soft: #16243d;
+  --accent-ink: #9dbdf2;
+  /* Sobre un acento claro el texto va oscuro: blanco encima se quedaria en
+     2,6:1 y el boton dejaria de leerse. */
+  --on-accent: #0b1220;
+  --on-good: #052e22;
+  --on-bad: #2d0a0a;
+  --on-warn: #2a1a00;
+
+  --surface: #0f1215;
+  --raised: #1a1d21;
+  --sunken: #23272c;
+
+  --line: #30353c;
+  --line-soft: #23272c;
+  --line-strong: #5d6672;
+  --scrim: rgb(0 0 0 / 0.6);
+
+  --ink: #e8eaed;
+  --ink-soft: #b4bac2;
+  --ink-muted: #8b939d;
+  --ink-faint: #4a5058;
+
+  --good: #34d399;
+  --good-ink: #6ee7b7;
+  --good-soft: #0d2a20;
+  --bad: #f87171;
+  --bad-ink: #fca5a5;
+  --bad-soft: #2d1414;
+  --warn: #fbbf24;
+  --warn-ink: #fcd34d;
+  --warn-soft: #2a2008;
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+
+  color-scheme: dark;
 }
 
 html,
@@ -20,5 +253,7 @@ body,
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  /* Fondo explícito desde el token: sin esto, el tema oscuro dejaría asomar el
+     blanco del navegador por debajo de todo lo que no sea una tarjeta. */
+  @apply bg-surface text-ink antialiased;
 }

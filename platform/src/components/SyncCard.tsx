@@ -25,11 +25,11 @@ const STATUS_TEXT: Record<SyncStatus, DictKey> = {
 }
 
 const STATUS_DOT: Record<SyncStatus, string> = {
-  off: 'bg-slate-300',
-  idle: 'bg-amber-400',
-  syncing: 'bg-emerald-400',
-  ready: 'bg-emerald-500',
-  error: 'bg-red-500',
+  off: 'bg-line-strong',
+  idle: 'bg-warn',
+  syncing: 'bg-good',
+  ready: 'bg-good',
+  error: 'bg-bad',
 }
 
 export function SyncCard() {
@@ -50,8 +50,8 @@ export function SyncCard() {
           className={clsx('inline-block h-2.5 w-2.5 shrink-0 rounded-full', STATUS_DOT[status])}
           aria-hidden="true"
         />
-        <span className="text-sm font-medium text-slate-800">{t(STATUS_TEXT[status])}</span>
-        <span className="text-xs text-slate-500">
+        <span className="text-sm font-medium text-ink">{t(STATUS_TEXT[status])}</span>
+        <span className="text-xs text-ink-muted">
           {lastSyncAt
             ? t('sync_last', {
                 when: new Date(lastSyncAt).toLocaleString(locale === 'es' ? 'es-ES' : 'en-GB'),
@@ -60,10 +60,10 @@ export function SyncCard() {
         </span>
       </div>
 
-      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-xs text-bad">{error}</p>}
 
       {status === 'off' ? (
-        <p className="mt-4 text-xs text-slate-500">{t('sync_off_hint')}</p>
+        <p className="mt-4 text-xs text-ink-muted">{t('sync_off_hint')}</p>
       ) : (
         <>
           <div className="mt-4">
@@ -71,7 +71,7 @@ export function SyncCard() {
               type="button"
               onClick={() => void runSync()}
               disabled={busy}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
             >
               <RefreshCw size={15} className={busy ? 'animate-spin' : undefined} />
               {t('sync_now')}
@@ -83,15 +83,15 @@ export function SyncCard() {
               type="checkbox"
               checked={auto}
               onChange={(e) => setAuto(e.target.checked)}
-              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-accent"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-line text-accent"
             />
             <span>
-              <span className="block text-sm text-slate-700">{t('sync_auto')}</span>
-              <span className="block text-xs text-slate-500">{t('sync_auto_hint')}</span>
+              <span className="block text-sm text-ink-soft">{t('sync_auto')}</span>
+              <span className="block text-xs text-ink-muted">{t('sync_auto_hint')}</span>
             </span>
           </label>
 
-          <p className="mt-4 text-xs text-slate-400">{t('sync_private')}</p>
+          <p className="mt-4 text-xs text-ink-muted">{t('sync_private')}</p>
         </>
       )}
     </div>

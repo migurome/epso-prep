@@ -63,7 +63,7 @@ function CourseModule({ courseField }: { courseField: CourseField }) {
             id: 'teoria',
             label: t('tab_theory'),
             content: (
-              <div className="rounded-xl border border-slate-200 bg-white p-6">
+              <div className="rounded-xl border border-line bg-raised p-6">
                 <Markdown>{pick(locale, module.doc.summaryMd)}</Markdown>
               </div>
             ),
@@ -88,17 +88,17 @@ function CourseModule({ courseField }: { courseField: CourseField }) {
         ]}
       />
 
-      <nav className="mt-8 flex items-center justify-between gap-4 border-t border-slate-200 pt-5">
+      <nav className="mt-8 flex items-center justify-between gap-4 border-t border-line pt-5">
         {previous ? (
           <Link
             to={`/formacion/${moduleNumber(previous.doc.id)}`}
-            className="group flex min-w-0 items-center gap-2 text-sm text-slate-500 transition-colors hover:text-accent"
+            className="group flex min-w-0 items-center gap-2 text-sm text-ink-muted transition-colors hover:text-accent"
           >
             <ChevronLeft size={16} className="shrink-0" />
             <span className="truncate">{pick(locale, previous.doc.title)}</span>
           </Link>
         ) : (
-          <Link to="/formacion" className="flex items-center gap-2 text-sm text-slate-500 hover:text-accent">
+          <Link to="/formacion" className="flex items-center gap-2 text-sm text-ink-muted hover:text-accent">
             <ChevronLeft size={16} />
             {t('course_all_modules')}
           </Link>

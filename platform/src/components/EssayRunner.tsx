@@ -70,7 +70,7 @@ export function EssayRunner({ prompt }: EssayRunnerProps) {
 
   return (
     <div>
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="rounded-xl border border-line bg-raised p-5">
         <Markdown>{pick(testLocale, prompt.briefMd)}</Markdown>
       </div>
 
@@ -78,7 +78,7 @@ export function EssayRunner({ prompt }: EssayRunnerProps) {
         <button
           type="button"
           onClick={start}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-dark"
         >
           <Play size={16} />
           {t('start_minutes', { n: prompt.recommendedMinutes })}
@@ -88,11 +88,11 @@ export function EssayRunner({ prompt }: EssayRunnerProps) {
       {stage === 'writing' && (
         <div className="mt-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs text-slate-500">{t('n_words', { n: wordCount(text) })}</span>
+            <span className="text-xs text-ink-muted">{t('n_words', { n: wordCount(text) })}</span>
             <span
               className={clsx(
                 'rounded-full px-3 py-1 text-sm font-semibold tabular-nums',
-                remaining <= 300 ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600',
+                remaining <= 300 ? 'bg-bad-soft text-bad-ink' : 'bg-sunken text-ink-soft',
               )}
             >
               {formatClock(remaining)}
@@ -102,13 +102,13 @@ export function EssayRunner({ prompt }: EssayRunnerProps) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={16}
-            className="w-full rounded-xl border border-slate-200 p-4 text-sm leading-relaxed text-slate-800 focus:border-accent focus:outline-none"
+            className="w-full rounded-xl border border-line p-4 text-sm leading-relaxed text-ink focus:border-accent focus:outline-none"
             placeholder={t('essay_placeholder')}
           />
           <button
             type="button"
             onClick={stopWriting}
-            className="mt-3 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark"
+            className="mt-3 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-on-accent hover:bg-accent-dark"
           >
             {t('finish')}
           </button>
@@ -118,29 +118,29 @@ export function EssayRunner({ prompt }: EssayRunnerProps) {
       {stage === 'review' && (
         <div className="mt-4 space-y-4">
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {t('your_draft', { n: wordCount(text), t: formatClock(elapsedSeconds) })}
             </p>
-            <div className="whitespace-pre-wrap rounded-xl border border-slate-200 bg-white p-4 text-sm leading-relaxed text-slate-700">
-              {text || <span className="text-slate-400">{t('no_text')}</span>}
+            <div className="whitespace-pre-wrap rounded-xl border border-line bg-raised p-4 text-sm leading-relaxed text-ink-soft">
+              {text || <span className="text-ink-muted">{t('no_text')}</span>}
             </div>
           </div>
 
           {prompt.sourceDocsMd?.map((doc, i) => (
-            <div key={i} className="rounded-xl border border-slate-200 bg-white p-5">
+            <div key={i} className="rounded-xl border border-line bg-raised p-5">
               <Markdown>{pick(testLocale, doc)}</Markdown>
             </div>
           ))}
 
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {t('self_review_notes')}
             </p>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={4}
-              className="w-full rounded-xl border border-slate-200 p-3 text-sm text-slate-800 focus:border-accent focus:outline-none"
+              className="w-full rounded-xl border border-line p-3 text-sm text-ink focus:border-accent focus:outline-none"
               placeholder={t('self_review_placeholder')}
             />
           </div>
@@ -149,7 +149,7 @@ export function EssayRunner({ prompt }: EssayRunnerProps) {
             type="button"
             onClick={save}
             disabled={saved}
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-dark disabled:opacity-50"
           >
             <Save size={16} />
             {saved ? t('saved') : t('save_attempt')}

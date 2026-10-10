@@ -77,7 +77,7 @@ export function AdminPage() {
       <PageHeader title={t('admin_title')} description={t('admin_description')} />
 
       {accounts === null || requests === null ? (
-        <p className="text-sm text-slate-500">{error ?? t('admin_loading')}</p>
+        <p className="text-sm text-ink-muted">{error ?? t('admin_loading')}</p>
       ) : (
         <AdminPanel
           me={me}

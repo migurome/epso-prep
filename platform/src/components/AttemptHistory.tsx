@@ -23,10 +23,10 @@ export function AttemptHistory({ attempts, maxScore }: AttemptHistoryProps) {
   )
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <div className="overflow-hidden rounded-xl border border-line bg-raised">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <thead className="bg-sunken text-left text-xs font-semibold uppercase tracking-wide text-ink-muted">
             <tr>
               <th className="px-4 py-2.5">{t('col_date')}</th>
               <th className="px-4 py-2.5">{t('col_score')}</th>
@@ -34,25 +34,25 @@ export function AttemptHistory({ attempts, maxScore }: AttemptHistoryProps) {
               <th className="px-4 py-2.5">{t('col_time')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-line-soft">
             {sorted.map((a) => {
               const correct = a.results.filter((r) => r.correct).length
               const scaled = a.totalQuestions > 0 ? (correct / a.totalQuestions) * maxScore : 0
               return (
                 <tr key={a.id}>
-                  <td className="px-4 py-2.5 text-slate-600">
+                  <td className="px-4 py-2.5 text-ink-soft">
                     {new Date(a.startedAt).toLocaleString(locale === 'es' ? 'es-ES' : 'en-GB', {
                       dateStyle: 'medium',
                       timeStyle: 'short',
                     })}
                   </td>
-                  <td className="px-4 py-2.5 font-medium text-slate-800">
+                  <td className="px-4 py-2.5 font-medium text-ink">
                     {scaled.toFixed(1)} / {maxScore}
                   </td>
-                  <td className="px-4 py-2.5 text-slate-600">
+                  <td className="px-4 py-2.5 text-ink-soft">
                     {correct} / {a.totalQuestions}
                   </td>
-                  <td className="px-4 py-2.5 text-slate-600">{formatClock(a.timeSpentSeconds)}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{formatClock(a.timeSpentSeconds)}</td>
                 </tr>
               )
             })}

@@ -16,9 +16,9 @@ export function PageHeader({ eyebrow, title, description, actions }: PageHeaderP
             {eyebrow}
           </p>
         )}
-        <h1 className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">{title}</h1>
+        <h1 className="mt-1 text-xl font-bold text-ink sm:text-2xl">{title}</h1>
         {description && (
-          <p className="mt-2 max-w-2xl text-sm text-slate-500">{description}</p>
+          <p className="mt-2 max-w-2xl text-sm text-ink-muted">{description}</p>
         )}
       </div>
       {actions && <div className="shrink-0">{actions}</div>}

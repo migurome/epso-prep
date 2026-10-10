@@ -35,7 +35,7 @@ function TextPanel({ panel, large }: { panel: FigurePanel; large?: boolean }) {
   if (panel.isBlank) {
     return (
       <div
-        className={`flex items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-400 ${
+        className={`flex items-center justify-center rounded-lg border-2 border-dashed border-line text-ink-muted ${
           large ? 'h-20 w-20 text-3xl' : 'h-16 w-16 text-2xl'
         }`}
       >
@@ -45,7 +45,7 @@ function TextPanel({ panel, large }: { panel: FigurePanel; large?: boolean }) {
   }
   return (
     <div
-      className={`flex min-h-16 items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-700 ${
+      className={`flex min-h-16 items-center rounded-lg border border-line bg-raised px-3 py-2 text-ink-soft ${
         large ? 'w-44 text-sm' : 'w-40 text-xs'
       }`}
     >
@@ -81,7 +81,7 @@ export function AbstractPromptView({ prompt, large, forceText }: AbstractPromptV
               {i < figures.panels.length - 1 && (
                 <SequenceArrow
                   size={forceText ? 16 : sequenceSize === 'small' ? 12 : large ? 20 : 16}
-                  className="shrink-0 text-slate-300"
+                  className="shrink-0 text-ink-muted"
                 />
               )}
             </div>
@@ -92,11 +92,11 @@ export function AbstractPromptView({ prompt, large, forceText }: AbstractPromptV
       {figures.kind === 'matrix' && (
         <div className="mb-4 overflow-x-auto">
           <div
-            className="mx-auto grid w-fit gap-2 rounded-xl border border-slate-200 bg-slate-50 p-4"
+            className="mx-auto grid w-fit gap-2 rounded-xl border border-line bg-sunken p-4"
             style={{ gridTemplateColumns: `repeat(${figures.columns ?? 3}, minmax(0, 1fr))` }}
           >
             {figures.panels.map((panel, i) => (
-              <div key={i} className="flex items-center justify-center rounded-lg bg-white p-2 shadow-sm">
+              <div key={i} className="flex items-center justify-center rounded-lg bg-raised p-2 shadow-sm">
                 {forceText ? (
                   <TextPanel panel={panel} large={large} />
                 ) : (

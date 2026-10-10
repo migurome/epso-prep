@@ -73,7 +73,7 @@ function CourseContents({ courseField }: { courseField: CourseField }) {
       />
 
       {intro && (
-        <section className="mb-8 rounded-xl border border-slate-200 bg-white p-6">
+        <section className="mb-8 rounded-xl border border-line bg-raised p-6">
           <Markdown>{pick(locale, intro.summaryMd)}</Markdown>
         </section>
       )}
@@ -83,16 +83,16 @@ function CourseContents({ courseField }: { courseField: CourseField }) {
           <li key={module.doc.id}>
             <Link
               to={`/formacion/${moduleNumber(module.doc.id)}`}
-              className="flex items-start gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-accent hover:bg-slate-50"
+              className="flex items-start gap-4 rounded-xl border border-line bg-raised p-4 transition-colors hover:border-accent hover:bg-sunken"
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-sm font-bold text-accent tabular-nums">
                 {moduleNumber(module.doc.id)}
               </span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-slate-800">
+                <h3 className="text-sm font-semibold text-ink">
                   {pick(locale, module.doc.title)}
                 </h3>
-                <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+                <p className="mt-1 flex items-center gap-1.5 text-xs text-ink-muted">
                   <BookOpen size={13} />
                   {t('course_module_meta', { questions: module.questions.length })}
                 </p>

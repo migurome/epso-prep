@@ -18,7 +18,7 @@ export function Tabs({ tabs, defaultTabId }: TabsProps) {
 
   return (
     <div>
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-slate-200">
+      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -27,7 +27,7 @@ export function Tabs({ tabs, defaultTabId }: TabsProps) {
               'shrink-0 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
               tab.id === active?.id
                 ? 'border-accent text-accent'
-                : 'border-transparent text-slate-500 hover:text-slate-800',
+                : 'border-transparent text-ink-muted hover:text-ink',
             )}
           >
             {tab.label}

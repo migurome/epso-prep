@@ -13,9 +13,9 @@ export function TestLocaleSelector() {
 
   return (
     <div className="mb-4 flex items-center justify-center gap-2 text-sm">
-      <Languages size={15} className="text-slate-400" />
-      <span className="text-slate-500">{t('test_language_label')}</span>
-      <div className="flex gap-1 rounded-lg bg-slate-100 p-1">
+      <Languages size={15} className="text-ink-muted" />
+      <span className="text-ink-muted">{t('test_language_label')}</span>
+      <div className="flex gap-1 rounded-lg bg-sunken p-1">
         {(['es', 'en'] as const).map((l) => (
           <button
             key={l}
@@ -23,7 +23,7 @@ export function TestLocaleSelector() {
             onClick={() => setLocale(l)}
             className={clsx(
               'rounded-md px-3 py-1 text-xs font-semibold uppercase transition-colors',
-              locale === l ? 'bg-white text-accent shadow-sm' : 'text-slate-500 hover:text-slate-700',
+              locale === l ? 'bg-raised text-accent shadow-sm' : 'text-ink-muted hover:text-ink-soft',
             )}
           >
             {l}
