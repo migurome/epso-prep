@@ -24,44 +24,6 @@ export const BOARD: BoardFile = {
   "since": "2026-09-18",
   "notices": [
     {
-      "id": "epso-ad-430-26-2",
-      "title": "Cybersecurity",
-      "url": "https://eu-careers.europa.eu/en/apply-ict-competition-ad8",
-      "reference": "EPSO/AD/430/26 - 2",
-      "stage": "open",
-      "year": 2026,
-      "grade": "AD 8",
-      "locations": [
-        "Brussels (Belgium)",
-        "Luxembourg (Luxembourg)",
-        "Strasbourg (France)"
-      ],
-      "deadline": "2026-10-13T10:00:00Z",
-      "deadlineText": "13/10/2026 - 12:00",
-      "firstSeen": "2026-09-18",
-      "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/cybersecurity",
-      "openedOn": "2026-09-08"
-    },
-    {
-      "id": "epso-ad-430-26-1",
-      "title": "Artificial intelligence (AI)",
-      "url": "https://eu-careers.europa.eu/en/apply-ict-competition-ad8",
-      "reference": "EPSO/AD/430/26 - 1",
-      "stage": "open",
-      "year": 2026,
-      "grade": "AD 8",
-      "locations": [
-        "Brussels (Belgium)",
-        "Luxembourg (Luxembourg)",
-        "Strasbourg (France)"
-      ],
-      "deadline": "2026-10-13T10:00:00Z",
-      "deadlineText": "13/10/2026 - 12:00",
-      "firstSeen": "2026-09-18",
-      "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/artificial-intelligence-ai",
-      "openedOn": "2026-09-08"
-    },
-    {
       "id": "artificial-intelligence-ai",
       "title": "Artificial intelligence (AI)",
       "url": "https://eu-careers.europa.eu/en/apply-ict-competition-ad8",
@@ -216,6 +178,46 @@ export const BOARD: BoardFile = {
       "firstSeen": "2026-09-18",
       "openedOn": "2026-02-05",
       "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/graduate-administrators"
+    },
+    {
+      "id": "epso-ad-430-26-2",
+      "title": "Cybersecurity",
+      "url": "https://eu-careers.europa.eu/en/job-opportunities/cybersecurity",
+      "reference": "EPSO/AD/430/26 - 2",
+      "stage": "in-progress",
+      "year": 2026,
+      "grade": "AD 8",
+      "locations": [
+        "Brussels (Belgium)",
+        "Luxembourg (Luxembourg)",
+        "Strasbourg (France)"
+      ],
+      "deadline": "2026-10-13T10:00:00Z",
+      "deadlineText": "13/10/2026 - 12:00",
+      "firstSeen": "2026-09-18",
+      "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/cybersecurity",
+      "openedOn": "2026-09-08",
+      "stageChangedOn": "2026-10-13"
+    },
+    {
+      "id": "epso-ad-430-26-1",
+      "title": "Artificial intelligence (AI)",
+      "url": "https://eu-careers.europa.eu/en/job-opportunities/artificial-intelligence-ai",
+      "reference": "EPSO/AD/430/26 - 1",
+      "stage": "in-progress",
+      "year": 2026,
+      "grade": "AD 8",
+      "locations": [
+        "Brussels (Belgium)",
+        "Luxembourg (Luxembourg)",
+        "Strasbourg (France)"
+      ],
+      "deadline": "2026-10-13T10:00:00Z",
+      "deadlineText": "13/10/2026 - 12:00",
+      "firstSeen": "2026-09-18",
+      "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/artificial-intelligence-ai",
+      "openedOn": "2026-09-08",
+      "stageChangedOn": "2026-10-13"
     }
   ]
 }
