@@ -80,3 +80,7 @@ export function loadEufteContent() {
 export function loadTestDayContent() {
   return cached('test-day', () => import('./content.test-day.generated'))
 }
+
+export function loadStrategyContent() {
+  return cached('strategy', () => import('./content.strategy.generated'))
+}

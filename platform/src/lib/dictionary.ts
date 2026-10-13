@@ -293,6 +293,15 @@ export const DICT = {
   },
 
   // TestDayPage
+  strategy_eyebrow: { es: 'Estrategia', en: 'Strategy' },
+  strategy_title: {
+    es: 'Qué preguntan de verdad los bancos',
+    en: 'What the banks actually ask',
+  },
+  strategy_description: {
+    es: 'Los patrones de cada prueba, contados sobre las preguntas de esta plataforma: qué familias hay, en qué fijarse primero, cuánto tiempo da cada pregunta y qué reglas conocidas no funcionan.',
+    en: 'The patterns of each test, counted over the questions in this platform: which families exist, what to look at first, how much time each question allows, and which familiar rules do not work.',
+  },
   test_day_eyebrow: { es: 'Logística', en: 'Logistics' },
   test_day_title: { es: 'Preparación para el día del examen', en: 'Preparing for test day' },
   test_day_description: {
@@ -516,6 +525,7 @@ export const DICT = {
     en: 'Language of the question and options',
   },
   // Tablón de convocatorias
+  nav_strategy: { es: 'Estrategia', en: 'Strategy' },
   nav_board: { es: 'Tablón', en: 'Noticeboard' },
   board_eyebrow: { es: 'Convocatorias', en: 'Competitions' },
   board_title: { es: 'Tablón de convocatorias', en: 'Competition noticeboard' },

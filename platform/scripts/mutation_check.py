@@ -1392,6 +1392,27 @@ MUTATIONS = [
         "src/lib/stores.test.ts",
     ),
     (
+        "el capitulo de estrategia miente sobre cuantas numericas son cadenas",
+        "../Docs/9.- Strategy - reading the banks.md",
+        "**74 of the 120 real numerical questions need more than one step.**",
+        "**40 of the 120 real numerical questions need more than one step.**",
+        "scripts/strategyFigures.test.mjs",
+    ),
+    (
+        "el capitulo de estrategia convierte la pista de longitud en una tactica",
+        "../Docs/9.- Strategy - reading the banks.md",
+        "That is a defect in the bank, not a tactic for the exam.",
+        "That is the fastest way through the bank.",
+        "scripts/strategyFigures.test.mjs",
+    ),
+    (
+        "la traduccion del capitulo pierde una seccion entera",
+        "../Docs/es/9.- Estrategia - leer los bancos.md",
+        "## La versión corta",
+        "### La versión corta",
+        "scripts/strategyFigures.test.mjs",
+    ),
+    (
         "el nivel 3 del calendario vuelve al 60 % y su numero deja de leerse",
         "src/lib/calendarHeat.ts",
         "    alpha: 0.8,\n    ink: 'on-accent',\n    className: 'bg-accent/80 text-on-accent hover:bg-accent/90',",

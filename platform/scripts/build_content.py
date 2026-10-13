@@ -666,6 +666,26 @@ def build_test_day():
     return [theory]
 
 
+def build_strategy():
+    """Capítulo 9: estrategia leída de los propios bancos — puro contenido de
+    teoría, como el capítulo 6. No cuelga de una fase concreta porque habla de
+    las cuatro: tiene su propia `phase` y su propio chunk."""
+    text = read("9.- Strategy - reading the banks.md")
+    chapters = split_toplevel_chapters(text)
+    en_title, en_body = chapters[0]
+
+    es_title, es_body = es_theory_chapter("9.- Estrategia - leer los bancos.md")
+
+    theory = {
+        'id': 'theory-strategy',
+        'phase': 'strategy',
+        'title': {'en': en_title, 'es': es_title},
+        'summaryMd': {'en': en_body, 'es': es_body},
+        'sourceFile': '9.- Strategy - reading the banks.md',
+    }
+    return [theory]
+
+
 def emit_chunk(filename, *, questions=None, theory=None, essays=None):
     """Writes one content.<name>.generated.ts chunk. Every chunk exports the
     same three names (QUESTIONS/THEORY_DOCS/ESSAY_PROMPTS, empty where not
@@ -851,6 +871,12 @@ def main():
     theory = build_test_day()
     print(f"build_test_day: {len(theory)} theory doc(s)")
     emit_chunk('content.test-day.generated.ts', theory=theory)
+    all_theory += theory
+    total_theory += len(theory)
+
+    theory = build_strategy()
+    print(f"build_strategy: {len(theory)} theory doc(s)")
+    emit_chunk('content.strategy.generated.ts', theory=theory)
     all_theory += theory
     total_theory += len(theory)
 

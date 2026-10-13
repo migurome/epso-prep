@@ -7,6 +7,7 @@ import {
   ListChecks,
   GraduationCap,
   PenLine,
+  Compass,
   Link2,
   Megaphone,
   ChevronRight,
@@ -73,6 +74,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { to: '/razonamiento', label: t('nav_reasoning'), icon: BrainCircuit },
     { to: '/campo', label: t('nav_field_mcq'), icon: ListChecks, children: fieldChildren },
     { to: '/eufte', label: t('nav_eufte'), icon: PenLine },
+    // La estrategia va con las fases y no en el menú de usuario: no es un dato
+    // del candidato, es material de estudio, y se vuelve a ella cada vez que
+    // se abre un banco.
+    { to: '/estrategia', label: t('nav_strategy'), icon: Compass },
     { to: '/recursos', label: t('nav_resources'), icon: Link2 },
     // El tablón no es una fase de la oposición: es lo que pasa fuera, en la
     // web de EPSO. Va al final porque se consulta de vez en cuando, no a

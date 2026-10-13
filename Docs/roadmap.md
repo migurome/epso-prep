@@ -10,6 +10,7 @@ Acordado el 18/09/2026.
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.5` | Capítulo de estrategia: los patrones de cada prueba contados sobre los propios bancos —doce familias de numérico, por qué falla cada distractor verbal, qué atributo mira primero en abstracto— con las cifras atadas a un test. De paso destapó que los cinco bancos de campo se pueden acertar sin leerlos. |
 | `2.4.1` | Auditoría de contraste como test: mide los 20 pares de color de los dos temas y, en el calendario, la mezcla real del acento con su fondo. Encontró el nivel 3 del mapa de calor en 3,68:1, heredado de antes del tema oscuro. |
 | `2.4` | Tema oscuro, con interruptor en Ajustes (claro, oscuro o el del sistema). Los 612 colores escritos a mano pasan a diez tokens con nombre de papel, los gráficos estrenan paleta validada contra fondo oscuro y las figuras de abstracto se quedan sobre blanco, porque sus rellenos son el dato de la pregunta. |
 | `2.3` | El tablón se puede marcar: «Visto» aparta lo repasado y «Presentada» deja constancia de dónde te has inscrito. Las vistas se esconden con un interruptor; las presentadas no se esconden nunca. Las marcas viajan en la copia. |
@@ -213,6 +214,55 @@ Tres cosas que el trabajo pidió y el plan no:
   —que es lo correcto: no pudo comprobarlas—. Se reapuntaron una a una al código
   equivalente en vez de borrarlas, que habría sido perder la cobertura sin que
   nada se quejara.
+
+### Estrategia leída de los bancos — **hecho** (`2.5`)
+
+Un capítulo nuevo, `/estrategia`, que responde a «¿hay patrones? ¿se pueden
+clasificar?» contando las preguntas que ya hay en la plataforma en vez de
+repetir folklore de oposiciones. Lo que salió:
+
+- **Numérico: doce familias**, y 64 de las 120 preguntas caen en más de una. La
+  clasificación no se inventó: el libro de ORSEU nombra su propio método en cada
+  respuesta resuelta («problema de proporcionalidad directa», «tasa de
+  crecimiento», «media simple»), así que el guion solo tuvo que contar. Las más
+  frecuentes son porcentaje de un total (62), regla de tres (23) y reconstruir
+  una cifra a partir de una diferencia dada (22).
+- **Dos de cada tres numéricas son cadenas de varias fases** —el libro declara
+  cuántas—, lo que convierte «planifica las fases antes de calcular» en una
+  instrucción medida y no en un consejo.
+- **«Imposible saberlo» es la correcta una vez en 120.** La opción aparece en
+  todo el banco y existe para recoger el pánico.
+- **El 64 % de los distractores verbales no son falsos: son indemostrables.** El
+  banco da el veredicto de cada opción, así que se pudieron clasificar 540
+  distractores. Cambia la pregunta operativa de «¿esto es verdad?» a «¿qué línea
+  del pasaje dice esto?».
+- **En abstracto el relleno manda**: aparece en el 64 % de las series, por
+  encima de la rotación (40 %), que es donde mira todo el mundo primero. Y la
+  serie media lleva 2,4 atributos independientes.
+
+Tres reglas de folklore se pusieron a prueba en lugar de repetirlas. «La opción
+con *solo* o *siempre* es falsa» da diez puntos de ventaja (85,6 % frente al
+75 % del azar): sirve de desempate, no de regla, y descartaría la correcta en 14
+de 180. «La más larga es la correcta» no funciona en verbal (32,2 %). «La que se
+queda en las palabras del pasaje» sí: 40,6 % frente al 25 % del azar. Y **no hay
+sesgo de letra en ningún banco**, probado con χ² en los cuatro.
+
+**Y el análisis destapó un defecto nuestro.** En los cinco bancos de MCQ de
+campo **la opción más larga es la correcta en 437 de 442 preguntas** (95–100 %
+según el ámbito). Son bancos generados, y el generador escribió respuestas
+correctas completas y distractores cortos. Eso no es un atajo útil: deja la nota
+de práctica sin valor como señal de que uno está preparado —que es la señal con
+la que se decide— y entrena a responder por la forma en la única prueba que se
+puntúa por clasificación. Los bancos de razonamiento están limpios (32 %, 24 % y
+14,5 %), porque vienen de libros reales y de muestras oficiales. Reescribir los
+distractores es trabajo de contenido pendiente; el capítulo avisa mientras tanto.
+
+Las cifras del capítulo están atadas a `scripts/strategyFigures.test.mjs`, que
+las vuelve a derivar de los bancos y comprueba que el texto las dice, en los dos
+idiomas. Sin eso serían prosa: cualquiera podría añadir preguntas y el capítulo
+seguiría afirmando lo de antes con la misma seguridad y ya sin razón. Tres
+mutaciones lo sostienen, incluida una que convierte el aviso del defecto en un
+«atajo» para comprobar que el test se queja.
 
 ### Tema oscuro — **hecho** (`2.4`)
 

@@ -229,6 +229,7 @@ subir el número en `package.json` es parte del cambio, no un trámite posterior
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.5` | Capítulo de estrategia: los patrones de cada prueba contados sobre los propios bancos —doce familias de numérico, por qué falla cada distractor verbal, qué atributo mira primero en abstracto— con las cifras atadas a un test. De paso destapó que los cinco bancos de campo se pueden acertar sin leerlos. |
 | `2.4.1` | Auditoría de contraste como test: mide los 20 pares de color de los dos temas y, en el calendario, la mezcla real del acento con su fondo. Encontró el nivel 3 del mapa de calor en 3,68:1, heredado de antes del tema oscuro. |
 | `2.4` | Tema oscuro, con interruptor en Ajustes (claro, oscuro o el del sistema). Los 612 colores escritos a mano pasan a diez tokens con nombre de papel, los gráficos estrenan paleta validada contra fondo oscuro y las figuras de abstracto se quedan sobre blanco, porque sus rellenos son el dato de la pregunta. |
 | `2.3` | El tablón se puede marcar: «Visto» aparta lo repasado y «Presentada» deja constancia de dónde te has inscrito. Las vistas se esconden con un interruptor; las presentadas no se esconden nunca. Las marcas viajan en la copia. |
