@@ -14,6 +14,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { QUESTIONS, QUESTION_KINDS } from '../src/data/content.numerical.generated.ts'
 
 const DOCS = join(dirname(fileURLToPath(import.meta.url)), '../../Docs')
 const leer = (rel) => readFileSync(join(DOCS, rel), 'utf8')
@@ -185,5 +186,60 @@ describe('los dos idiomas cuentan lo mismo', () => {
     for (const cap of [CAPITULO_EN, CAPITULO_ES]) {
       expect(cap.length).toBeGreaterThan(9000)
     }
+  })
+})
+
+describe('el capítulo y las pestañas cuentan lo mismo', () => {
+  // Esto es lo que se escapó la primera vez. El capítulo se escribió con un
+  // guion de análisis y las pestañas salen del clasificador del generador, así
+  // que había dos clasificadores y dos juegos de cifras para el mismo concepto:
+  // el capítulo decía 62 reglas de porcentaje y la plataforma enseñaba 67.
+  // Ahora el clasificador del generador es el único, y esto comprueba que el
+  // capítulo dice lo que la plataforma enseña.
+  // Se IMPORTA el módulo generado en vez de leerlo con una expresión regular:
+  // el fichero está en CRLF y pesa megas, y un patrón atado a `\n` fallaba sin
+  // decir por qué. Importarlo es además lo que hace la propia aplicación.
+  const rotulos = QUESTION_KINDS
+  const libro = QUESTIONS.filter((q) => q.id.startsWith('num-real-'))
+  const tiposDe = (q) =>
+    (q.tags ?? []).filter((t) => t.startsWith('kind:')).map((t) => t.slice(5))
+
+  it('el banco del libro sigue siendo de 120 y todas sus familias tienen rótulo', () => {
+    expect(libro).toHaveLength(120)
+    for (const q of libro) {
+      for (const tipo of tiposDe(q)) {
+        expect(rotulos[tipo], `${tipo} sin rótulo en el catálogo`).toBeTruthy()
+        expect(rotulos[tipo].es).toBeTruthy()
+        expect(rotulos[tipo].en).toBeTruthy()
+      }
+    }
+  })
+
+  it('cada familia con cinco preguntas o más aparece en el capítulo con su cifra', () => {
+    const cuenta = new Map()
+    for (const q of libro) {
+      for (const tipo of tiposDe(q)) cuenta.set(tipo, (cuenta.get(tipo) ?? 0) + 1)
+    }
+    // Las de menos de cinco no se exigen en la tabla: una familia de dos no
+    // merece una fila, y pedirlo aquí ataría el capítulo a un ruido.
+    const grandes = [...cuenta.entries()].filter(([, n]) => n >= 5)
+    expect(grandes.length).toBeGreaterThan(8)
+    for (const [tipo, n] of grandes) {
+      // Las barras van dobladas: dentro de una plantilla `` `...` `` de
+      // JavaScript, `\s` se queda en una «s» y la expresión deja de ser la
+      // que uno lee.
+      const fila = new RegExp(`\|[^|]*\|\s*${n}\s*\|`)
+      expect(CAPITULO_ES, `falta la fila de ${tipo} con ${n}`).toMatch(fila)
+      expect(CAPITULO_EN, `missing the ${tipo} row with ${n}`).toMatch(fila)
+    }
+  })
+
+  it('el número de preguntas con más de una familia es el que dice el capítulo', () => {
+    const varias = libro.filter((q) => tiposDe(q).length >= 2).length
+    const ninguna = libro.filter((q) => tiposDe(q).length === 0).length
+    expect(varias).toBe(63)
+    expect(ninguna).toBe(6)
+    expect(CAPITULO_ES).toContain('63 de las 120')
+    expect(CAPITULO_EN).toContain('63 of the 120')
   })
 })

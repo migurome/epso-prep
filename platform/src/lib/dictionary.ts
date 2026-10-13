@@ -293,6 +293,17 @@ export const DICT = {
   },
 
   // TestDayPage
+  // Las pestañas de tipo de ejercicio del banco de práctica
+  practice_kind_all: { es: 'Todos los tipos', en: 'All kinds' },
+  practice_kind_none: { es: 'Sin tipo', en: 'Unclassified' },
+  practice_kind_empty: {
+    es: 'No queda ninguna pregunta con esta combinación de tipo y procedencia. Cambia una de las dos.',
+    en: 'No question matches this combination of kind and source. Change one of the two.',
+  },
+  practice_kind_hint: {
+    es: 'Una pestaña por tipo de ejercicio. Una pregunta puede estar en varias: la mayoría combina dos técnicas, y practicar un patrón seguido es lo que hace que se reconozca solo.',
+    en: 'One tab per exercise kind. A question can sit in several: most combine two techniques, and drilling one pattern in a row is what makes it recognisable on sight.',
+  },
   strategy_eyebrow: { es: 'Estrategia', en: 'Strategy' },
   strategy_title: {
     es: 'Qué preguntan de verdad los bancos',

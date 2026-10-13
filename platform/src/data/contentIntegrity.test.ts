@@ -51,7 +51,12 @@ describe('integridad del contenido', () => {
     expect(checks.length).toBeGreaterThan(0)
     const failed = checks.filter((c) => c.issues.length)
     expect(failed.map((c) => c.label.es), failed.map(report).join('')).toEqual([])
-  })
+    // Treinta segundos y no los cinco de por defecto: el bloque de abstracto
+    // son 402 preguntas con 2.666 SVG dentro y tarda casi cinco segundos él
+    // solo. Con la suite entera en paralelo se pasaba del límite y fallaba de
+    // forma intermitente, que es la peor manera de fallar: en solitario pasa,
+    // y uno acaba volviendo a lanzarlo hasta que sale verde.
+  }, 30_000)
 
   it('ningún identificador de pregunta se repite entre bloques', async () => {
     expectClean(await checkUniqueIds())

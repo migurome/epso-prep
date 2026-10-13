@@ -229,6 +229,7 @@ subir el número en `package.json` es parte del cambio, no un trámite posterior
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.6` | Una pestaña por tipo de ejercicio en cada banco: las catorce familias de numérico, los atributos y familias de abstracto y los temas de cada ámbito, con su cuenta y ordenadas por frecuencia. El tipo pasa a ser un dato de la pregunta, clasificado al generar el contenido. |
 | `2.5` | Capítulo de estrategia: los patrones de cada prueba contados sobre los propios bancos —doce familias de numérico, por qué falla cada distractor verbal, qué atributo mira primero en abstracto— con las cifras atadas a un test. De paso destapó que los cinco bancos de campo se pueden acertar sin leerlos. |
 | `2.4.1` | Auditoría de contraste como test: mide los 20 pares de color de los dos temas y, en el calendario, la mezcla real del acento con su fondo. Encontró el nivel 3 del mapa de calor en 3,68:1, heredado de antes del tema oscuro. |
 | `2.4` | Tema oscuro, con interruptor en Ajustes (claro, oscuro o el del sistema). Los 612 colores escritos a mano pasan a diez tokens con nombre de papel, los gráficos estrenan paleta validada contra fondo oscuro y las figuras de abstracto se quedan sobre blanco, porque sus rellenos son el dato de la pregunta. |

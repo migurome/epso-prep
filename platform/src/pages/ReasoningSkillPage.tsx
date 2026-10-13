@@ -28,7 +28,11 @@ export function ReasoningSkillPage() {
   if (!skill) return <Navigate to="/razonamiento" replace />
 
   const skillTyped = skill.id as ReasoningSkill
-  const { QUESTIONS: questions, THEORY_DOCS: theory } = use(loadReasoningContent(skillTyped))
+  const {
+    QUESTIONS: questions,
+    THEORY_DOCS: theory,
+    QUESTION_KINDS: kinds,
+  } = use(loadReasoningContent(skillTyped))
   const attempts = testAttempts.filter((a) => a.phase === 'reasoning' && a.skill === skillTyped)
 
   return (
@@ -59,12 +63,13 @@ export function ReasoningSkillPage() {
               questions.length === 0 ? (
                 <EmptyState icon={<ClipboardList size={28} />} title={t('empty_bank_title')} description={t('empty_bank_description')} />
               ) : skillTyped === 'abstract' ? (
-                <FullscreenPractice questions={questions} />
+                <FullscreenPractice questions={questions} kinds={kinds} />
               ) : (
                 <PracticeBank
                   questions={questions}
                   bankId={`reasoning:${skillTyped}`}
                   format={skill.format}
+                  kinds={kinds}
                 />
               ),
           },

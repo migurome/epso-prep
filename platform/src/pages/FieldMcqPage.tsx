@@ -41,7 +41,11 @@ export function FieldMcqPage() {
   if (!field || !owner) return <Navigate to="/campo" replace />
 
   const fieldTyped = field.id as Field
-  const { QUESTIONS: questions, THEORY_DOCS: theory } = use(loadFieldContent(fieldTyped))
+  const {
+    QUESTIONS: questions,
+    THEORY_DOCS: theory,
+    QUESTION_KINDS: kinds,
+  } = use(loadFieldContent(fieldTyped))
   const attempts = testAttempts.filter((a) => a.phase === 'field-mcq' && a.field === fieldTyped)
 
   return (
@@ -92,6 +96,7 @@ export function FieldMcqPage() {
                   questions={questions}
                   bankId={`field:${fieldTyped}`}
                   format={FIELD_MCQ_FORMAT}
+                  kinds={kinds}
                 />
               ),
           },

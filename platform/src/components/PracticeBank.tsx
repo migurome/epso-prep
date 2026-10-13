@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Check, ChevronDown, Pause, Play, RotateCcw, TimerReset, X } from 'lucide-react'
 import clsx from 'clsx'
+import { KindTabs } from './KindTabs'
 import { QuestionCard } from './QuestionCard'
 import { PromptWithChart } from './QuestionChart'
 import { TestLocaleSelector } from './TestLocaleSelector'
@@ -18,6 +19,7 @@ import {
   showsUnder,
   type PracticeFilter,
 } from '../lib/practiceView'
+import { showsInKind, type KindCatalogue } from '../lib/questionKind'
 import { shuffleWithSeed } from '../lib/shuffle'
 import { useStopwatch } from '../lib/useStopwatch'
 import { useTestLocaleStore } from '../lib/testLocaleStore'
@@ -35,6 +37,11 @@ interface PracticeBankProps {
    * reloj. Sin él se usa el de referencia: los bancos del curso de fundamentos
    * no cuelgan de ninguna prueba oficial. */
   format?: { questions: number; minutes: number }
+  /** Catálogo de tipos de ejercicio del chunk, para las pestañas. Sin él no
+   * se enseña ninguna: verbal no tiene tipos porque todas sus preguntas son
+   * el mismo ejercicio, y una barra de pestañas con una sola pestaña sería
+   * decorar una pantalla con una mentira. */
+  kinds?: KindCatalogue
 }
 
 // El enunciado de la cabecera. Va entero: cortarlo a mitad de frase obligaba a
@@ -63,7 +70,7 @@ const FILTERS: { value: PracticeFilter; key: DictKey }[] = [
   { value: 'answered', key: 'practice_filter_answered' },
 ]
 
-export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
+export function PracticeBank({ questions, bankId, format, kinds }: PracticeBankProps) {
   const t = useT()
   const testLocale = useTestLocaleStore((s) => s.locale)
   const paceSeconds = format ? paceFor(format) : DEFAULT_PACE_SECONDS
@@ -80,6 +87,7 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
   const sources = useMemo(() => sourcesIn(questions), [questions])
 
   const [sourceFilter, setSourceFilter] = useState<QuestionSource | 'all'>(defaultSource(sources))
+  const [kindFilter, setKindFilter] = useState<string>('all')
   const [stateFilter, setStateFilter] = useState<PracticeFilter>('all')
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
@@ -95,9 +103,10 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
       ordered.filter(
         (q) =>
           (sourceFilter === 'all' || sourceOf(q.tags) === sourceFilter) &&
+          showsInKind(kindFilter, q.tags) &&
           showsUnder(stateFilter, answers[q.id], q.id === expandedId),
       ),
-    [ordered, sourceFilter, stateFilter, answers, expandedId],
+    [ordered, sourceFilter, kindFilter, stateFilter, answers, expandedId],
   )
 
   const counts = useMemo(() => countsFor(bank.questionIds, answers), [bank.questionIds, answers])
@@ -105,6 +114,14 @@ export function PracticeBank({ questions, bankId, format }: PracticeBankProps) {
   return (
     <div>
       <TestLocaleSelector />
+
+      <KindTabs
+        questions={questions}
+        catalogue={kinds}
+        value={kindFilter}
+        onChange={setKindFilter}
+      />
+
       {sources.length >= 2 && (
         <div className="mb-3 flex gap-1 rounded-lg bg-sunken p-1 text-xs sm:text-sm">
           {[

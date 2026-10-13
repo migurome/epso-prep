@@ -1,3 +1,4 @@
+import { kindsOf } from './questionKind'
 import type { Question, TheoryDoc } from '../types/content'
 
 // Emparejado de la teoría del curso con su banco de preguntas.
@@ -12,7 +13,9 @@ import type { Question, TheoryDoc } from '../types/content'
 // número que lleva el identificador del documento.
 
 /** Etiquetas que no son títulos de módulo. */
-const NON_MODULE_TAGS = new Set(['course', 'ai-generated', 'real'])
+// El módulo de una pregunta viaja como su tipo de ejercicio (`kind:<slug>`),
+// igual que las familias de numérico o los temas de campo: para el candidato,
+// el módulo del curso ES el tipo de ejercicio que está practicando.
 
 export interface CourseModule {
   doc: TheoryDoc
@@ -27,7 +30,25 @@ export function moduleNumber(id: string): number {
 }
 
 function moduleTags(question: Question): string[] {
-  return (question.tags ?? []).filter((tag) => !NON_MODULE_TAGS.has(tag))
+  return kindsOf(question.tags)
+}
+
+/**
+ * El identificador que lleva el tag, a partir del título del módulo.
+ *
+ * Tiene que coincidir con `slug()` de scripts/lib/question_kinds.py, que es
+ * quien lo escribe. Si las dos se separan, las preguntas dejan de encontrar su
+ * módulo y el curso se queda con doce módulos vacíos sin que nada falle: lo
+ * comprueba `course.test.ts` sobre el contenido publicado de verdad.
+ */
+export function moduleSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60)
 }
 
 /** Los módulos del curso, en orden, cada uno con sus preguntas. La
@@ -45,7 +66,7 @@ export function courseModules(theory: TheoryDoc[], questions: Question[]): Cours
   return theory
     .filter((doc) => moduleNumber(doc.id) > 0)
     .sort((a, b) => moduleNumber(a.id) - moduleNumber(b.id))
-    .map((doc) => ({ doc, questions: byTitle.get(doc.title.en) ?? [] }))
+    .map((doc) => ({ doc, questions: byTitle.get(moduleSlug(doc.title.en)) ?? [] }))
 }
 
 export function findModule(

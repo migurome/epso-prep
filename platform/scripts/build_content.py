@@ -26,6 +26,20 @@ import re
 import sys
 from pathlib import Path
 
+# El clasificador de tipos de ejercicio vive aparte: es una tabla de patrones
+# larga, con su propio test, y mezclarla aquí escondería que la taxonomía sale
+# del vocabulario de las fuentes y no de este guion. Ver lib/question_kinds.py.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lib.question_kinds import (  # noqa: E402
+    ENGINE_KINDS,
+    KIND_PREFIX,
+    TOPIC_LABELS,
+    abstract_kinds,
+    labels_for,
+    numerical_kinds,
+    slug,
+)
+
 ROOT = Path(__file__).resolve().parent.parent.parent
 DOCS = ROOT / "Docs"
 DOCS_ES = DOCS / "es"
@@ -138,10 +152,13 @@ def parse_bank_raw(questions_text, answers_text, *, topic_tracking=False):
 
 def parse_question_bank_bilingual(en_q_text, en_a_text, es_q_text, es_a_text, *, id_prefix, phase,
                                    skill=None, field=None, source=None, extra_tags=None,
-                                   topic_tracking=False):
+                                   topic_tracking=False, kinds_fn=None):
     extra_tags = extra_tags or []
     en_bank = parse_bank_raw(en_q_text, en_a_text, topic_tracking=topic_tracking)
-    es_bank = parse_bank_raw(es_q_text, es_a_text, topic_tracking=False)
+    # El tema se rastrea también en español: es el rótulo de la pestaña, y en
+    # una interfaz en español una pestaña que diga «Secure Development and
+    # DevSecOps» canta.
+    es_bank = parse_bank_raw(es_q_text, es_a_text, topic_tracking=topic_tracking)
 
     questions = []
     for num, en_q in sorted(en_bank.items()):
@@ -169,7 +186,25 @@ def parse_question_bank_bilingual(en_q_text, en_a_text, es_q_text, es_a_text, *,
 
         tags = list(extra_tags)
         if en_q['topic']:
-            tags.append(en_q['topic'])
+            # El tema de un banco de campo ES su tipo de ejercicio: lleva el
+            # mismo prefijo que las familias de numérico para que la interfaz
+            # no tenga que distinguir de dónde salió cada uno.
+            tags.append(KIND_PREFIX + slug(en_q['topic']))
+            TOPIC_LABELS[slug(en_q['topic'])] = {
+                'en': en_q['topic'],
+                'es': (es_q.get('topic') or en_q['topic']),
+            }
+        if kinds_fn:
+            correcta = next((o for o in en_q['options'] if o['isCorrect']), None)
+            es_correcta = next((o for o in es_q['options'] if o['isCorrect']), None)
+            explicacion = ' '.join(
+                x for x in (
+                    (correcta or {}).get('explanation'),
+                    (es_correcta or {}).get('explanation'),
+                ) if x
+            )
+            for kid in kinds_fn(en_q['prompt'] + ' ' + es_q['prompt'], explicacion):
+                tags.append(KIND_PREFIX + kid)
 
         q = {
             'id': f'{id_prefix}-{num}',
@@ -252,7 +287,7 @@ def build_numerical():
     real_questions = parse_question_bank_bilingual(
         en_q, en_a, es_q, es_a, id_prefix='num-real', phase='reasoning', skill='numerical',
         source='Numerical Reasoning MCQ for European institution competitions (Hetru & Bizeur, ORSEU, 2012)',
-        extra_tags=['real'],
+        extra_tags=['real'], kinds_fn=numerical_kinds,
     )
     en_q, en_a = split_bank(ai_body)
     es_q, es_a = es_bank_chapter("2.- Razonamiento numérico (banco bonus).md", 0)
@@ -332,6 +367,17 @@ def load_engine_bank():
         provenance = q.get('provenance') or {}
         provenance.pop('config', None)
         provenance.pop('program', None)
+        # La familia del motor ES el tipo de ejercicio, y el motor ya la
+        # declara. Se le añade el tag con prefijo sin tocar los suyos: el
+        # fichero lo escribe otro repositorio y su contrato está congelado.
+        familia = provenance.get('family')
+        if familia:
+            if familia not in ENGINE_KINDS:
+                raise ValueError(
+                    f"{name}: {qid} es de la familia {familia!r}, que no tiene rótulo "
+                    "en lib/question_kinds.py — añádelo antes de importar el banco"
+                )
+            q.setdefault('tags', []).append(KIND_PREFIX + familia)
     return questions
 
 
@@ -351,7 +397,7 @@ def build_abstract():
     real_questions = parse_question_bank_bilingual(
         en_q, en_a, es_q, es_a, id_prefix='abs-real', phase='reasoning', skill='abstract',
         source='Abstract Reasoning Test — 120 Questions (real published book)',
-        extra_tags=['real'],
+        extra_tags=['real'], kinds_fn=abstract_kinds,
     )
     es_title, es_body = es_theory_chapter("3.- Razonamiento abstracto (teoría).md")
     theory = {
@@ -513,9 +559,15 @@ def build_course(cfg):
     # Cada pregunta lleva como etiqueta el título de su módulo. Si esa etiqueta
     # no coincide con ningún módulo, la interfaz no sabría a cuál adjuntarla y
     # las preguntas desaparecerían del curso sin que nada fallase.
-    titles = {en_title for _, en_title, _ in en_modules}
+    #
+    # El título viaja como `kind:<slug>`, igual que cualquier otro tipo de
+    # ejercicio, así que aquí se compara contra el slug del módulo y no contra
+    # su título: son la misma cosa escrita de dos maneras.
+    titles = {slug(en_title) for _, en_title, _ in en_modules}
     for q in questions:
-        module_tags = [tag for tag in q['tags'] if tag not in ('course', 'ai-generated')]
+        module_tags = [
+            tag[len(KIND_PREFIX):] for tag in q['tags'] if tag.startswith(KIND_PREFIX)
+        ]
         unknown = [tag for tag in module_tags if tag not in titles]
         if unknown:
             raise ValueError(f"{q['id']}: módulo desconocido en el banco: {unknown}")
@@ -686,25 +738,54 @@ def build_strategy():
     return [theory]
 
 
+def kinds_catalogue(questions):
+    """Los tipos que de verdad usa este chunk, con su rótulo en los dos idiomas.
+
+    Se deduce de los tags en vez de volcar la tabla entera: un chunk de campo no
+    tiene por qué cargar con los rótulos de las familias de numérico."""
+    usados = set()
+    for q in questions:
+        for tag in q.get('tags', []):
+            if tag.startswith(KIND_PREFIX):
+                usados.add(tag[len(KIND_PREFIX):])
+    catalogo = dict(labels_for(usados))
+    faltan = usados - set(catalogo)
+    if faltan:
+        raise ValueError(f"tipos de ejercicio sin rótulo: {sorted(faltan)}")
+    return dict(sorted(catalogo.items()))
+
+
 def emit_chunk(filename, *, questions=None, theory=None, essays=None):
     """Writes one content.<name>.generated.ts chunk. Every chunk exports the
-    same three names (QUESTIONS/THEORY_DOCS/ESSAY_PROMPTS, empty where not
-    applicable) so every page can destructure the same shape regardless of
-    which chunk it dynamically imports."""
+    same four names (QUESTIONS/THEORY_DOCS/ESSAY_PROMPTS/QUESTION_KINDS, empty
+    where not applicable) so every page can destructure the same shape
+    regardless of which chunk it dynamically imports.
+
+    `QUESTION_KINDS` es el catálogo de tipos de ejercicio del chunk: traduce el
+    identificador que llevan los tags (`kind:rule-of-three`) al rótulo en los
+    dos idiomas. Va aquí y no repetido dentro de cada pregunta porque son 442
+    preguntas de campo y el rótulo de un tema pesa sesenta caracteres por
+    idioma: repetirlo sumaría unos 50 kB al paquete para decir lo mismo."""
     questions = questions or []
     theory = theory or []
     essays = essays or []
+    kinds = kinds_catalogue(questions)
     lines = []
     lines.append("// AUTO-GENERATED by scripts/build_content.py — do not edit by hand.")
     lines.append("// Re-run: python scripts/build_content.py  (after editing ../Docs/*.md or ../Docs/es/*.md)")
     lines.append("")
-    lines.append("import type { Question, TheoryDoc, EssayPrompt } from '../types/content'")
+    lines.append("import type { Question, TheoryDoc, EssayPrompt, LocalizedText } from '../types/content'")
     lines.append("")
     lines.append(f"export const QUESTIONS: Question[] = {json.dumps(questions, ensure_ascii=False, indent=2)}")
     lines.append("")
     lines.append(f"export const THEORY_DOCS: TheoryDoc[] = {json.dumps(theory, ensure_ascii=False, indent=2)}")
     lines.append("")
     lines.append(f"export const ESSAY_PROMPTS: EssayPrompt[] = {json.dumps(essays, ensure_ascii=False, indent=2)}")
+    lines.append("")
+    lines.append(
+        "export const QUESTION_KINDS: Record<string, LocalizedText> = "
+        + json.dumps(kinds, ensure_ascii=False, indent=2)
+    )
     lines.append("")
     (GEN_DIR / filename).write_text('\n'.join(lines), encoding='utf-8')
 

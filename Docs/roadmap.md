@@ -10,6 +10,7 @@ Acordado el 18/09/2026.
 
 | Versión | Qué entró |
 | --- | --- |
+| `2.6` | Una pestaña por tipo de ejercicio en cada banco: las catorce familias de numérico, los atributos y familias de abstracto y los temas de cada ámbito, con su cuenta y ordenadas por frecuencia. El tipo pasa a ser un dato de la pregunta, clasificado al generar el contenido. |
 | `2.5` | Capítulo de estrategia: los patrones de cada prueba contados sobre los propios bancos —doce familias de numérico, por qué falla cada distractor verbal, qué atributo mira primero en abstracto— con las cifras atadas a un test. De paso destapó que los cinco bancos de campo se pueden acertar sin leerlos. |
 | `2.4.1` | Auditoría de contraste como test: mide los 20 pares de color de los dos temas y, en el calendario, la mezcla real del acento con su fondo. Encontró el nivel 3 del mapa de calor en 3,68:1, heredado de antes del tema oscuro. |
 | `2.4` | Tema oscuro, con interruptor en Ajustes (claro, oscuro o el del sistema). Los 612 colores escritos a mano pasan a diez tokens con nombre de papel, los gráficos estrenan paleta validada contra fondo oscuro y las figuras de abstracto se quedan sobre blanco, porque sus rellenos son el dato de la pregunta. |
@@ -214,6 +215,69 @@ Tres cosas que el trabajo pidió y el plan no:
   —que es lo correcto: no pudo comprobarlas—. Se reapuntaron una a una al código
   equivalente en vez de borrarlas, que habría sido perder la cobertura sin que
   nada se quejara.
+
+### Una pestaña por tipo de ejercicio — **hecho** (`2.6`)
+
+La `2.5` contó los patrones; esta los hace practicables. Saber que 25 preguntas
+del banco numérico son reglas de tres no cambia nada si no se pueden hacer esas
+25 seguidas: practicar un patrón en fila es lo que hace que luego se reconozca
+de un vistazo.
+
+El tipo pasa a ser **un dato de la pregunta**. Antes vivía solo en un guion de
+análisis, así que no había manera de filtrar por él. Ahora el generador
+clasifica al construir el contenido y cada pregunta lleva sus tipos como tags
+con prefijo (`kind:rule-of-three`), con el rótulo en los dos idiomas en un
+catálogo por chunk —`QUESTION_KINDS`— y no repetido dentro de cada pregunta:
+son 442 preguntas de campo y un rótulo de tema pesa sesenta caracteres por
+idioma, así que repetirlo sumaría unos 50 kB al paquete para decir lo mismo.
+
+Lo que sale en cada banco:
+
+- **Numérico**: las catorce familias, de porcentaje de un total (67) a
+  fracciones (2), más una pestaña para las seis que no encajan en ninguna.
+- **Abstracto**: las ocho familias que el motor ya declaraba —serie, rejilla
+  3×3, la que sobra…— y los diez atributos de las series del libro (relleno,
+  posición, rotación…). El motor no se tocó: su contrato está congelado y su
+  familia se lee de la procedencia que ya traía.
+- **Campo**: los ocho o doce temas de cada ámbito, que ya venían etiquetados.
+  Ahora también en español: el tema se rastrea en los dos idiomas, porque una
+  pestaña que diga «Secure Development and DevSecOps» en una interfaz española
+  canta.
+- **Verbal**: ninguna, y es lo correcto. Sus 180 preguntas son el mismo
+  ejercicio, y una barra con una sola pestaña sería decorar la pantalla con una
+  mentira. `KindTabs` no se dibuja por debajo de dos.
+
+Tres decisiones que no son cosméticas:
+
+- **Una pregunta aparece en todas sus pestañas**, no en la primera. 63 de las
+  120 numéricas tienen más de una familia; quedarse con la primera dejaría la
+  mitad del banco sin practicar por una familia que sí la contiene. Tiene
+  mutación.
+- **Las pestañas van por frecuencia**, no por alfabeto: la primera es la que
+  más va a salir en el examen, y ése es el orden en que conviene practicarlas.
+  La primera mutación de esto sobrevivió, porque el ejemplo del test tenía el
+  orden alfabético y el de frecuencia coincidiendo; hubo que escribir un caso
+  donde discrepan.
+- **Un tipo sin rótulo no se enseña.** Una pestaña que ponga `rule-of-three` es
+  peor que una pestaña de menos, y el generador falla al construir si aparece
+  un tipo sin traducir, en vez de dejarlo salir a pantalla.
+
+**Y un desajuste que este trabajo destapó.** El capítulo de estrategia se
+escribió con un guion de análisis propio y las pestañas salen del clasificador
+del generador: eran dos clasificadores y dos juegos de cifras para el mismo
+concepto. El capítulo decía 62 preguntas de porcentaje y la plataforma enseñaba
+67. Peor: mi guion metía en la misma familia «calcular la diferencia entre dos
+columnas» y «te dan la diferencia y hay que deshacerla», que son dos ejercicios
+distintos —uno se resta y el otro se divide—. Ahora hay un solo clasificador,
+las dos cosas son dos familias (17 y 5), el capítulo lleva las cifras del
+generador y `strategyFigures.test.mjs` comprueba que el capítulo dice lo que la
+plataforma enseña.
+
+El emparejado de las preguntas del curso con su módulo también viajaba por ese
+tag, y el cambio de formato lo rompió: doce módulos se quedaron sin preguntas.
+Lo pilló `course.test.ts`, que se ejecuta contra el contenido publicado de
+verdad y no contra un montaje, y ahora el emparejado va por el mismo `slug` en
+el generador y en el navegador, con una mutación que lo sostiene.
 
 ### Estrategia leída de los bancos — **hecho** (`2.5`)
 

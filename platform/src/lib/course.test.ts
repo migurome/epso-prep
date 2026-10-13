@@ -8,7 +8,7 @@
 // nada falle: la pestaña sigue ahí, sólo que vacía.
 import { describe, it, expect } from 'vitest'
 import type { Question, TheoryDoc } from '../types/content'
-import { courseModules, findModule, moduleNumber } from './course'
+import { courseModules, moduleSlug, findModule, moduleNumber } from './course'
 
 function doc(id: string, titleEn: string): TheoryDoc {
   return {
@@ -30,7 +30,9 @@ function question(id: string, module: string): Question {
       { id: 'A', text: { es: 'a', en: 'a' }, isCorrect: true },
       { id: 'B', text: { es: 'b', en: 'b' }, isCorrect: false },
     ],
-    tags: ['course', 'ai-generated', module],
+    // El módulo viaja como tipo de ejercicio, igual que las familias de
+    // numérico: para quien practica, el módulo ES el tipo.
+    tags: ['course', 'ai-generated', `kind:${moduleSlug(module)}`],
   }
 }
 
@@ -97,9 +99,9 @@ describe('módulos del curso', () => {
     expect(module!.questions).toEqual([])
   })
 
-  it('ignora las etiquetas que no son títulos de módulo', () => {
+  it('ignora las etiquetas que no son de tipo', () => {
     const q = question('q5', 'Security concepts')
-    q.tags = ['real', 'ai-generated', 'course', 'Security concepts']
+    q.tags = ['real', 'ai-generated', 'course', 'kind:security-concepts']
     const [first] = courseModules(THEORY, [q])
     expect(first.questions.map((x) => x.id)).toEqual(['q5'])
   })
