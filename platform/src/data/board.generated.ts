@@ -114,6 +114,136 @@ export const BOARD: BoardFile = {
       "openedOn": null
     },
     {
+      "id": "epso-ad-407-23",
+      "title": "Dutch-language (NL) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "reference": "EPSO/AD/407/23",
+      "stage": "open",
+      "year": 2023,
+      "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/dutch-language-nl-lawyer-linguists",
+      "grade": "N/A",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
+      "id": "epso-ad-405-23",
+      "title": "Spanish-language (ES) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "reference": "EPSO/AD/405/23",
+      "stage": "open",
+      "year": 2023,
+      "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/spanish-language-es-lawyer-linguists",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "firstSeen": "2026-10-21",
+      "openedOn": "2023-09-14"
+    },
+    {
+      "id": "bulgarian-language-bg-lawyer-linguists",
+      "title": "Bulgarian-Language (BG) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
+      "id": "german-language-de-lawyer-linguists",
+      "title": "German-Language (DE) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
+      "id": "greek-language-el-lawyer-linguists",
+      "title": "Greek-Language (EL) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
+      "id": "irish-language-ga-lawyer-linguists",
+      "title": "Irish-Language (GA) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
+      "id": "maltese-language-mt-lawyer-linguists",
+      "title": "Maltese-Language (MT) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
+      "id": "romanian-language-ro-lawyer-linguists",
+      "title": "Romanian-language (RO) lawyer-linguists",
+      "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
+      "grade": "AD 7",
+      "locations": [
+        "Luxembourg (Luxembourg)"
+      ],
+      "deadline": "2026-11-25T11:00:00Z",
+      "deadlineText": "25/11/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-21",
+      "openedOn": null
+    },
+    {
       "id": "epso-ad-429-26-4",
       "title": "Data science",
       "url": "https://eu-careers.europa.eu/en/job-opportunities/data-science",
