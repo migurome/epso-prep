@@ -121,14 +121,15 @@ export const BOARD: BoardFile = {
       "stage": "open",
       "year": 2023,
       "infoUrl": "https://eu-careers.europa.eu/en/job-opportunities/dutch-language-nl-lawyer-linguists",
-      "grade": "N/A",
+      "grade": "AD 7",
       "locations": [
         "Luxembourg (Luxembourg)"
       ],
       "deadline": "2026-11-25T11:00:00Z",
       "deadlineText": "25/11/2026 - 12:00",
       "firstSeen": "2026-10-21",
-      "openedOn": null
+      "openedOn": null,
+      "updatedOn": "2026-10-23"
     },
     {
       "id": "epso-ad-405-23",
