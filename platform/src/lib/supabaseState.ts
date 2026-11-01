@@ -10,29 +10,9 @@ import { describeDbError as describe, supabase } from './supabaseClient'
 // dispositivos y se guarda como `jsonb`, así que hay una conversión en cada
 // sentido que tiene que devolver exactamente lo que entró.
 //
-// La tabla se crea una vez, con RLS encendida y una política que sólo deja
-// tocar la fila propia:
-//
-//   create table public.study_state (
-//     user_id    uuid primary key references auth.users on delete cascade,
-//     snapshot   jsonb not null,
-//     updated_at timestamptz not null default now()
-//   );
-//   alter table public.study_state enable row level security;
-//   create policy "cada cuenta, su fila" on public.study_state
-//     for all to authenticated
-//     using (auth.uid() = user_id) with check (auth.uid() = user_id);
-//
-// Y un disparador que toca `updated_at` en cada escritura, porque es la marca
-// con la que el sincronizador sabe si lo de allí es más nuevo que lo que este
-// dispositivo ya fusionó. Dejarla en manos del cliente sería fiarse del reloj
-// de cada teléfono:
-//
-//   create function public.touch_updated_at() returns trigger
-//     language plpgsql as $$
-//     begin new.updated_at = now(); return new; end $$;
-//   create trigger study_state_touch before insert or update on public.study_state
-//     for each row execute function public.touch_updated_at();
+// La tabla, sus políticas (RLS) y el disparador que pone `updated_at` están en
+// Docs/sql/01-study-state.sql y 02-profiles.sql; la política vigente es la de 02
+// (fila propia si la cuenta está aprobada, o cualquiera si eres admin).
 
 /** La tabla donde vive el progreso. */
 export const STATE_TABLE = 'study_state'

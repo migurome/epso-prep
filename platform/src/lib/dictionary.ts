@@ -675,8 +675,8 @@ export const DICT = {
     en: 'Withdraw access for {email}? Their progress is not deleted: if you grant it again, it will be where they left it.',
   },
   admin_confirm_wipe: {
-    es: '¿Borrar el progreso de {email}? Esto no se puede deshacer. Bájatelo antes si quieres poder restaurarlo.',
-    en: 'Delete {email}’s progress? This cannot be undone. Download it first if you want to be able to restore it.',
+    es: '¿Borrar el progreso de {email}? Esto no se puede deshacer. Bájatelo antes si quieres poder restaurarlo. Ojo: si sigue teniendo el progreso en su navegador, lo volverá a subir al sincronizar.',
+    en: 'Delete {email}’s progress? This cannot be undone. Download it first if you want to be able to restore it. Note: if their browser still holds the progress, it will upload it again on the next sync.',
   },
   admin_confirm_delete: {
     es: '¿Borrar la cuenta de {email}? Desaparece de esta lista y pierde el acceso. Su cuenta de acceso sigue existiendo en Supabase: se borra desde su panel.',
@@ -686,7 +686,10 @@ export const DICT = {
   admin_done_revoke: { es: '{email} ya no puede entrar.', en: '{email} can no longer sign in.' },
   admin_done_wipe: { es: 'Progreso de {email} borrado.', en: '{email}’s progress deleted.' },
   admin_done_delete: { es: 'Cuenta de {email} borrada.', en: '{email}’s account deleted.' },
-  admin_done_restore: { es: 'Progreso de {email} restaurado.', en: '{email}’s progress restored.' },
+  admin_done_restore: {
+    es: 'Progreso de {email} restaurado. Su navegador lo fusionará con lo que ya tenga: no quita nada de lo que haya allí.',
+    en: '{email}’s progress restored. Their browser will merge it with what it already holds: nothing there is removed.',
+  },
   admin_no_progress: { es: '{email} todavía no ha guardado nada.', en: '{email} has not saved anything yet.' },
   admin_bad_file: {
     es: 'Ese fichero no sirve: no es una copia de progreso de esta aplicación.',

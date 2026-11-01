@@ -9,14 +9,14 @@ import { TimedTest } from '../components/TimedTest'
 import { hasCourse, loadCourseContent, type CourseField } from '../data/contentLoader'
 import { FIELD_MCQ_FORMAT } from '../data/competition'
 import { useLocaleStore, pick } from '../lib/localeStore'
-import { usePreferredField } from '../lib/studyStore'
+import { useField } from '../lib/studyStore'
 import { useT } from '../lib/useT'
 import { courseModules, moduleNumber } from '../lib/course'
 
 // Igual que la portada de formación: si el ámbito elegido no tiene curso,
 // aquí no hay nada que enseñar y se vuelve, que es donde se explica por qué.
 export function CourseModulePage() {
-  const field = usePreferredField()
+  const field = useField()
   if (!hasCourse(field)) return <Navigate to="/formacion" replace />
   return <CourseModule courseField={field} />
 }

@@ -34,7 +34,11 @@ interface SyncStoreState {
   lastSyncAt: string | null
   /** Lo que el sincronizador necesita recordar entre pasadas. */
   sync: SyncState
+  /** De qué cuenta es el progreso que hay en este navegador. `forget` no lo
+   * toca: sobrevive al cierre de sesión justo para reconocer a otra cuenta. */
+  owner: string | null
   setAuto: (auto: boolean) => void
+  setOwner: (owner: string) => void
   setStatus: (status: SyncStatus, error?: string | null) => void
   remember: (next: { sync?: SyncState; syncedAt?: string }) => void
   /** Olvidar la fila de la que se venía. Lo llama el cambio de sesión. */
@@ -49,7 +53,9 @@ export const useSyncStore = create<SyncStoreState>()(
       error: null,
       lastSyncAt: null,
       sync: {},
+      owner: null,
       setAuto: (auto) => set({ auto }),
+      setOwner: (owner) => set({ owner }),
       setStatus: (status, error = null) => set({ status, error }),
       remember: ({ sync, syncedAt }) =>
         set((state) => ({
@@ -71,7 +77,7 @@ export const useSyncStore = create<SyncStoreState>()(
       name: 'epso-prep-sync',
       // El estado de la última pasada es de esta pestaña: guardarlo haría que
       // al abrir la web pareciera sincronizada antes de hablar con el servidor.
-      partialize: ({ auto, lastSyncAt, sync }) => ({ auto, lastSyncAt, sync }),
+      partialize: ({ auto, lastSyncAt, sync, owner }) => ({ auto, lastSyncAt, sync, owner }),
     },
   ),
 )

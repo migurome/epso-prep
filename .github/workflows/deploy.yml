@@ -32,6 +32,12 @@ jobs:
         working-directory: platform
         run: npm ci
 
+      # Lo que se publica sin pasar por `verify` (p. ej. el commit del bot del
+      # tablón) pasa al menos por los tests.
+      - name: Test
+        working-directory: platform
+        run: npm test
+
       - name: Build
         working-directory: platform
         run: npm run build

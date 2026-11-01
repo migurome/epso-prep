@@ -11,6 +11,11 @@
 -- basura en `auth.users` que sólo se limpia a mano.
 --
 -- Se ejecuta DESPUÉS de `02-profiles.sql`, y se puede repetir sin romper nada.
+--
+-- OBLIGATORIO: Authentication → Sign In / Providers → Email → «Confirm email»
+-- ACTIVADO. El disparador aprueba a quien se registre con un correo aprobado;
+-- sin confirmar el correo, cualquiera que lo conozca se registra antes que su
+-- dueño y entra aprobado (y con el de `admin_email()`, como administrador).
 
 -- ── 1. La tabla ───────────────────────────────────────────────────────────
 create table if not exists public.access_requests (

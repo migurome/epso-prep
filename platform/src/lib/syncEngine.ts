@@ -3,6 +3,7 @@ import { AUTO_SAVE_MS, syncOnce, type SyncOutcome } from './remoteSync'
 import { useSyncStore } from './syncStore'
 import { isSupabaseConfigured } from './supabaseConfig'
 import { remoteBackend, stateRows } from './supabaseState'
+import { errorText as message } from './supabaseClient'
 
 // El reloj de la sincronización: una pasada al entrar, otra cada cinco minutos
 // y otra al dejar la pestaña.
@@ -18,11 +19,6 @@ import { remoteBackend, stateRows } from './supabaseState'
 // ya hay una cuenta aprobada detrás.
 
 let running = false
-
-/** ¿Hay a dónde sincronizar? Sin configuración no se carga nada de Supabase. */
-export function isSyncConfigured(): boolean {
-  return isSupabaseConfigured()
-}
 
 /** Texto para el candidato a partir de lo que devolvió el sincronizador. */
 export function explainOutcome(outcome: Extract<SyncOutcome, { ok: false }>): string {
@@ -45,7 +41,7 @@ export function explainOutcome(outcome: Extract<SyncOutcome, { ok: false }>): st
  */
 export async function runSync(): Promise<void> {
   const store = useSyncStore.getState()
-  if (!isSyncConfigured()) {
+  if (!isSupabaseConfigured()) {
     store.setStatus('off')
     return
   }
@@ -82,7 +78,7 @@ export async function runSync(): Promise<void> {
  * pararlo para que React pueda limpiar al desmontar.
  */
 export function startAutoSync(): () => void {
-  if (!isSyncConfigured()) {
+  if (!isSupabaseConfigured()) {
     useSyncStore.getState().setStatus('off')
     return () => {}
   }
@@ -106,8 +102,4 @@ export function startAutoSync(): () => void {
     clearInterval(timer)
     document.removeEventListener('visibilitychange', onHide)
   }
-}
-
-function message(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
 }

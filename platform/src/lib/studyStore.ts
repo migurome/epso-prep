@@ -209,11 +209,6 @@ export function useActiveFields(): Field[] {
   return activeFieldsOf(useStudyStore((s) => s.profile))
 }
 
-/** Alias histórico de useField. Field-Related MCQ y Formación se ciñen a él:
- * enseñar los demás ámbitos era material que el candidato no va a examinar,
- * compitiendo por su atención con el que sí. */
-export const usePreferredField = useField
-
 /** Los datos de la convocatoria a la que pertenece el ámbito elegido: sus
  * plazos, sus plazas y su color. No se elige aparte — se deduce. */
 export function useCompetition(): CompetitionInfo {

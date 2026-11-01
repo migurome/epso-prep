@@ -1,29 +1,35 @@
+import { lazy, type ComponentType } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { Dashboard } from './pages/Dashboard'
-import { ReasoningOverview } from './pages/ReasoningOverview'
-import { ReasoningSkillPage } from './pages/ReasoningSkillPage'
-import { FieldMcqOverview } from './pages/FieldMcqOverview'
-import { FieldMcqPage } from './pages/FieldMcqPage'
-import { EuftePage } from './pages/EuftePage'
-import { TestDayPage } from './pages/TestDayPage'
-import { StrategyPage } from './pages/StrategyPage'
-import { ApplicationPage } from './pages/ApplicationPage'
-import { ResourcesPage } from './pages/ResourcesPage'
-import { BoardPage } from './pages/BoardPage'
-import { ProgressPage } from './pages/ProgressPage'
-import { CoursePage } from './pages/CoursePage'
-import { CourseModulePage } from './pages/CourseModulePage'
-import { CalendarPage } from './pages/CalendarPage'
-import { SettingsPage } from './pages/SettingsPage'
 import { SelfCheckPage } from './pages/SelfCheckPage'
-import { AdminPage } from './pages/AdminPage'
 import { LoginPage } from './pages/LoginPage'
 import { AccessNotice } from './components/AccessNotice'
 import { useAccountStore } from './lib/accountStore'
 import { isAdmin } from './lib/account'
 import { loadAccount, signOut } from './lib/accountEngine'
+
+// Las páginas se bajan al visitarlas; `Layout` ya las envuelve en `Suspense`.
+// Dashboard es la portada y SelfCheckPage se prueba en su primer pintado síncrono.
+const page = <K extends string>(load: () => Promise<Record<K, ComponentType>>, name: K) =>
+  lazy(() => load().then((m) => ({ default: m[name] })))
+const ReasoningOverview = page(() => import('./pages/ReasoningOverview'), 'ReasoningOverview')
+const ReasoningSkillPage = page(() => import('./pages/ReasoningSkillPage'), 'ReasoningSkillPage')
+const FieldMcqOverview = page(() => import('./pages/FieldMcqOverview'), 'FieldMcqOverview')
+const FieldMcqPage = page(() => import('./pages/FieldMcqPage'), 'FieldMcqPage')
+const EuftePage = page(() => import('./pages/EuftePage'), 'EuftePage')
+const TestDayPage = page(() => import('./pages/TestDayPage'), 'TestDayPage')
+const StrategyPage = page(() => import('./pages/StrategyPage'), 'StrategyPage')
+const ApplicationPage = page(() => import('./pages/ApplicationPage'), 'ApplicationPage')
+const ResourcesPage = page(() => import('./pages/ResourcesPage'), 'ResourcesPage')
+const BoardPage = page(() => import('./pages/BoardPage'), 'BoardPage')
+const ProgressPage = page(() => import('./pages/ProgressPage'), 'ProgressPage')
+const CoursePage = page(() => import('./pages/CoursePage'), 'CoursePage')
+const CourseModulePage = page(() => import('./pages/CourseModulePage'), 'CourseModulePage')
+const CalendarPage = page(() => import('./pages/CalendarPage'), 'CalendarPage')
+const SettingsPage = page(() => import('./pages/SettingsPage'), 'SettingsPage')
+const AdminPage = page(() => import('./pages/AdminPage'), 'AdminPage')
 
 function App() {
   // La puerta. Sin cuenta aprobada no se monta nada más: ni el armazón, ni las

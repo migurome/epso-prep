@@ -282,6 +282,12 @@ export function applySnapshot(snapshot: Snapshot, mode: ImportMode): SnapshotSum
   }
 }
 
+/** Deja este dispositivo como recién estrenado: lo que se usa cuando en el
+ * navegador entra una cuenta distinta de la dueña del progreso local. */
+export function clearProgress(): void {
+  applySnapshot(normalise({ format: SNAPSHOT_FORMAT }), 'replace')
+}
+
 /** Nombre del fichero. Lleva la fecha delante para que varias copias se
  * ordenen solas en la carpeta de descargas. */
 export function snapshotFilename(when: Date = new Date()): string {

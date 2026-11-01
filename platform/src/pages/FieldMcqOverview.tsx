@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { usePreferredField } from '../lib/studyStore'
+import { useField } from '../lib/studyStore'
 
 // Había aquí una portada con una tarjeta por ámbito de la convocatoria. Ya no:
 // el candidato se presenta por uno solo, lo elige en Ajustes, y los demás eran
@@ -7,6 +7,6 @@ import { usePreferredField } from '../lib/studyStore'
 // elegir, la portada era un clic de más, así que /campo lleva directamente al
 // ámbito elegido.
 export function FieldMcqOverview() {
-  const field = usePreferredField()
+  const field = useField()
   return <Navigate to={`/campo/${field}`} replace />
 }

@@ -10,6 +10,7 @@ import { readSnapshot } from '../lib/backup'
 import { downloadText } from '../lib/download'
 import type { AccessRequest, Account } from '../types/account'
 import { useT } from '../lib/useT'
+import { errorText as message } from '../lib/supabaseClient'
 
 // El cableado del perfil de administrador con la base de datos.
 //
@@ -155,7 +156,3 @@ export function AdminPage() {
   )
 }
 
-
-function message(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
-}

@@ -1,7 +1,8 @@
 import { accountRows, type AccountRows } from './accountApi'
 import { useAccountStore } from './accountStore'
+import { clearProgress } from './backup'
 import { useSyncStore } from './syncStore'
-import { supabase } from './supabaseClient'
+import { errorText as message, supabase } from './supabaseClient'
 import { isSupabaseConfigured } from './supabaseConfig'
 
 // La sesión: entrar, salir, y mantener la web al día de quién está dentro.
@@ -31,13 +32,7 @@ export type SignInResult = { ok: true } | { ok: false; message: string }
  */
 export type SignUpResult = { ok: true; inside: boolean } | { ok: false; message: string }
 
-/** El acceso a la tabla. Se puede sustituir en los tests. */
-let rows: AccountRows = accountRows()
-
-/** Sólo para los tests: cambia de dónde se leen las cuentas. */
-export function useAccountRowsForTests(next: AccountRows): void {
-  rows = next
-}
+const rows: AccountRows = accountRows()
 
 /** Lee la cuenta del usuario que haya dentro y la deja en el almacén. */
 export async function loadAccount(): Promise<void> {
@@ -62,7 +57,22 @@ export async function loadAccount(): Promise<void> {
 function rememberSession(user: { id: string; email: string } | null): void {
   const before = useAccountStore.getState().userId
   if (before !== (user?.id ?? null)) useSyncStore.getState().forget()
+  if (user) claimLocalProgress(user.id)
   useAccountStore.getState().session(user)
+}
+
+/**
+ * El progreso de este navegador pasa a ser de `userId`.
+ *
+ * Si era de otra cuenta, se vacía antes: si no, la primera sincronización lo
+ * fusionaría y lo subiría a la fila de quien acaba de entrar. Si no tenía dueño
+ * (instalaciones de antes de esto), se adopta tal cual, sin borrar nada.
+ */
+export function claimLocalProgress(userId: string): void {
+  const { owner, setOwner } = useSyncStore.getState()
+  if (owner === userId) return
+  if (owner) clearProgress()
+  setOwner(userId)
 }
 
 async function currentUser(): Promise<{ id: string; email: string } | null> {
@@ -130,8 +140,4 @@ export function startAccountWatch(): () => void {
   })
 
   return () => watch.subscription.unsubscribe()
-}
-
-function message(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
 }

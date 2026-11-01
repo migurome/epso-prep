@@ -7,7 +7,7 @@ import { Markdown } from '../components/Markdown'
 import { hasCourse, loadCourseContent, type CourseField } from '../data/contentLoader'
 import { COMPETITIONS, COMPETITION_ORDER } from '../data/competition'
 import { useLocaleStore, pick } from '../lib/localeStore'
-import { usePreferredField } from '../lib/studyStore'
+import { useField } from '../lib/studyStore'
 import { useT } from '../lib/useT'
 import { courseModules, moduleNumber } from '../lib/course'
 
@@ -18,7 +18,7 @@ import { courseModules, moduleNumber } from '../lib/course'
 // descargar un bloque de cientos de kilobytes que no se va a enseñar.
 export function CoursePage() {
   const t = useT()
-  const field = usePreferredField()
+  const field = useField()
 
   if (!hasCourse(field)) {
     return (

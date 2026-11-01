@@ -6,6 +6,7 @@ import {
   type Snapshot,
   type SnapshotSummary,
 } from './backup'
+import { errorText as message } from './supabaseClient'
 
 // Sincronización del progreso con un almacén remoto.
 //
@@ -156,8 +157,4 @@ export async function syncOnce(backend: RemoteBackend, state: SyncState): Promis
     // huella, para que el próximo intento vuelva a subir.
     return { ok: false, reason: 'write', detail: message(error), state: next }
   }
-}
-
-function message(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
 }

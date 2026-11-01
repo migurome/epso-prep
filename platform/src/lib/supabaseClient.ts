@@ -32,9 +32,9 @@ export function supabase(): SupabaseClient {
   return client
 }
 
-/** Sólo para los tests: deja el módulo como recién cargado. */
-export function resetSupabaseClientForTests(): void {
-  client = null
+/** Cualquier fallo, como texto que se pueda enseñar. */
+export function errorText(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
 }
 
 /**
