@@ -54,60 +54,6 @@
       "openedOn": null
     },
     {
-      "id": "data-processing-analytics-and-statistics",
-      "title": "Data processing, analytics, and statistics",
-      "url": "https://eu-careers.europa.eu/en/apply-data-management-competition-ast3",
-      "grade": "AST 3",
-      "locations": [
-        "Brussels (Belgium)",
-        "Luxembourg (Luxembourg)",
-        "Strasbourg (France)"
-      ],
-      "deadline": "2026-11-11T11:00:00Z",
-      "deadlineText": "11/11/2026 - 12:00",
-      "stage": "open",
-      "reference": null,
-      "year": null,
-      "firstSeen": "2026-10-10",
-      "openedOn": null
-    },
-    {
-      "id": "librarianship-and-information-science",
-      "title": "Librarianship and information science",
-      "url": "https://eu-careers.europa.eu/en/apply-data-management-competition-ast3",
-      "grade": "AST 3",
-      "locations": [
-        "Brussels (Belgium)",
-        "Luxembourg (Luxembourg)",
-        "Strasbourg (France)"
-      ],
-      "deadline": "2026-11-11T11:00:00Z",
-      "deadlineText": "11/11/2026 - 12:00",
-      "stage": "open",
-      "reference": null,
-      "year": null,
-      "firstSeen": "2026-10-10",
-      "openedOn": null
-    },
-    {
-      "id": "records-and-archives-management",
-      "title": "Records and archives management",
-      "url": "https://eu-careers.europa.eu/en/apply-data-management-competition-ast3",
-      "grade": "AST 3",
-      "locations": [
-        "Brussels (Belgium)",
-        "Luxembourg (Luxembourg)",
-        "Strasbourg (France)"
-      ],
-      "deadline": "2026-11-11T11:00:00Z",
-      "deadlineText": "11/11/2026 - 12:00",
-      "stage": "open",
-      "reference": null,
-      "year": null,
-      "firstSeen": "2026-10-10",
-      "openedOn": null
-    },
-    {
       "id": "epso-ad-407-23",
       "title": "Dutch-language (NL) lawyer-linguists",
       "url": "https://eu-careers.europa.eu/en/apply-lawyer-linguists-competition-ad7",
@@ -237,6 +183,63 @@
       "year": null,
       "firstSeen": "2026-10-21",
       "openedOn": null
+    },
+    {
+      "id": "data-processing-analytics-and-statistics",
+      "title": "Data processing, analytics, and statistics",
+      "url": "https://eu-careers.europa.eu/en/apply-data-management-competition-ast3",
+      "grade": "AST 3",
+      "locations": [
+        "Brussels (Belgium)",
+        "Luxembourg (Luxembourg)",
+        "Strasbourg (France)"
+      ],
+      "deadline": "2026-12-09T11:00:00Z",
+      "deadlineText": "09/12/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-10",
+      "openedOn": null,
+      "updatedOn": "2026-11-09"
+    },
+    {
+      "id": "librarianship-and-information-science",
+      "title": "Librarianship and information science",
+      "url": "https://eu-careers.europa.eu/en/apply-data-management-competition-ast3",
+      "grade": "AST 3",
+      "locations": [
+        "Brussels (Belgium)",
+        "Luxembourg (Luxembourg)",
+        "Strasbourg (France)"
+      ],
+      "deadline": "2026-12-09T11:00:00Z",
+      "deadlineText": "09/12/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-10",
+      "openedOn": null,
+      "updatedOn": "2026-11-09"
+    },
+    {
+      "id": "records-and-archives-management",
+      "title": "Records and archives management",
+      "url": "https://eu-careers.europa.eu/en/apply-data-management-competition-ast3",
+      "grade": "AST 3",
+      "locations": [
+        "Brussels (Belgium)",
+        "Luxembourg (Luxembourg)",
+        "Strasbourg (France)"
+      ],
+      "deadline": "2026-12-09T11:00:00Z",
+      "deadlineText": "09/12/2026 - 12:00",
+      "stage": "open",
+      "reference": null,
+      "year": null,
+      "firstSeen": "2026-10-10",
+      "openedOn": null,
+      "updatedOn": "2026-11-09"
     },
     {
       "id": "epso-ad-429-26-4",
